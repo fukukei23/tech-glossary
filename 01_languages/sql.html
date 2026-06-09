@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL — テクニカルアーキテクト語彙帳</title>
+<meta name="description" content="SQLの用途・選定理由・トレードオフを解説">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#1e1e2e;--bg-raised:#262638;--bg-deep:#1a1a28;
+  --accent:#7c3aed;--accent-dim:rgba(124,58,237,0.2);
+  --fg:#e4e4f0;--fg-dim:#9494ac;--fg-bright:#fff;
+  --border:#3a3a52;--radius:10px;
+  --font-ui:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",sans-serif;
+}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--fg);line-height:1.8;min-height:100vh;}
+body::before{content:'';position:fixed;top:-30%;left:-20%;width:70vw;height:70vw;background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transparent 65%);pointer-events:none;}
+.container{max-width:780px;margin:0 auto;padding:40px 20px 80px;position:relative;z-index:1;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--fg-dim);text-decoration:none;margin-bottom:32px;transition:color 0.2s;}
+.back-link:hover{color:var(--accent);}
+.lang-header{margin-bottom:40px;}
+.lang-icon{font-size:48px;margin-bottom:12px;}
+h1{font-size:32px;font-weight:800;color:var(--fg-bright);margin-bottom:6px;}
+.lang-tagline{font-size:16px;color:var(--fg-dim);margin-bottom:16px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+.tag{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.tag-good{background:rgba(16,185,129,0.15);color:#34d399;}
+.tag-bad{background:rgba(239,68,68,0.15);color:#f87171;}
+.section{margin-bottom:40px;}
+.section-title{font-size:18px;font-weight:700;color:var(--fg-bright);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.card{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;}
+.card p{font-size:14px;line-height:1.9;margin-bottom:10px;}
+.card p:last-child{margin-bottom:0;}
+.card strong{color:var(--fg-bright);}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+.compare-table th{background:var(--bg-deep);color:var(--fg-dim);font-weight:700;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.compare-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--fg);vertical-align:top;}
+.compare-table tr:last-child td{border-bottom:none;}
+.good{color:#34d399;}.bad{color:#f87171;}
+.qa-item{margin-bottom:16px;}
+.qa-q{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.qa-a{font-size:14px;color:var(--fg);padding-left:16px;border-left:2px solid var(--border);}
+.term{border-bottom:1px dashed var(--accent);cursor:help;color:#c4b5fd;transition:color 0.2s;}
+.term:hover,.term:focus{color:#fff;}
+.term-popup{display:none;}
+#term-tooltip{display:none;position:fixed;background:var(--bg-raised);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--fg);line-height:1.6;white-space:normal;max-width:300px;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.4);pointer-events:none;}
+#term-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--accent);}
+#term-tooltip.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--accent);}
+.footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--border);color:var(--fg-dim);font-size:13px;text-align:center;}
+.footer a{color:var(--accent);text-decoration:none;}
+body.light{--bg:#f8f9fa;--bg-raised:#fff;--bg-deep:#f1f3f5;--fg:#2d2d3f;--fg-dim:#6b7280;--fg-bright:#1a1a2e;--border:#e5e7eb;}
+body.light #term-tooltip{background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+.theme-toggle{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:15px;color:var(--fg-dim);position:fixed;top:20px;right:20px;z-index:100;transition:all 0.2s;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--fg);}
+@media(max-width:600px){.container{padding:24px 14px 60px;}h1{font-size:24px;}}
+</style>
+</head>
+<body>
+<button class="theme-toggle">🌙</button>
+<div class="container">
+  <a class="back-link" href="../index.html">← 語彙帳トップに戻る</a>
+  <div class="lang-header">
+    <div class="lang-icon">🗄️</div>
+    <h1>SQL</h1>
+    <p class="lang-tagline">データベース専用言語。JOINやインデックスが重要</p>
+    <div class="tag-row"><span class="tag tag-good">✅ データ取得</span><span class="tag tag-good">✅ 集計/分析</span><span class="tag tag-good">✅ 汎用性高い</span><span class="tag tag-bad">⚠ 大量データでは設計が重要</span></div>
+  </div>
+  <div class="section"><div class="section-title">📌 一言で言うと</div><div class="card">
+<p>「データを取り出す・集計する・更新するための専用言語」</p>
+<p>1970年代から使われ続ける最も普及したデータ操作言語。<span class="term">リレーショナルDB<span class="term-popup">データを表（テーブル）形式で管理し、テーブル間の関係を定義できるデータベース。PostgreSQL・MySQL・SQLiteなどが代表</span></span>と組み合わせて使う。AIがSQLを自動生成するツールが増えているが、生成されたSQLの妥当性を判断するには基礎理解が必要。</p>
+</div></div>
+<div class="section"><div class="section-title">🎯 重要概念</div><div class="card">
+<p><strong>SELECT（取得）</strong>：テーブルからデータを取り出す基本操作。条件（WHERE）・並び替え（ORDER BY）・件数制限（LIMIT）を組み合わせる。</p>
+<p><strong>JOIN（結合）</strong>：複数テーブルを関連付けて一つの結果セットにする。<span class="term">INNER JOIN<span class="term-popup">両テーブルで一致するデータのみ取得。一致しない行は除外される</span></span>・<span class="term">LEFT JOIN<span class="term-popup">左テーブルの全行＋右テーブルの一致行を取得。一致しない場合はNULLが入る</span></span>の違いを理解することが重要。</p>
+<p><strong>INDEX（インデックス）</strong>：検索を高速化する仕組み。本の索引と同じ原理。大量データのクエリが遅い場合は適切なINDEXが解決策になる。</p>
+<p><strong>トランザクション</strong>：複数の操作を「全部成功か全部失敗」にまとめる仕組み。銀行の送金（引き落としと入金が必ずセット）が典型例。</p>
+</div></div>
+<div class="section"><div class="section-title">⚖️ 主要DBの比較</div><table class="compare-table">
+<thead><tr><th>DB</th><th>特徴</th><th>使い道</th></tr></thead>
+<tbody>
+<tr><td><strong>PostgreSQL</strong></td><td class="good">高機能・本番向け</td><td>本番Webサービス・AIアプリのデータストア</td></tr>
+<tr><td><strong>MySQL</strong></td><td>Web定番・シンプル</td><td>WordPress・伝統的なWebアプリ</td></tr>
+<tr><td><strong>SQLite</strong></td><td class="good">ファイル1つで完結</td><td>開発環境・モバイルアプリ・軽量ツール</td></tr>
+<tr><td><strong>BigQuery</strong></td><td>列指向・大規模分析向け</td><td>数TB超のデータ分析・BIダッシュボード</td></tr>
+</tbody></table></div>
+<div class="section"><div class="section-title">✅ AI時代のSQLとの関わり方</div><div class="card">
+<p><strong>自然言語→SQL変換</strong>：「先月の売上上位10件を出して」という日本語をSQLに変換するAIツールが増えている。このようなMCPツールの開発・評価にはSQL理解が必須。</p>
+<p><strong>AIが生成したSQLのレビュー</strong>：AIが書いたSQLは一見正しく見えても、JOINの方向が逆だったり、インデックスを使わない遅いクエリだったりする。基礎理解があれば問題を発見できる。</p>
+<p><strong>ベクトルDB</strong>：<span class="term">pgvector<span class="term-popup">PostgreSQLの拡張機能。ベクトル（数値の配列）を保存・類似検索できる。RAG実装でよく使われる</span></span> のようにPostgreSQLでベクトル検索も可能になっており、SQL＋AIの組み合わせが広がっている。</p>
+</div></div>
+<div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div><div class="qa-item">
+<div class="qa-q">Q.「このクエリ、なぜ遅いですか？」</div>
+<div class="qa-a">A.「EXPLAINコマンドで実行計画を確認します。多くの場合、適切なINDEXがない（フルスキャン）か、JOINで大量のデータを結合している場合です」</div>
+</div>
+<div class="qa-item">
+<div class="qa-q">Q.「NoSQLじゃなくSQLを使う理由は？」</div>
+<div class="qa-a">A.「データ間の関係が複雑でJOINが必要なら、RDBが有利です。NoSQLはスキーマが柔軟でスケールしやすい反面、複雑なクエリが書きにくい。用途に応じて使い分けます」</div>
+</div></div>
+  <div class="footer">
+    <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var tip=document.createElement('div');tip.id='term-tooltip';document.body.appendChild(tip);
+  var cur=null;
+  function show(t){
+    var p=t.querySelector('.term-popup');if(!p)return;
+    tip.textContent=p.textContent;tip.style.display='block';tip.classList.remove('below');
+    var r=t.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+    var left=r.left+r.width/2-tw/2;
+    left=Math.max(8,Math.min(left,window.innerWidth-tw-8));
+    var top=r.top-th-10;
+    if(top<8){top=r.bottom+10;tip.classList.add('below');}
+    tip.style.left=left+'px';tip.style.top=top+'px';cur=t;
+  }
+  function hide(){tip.style.display='none';cur=null;}
+  document.querySelectorAll('.term').forEach(function(t){
+    t.setAttribute('tabindex','0');
+    t.addEventListener('mouseenter',function(){show(t);});
+    t.addEventListener('mouseleave',hide);
+    t.addEventListener('focus',function(){show(t);});
+    t.addEventListener('blur',hide);
+    t.addEventListener('click',function(e){e.stopPropagation();if(cur===t)hide();else show(t);});
+  });
+  document.addEventListener('click',hide);
+  window.addEventListener('scroll',function(){if(cur)show(cur);},{passive:true});
+})();
+(function(){
+  var s=localStorage.getItem('tg_theme');
+  if(s==='light')document.body.classList.add('light');
+  var b=document.querySelector('.theme-toggle');
+  if(b){
+    b.addEventListener('click',function(){
+      document.body.classList.toggle('light');
+      var l=document.body.classList.contains('light');
+      b.textContent=l?'☀️':'🌙';
+      localStorage.setItem('tg_theme',l?'light':'dark');
+    });
+    b.textContent=document.body.classList.contains('light')?'☀️':'🌙';
+  }
+})();
+</script>
+</body>
+</html>

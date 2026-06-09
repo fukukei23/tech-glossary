@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python — テクニカルアーキテクト語彙帳</title>
+<meta name="description" content="Pythonの用途・選定理由・トレードオフを解説">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#1e1e2e;--bg-raised:#262638;--bg-deep:#1a1a28;
+  --accent:#7c3aed;--accent-dim:rgba(124,58,237,0.2);
+  --fg:#e4e4f0;--fg-dim:#9494ac;--fg-bright:#fff;
+  --border:#3a3a52;--radius:10px;
+  --font-ui:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",sans-serif;
+}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--fg);line-height:1.8;min-height:100vh;}
+body::before{content:'';position:fixed;top:-30%;left:-20%;width:70vw;height:70vw;background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transparent 65%);pointer-events:none;}
+.container{max-width:780px;margin:0 auto;padding:40px 20px 80px;position:relative;z-index:1;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--fg-dim);text-decoration:none;margin-bottom:32px;transition:color 0.2s;}
+.back-link:hover{color:var(--accent);}
+.lang-header{margin-bottom:40px;}
+.lang-icon{font-size:48px;margin-bottom:12px;}
+h1{font-size:32px;font-weight:800;color:var(--fg-bright);margin-bottom:6px;}
+.lang-tagline{font-size:16px;color:var(--fg-dim);margin-bottom:16px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+.tag{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.tag-good{background:rgba(16,185,129,0.15);color:#34d399;}
+.tag-bad{background:rgba(239,68,68,0.15);color:#f87171;}
+.section{margin-bottom:40px;}
+.section-title{font-size:18px;font-weight:700;color:var(--fg-bright);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.card{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;}
+.card p{font-size:14px;line-height:1.9;margin-bottom:10px;}
+.card p:last-child{margin-bottom:0;}
+.card strong{color:var(--fg-bright);}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+.compare-table th{background:var(--bg-deep);color:var(--fg-dim);font-weight:700;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.compare-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--fg);vertical-align:top;}
+.compare-table tr:last-child td{border-bottom:none;}
+.good{color:#34d399;}.bad{color:#f87171;}
+.qa-item{margin-bottom:16px;}
+.qa-q{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.qa-a{font-size:14px;color:var(--fg);padding-left:16px;border-left:2px solid var(--border);}
+.term{border-bottom:1px dashed var(--accent);cursor:help;color:#c4b5fd;transition:color 0.2s;}
+.term:hover,.term:focus{color:#fff;}
+.term-popup{display:none;}
+#term-tooltip{display:none;position:fixed;background:var(--bg-raised);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--fg);line-height:1.6;white-space:normal;max-width:300px;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.4);pointer-events:none;}
+#term-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--accent);}
+#term-tooltip.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--accent);}
+.footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--border);color:var(--fg-dim);font-size:13px;text-align:center;}
+.footer a{color:var(--accent);text-decoration:none;}
+body.light{--bg:#f8f9fa;--bg-raised:#fff;--bg-deep:#f1f3f5;--fg:#2d2d3f;--fg-dim:#6b7280;--fg-bright:#1a1a2e;--border:#e5e7eb;}
+body.light #term-tooltip{background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+.theme-toggle{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:15px;color:var(--fg-dim);position:fixed;top:20px;right:20px;z-index:100;transition:all 0.2s;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--fg);}
+@media(max-width:600px){.container{padding:24px 14px 60px;}h1{font-size:24px;}}
+</style>
+</head>
+<body>
+<button class="theme-toggle">🌙</button>
+<div class="container">
+  <a class="back-link" href="../index.html">← 語彙帳トップに戻る</a>
+  <div class="lang-header">
+    <div class="lang-icon">🐍</div>
+    <h1>Python</h1>
+    <p class="lang-tagline">AIと相性◎。書きやすいが実行速度は遅め</p>
+    <div class="tag-row"><span class="tag tag-good">✅ AI/ML</span><span class="tag tag-good">✅ データ処理</span><span class="tag tag-good">✅ スクリプト</span><span class="tag tag-good">✅ Web API</span><span class="tag tag-bad">⚠ 実行速度</span><span class="tag tag-bad">⚠ 型の曖昧さ</span></div>
+  </div>
+  <div class="section"><div class="section-title">📌 一言で言うと</div><div class="card">
+<p>「人間が読みやすい言語。特にAI・データ処理の業界標準語」</p>
+<p>コードが英語の散文に近く初学者でも読みやすい。<span class="term">PyTorch<span class="term-popup">MetaのPython製ディープラーニングフレームワーク。研究から本番まで業界標準</span></span>・<span class="term">LangChain<span class="term-popup">LLMアプリを素早く組むPython/TSライブラリ。RAGやエージェント機能を提供</span></span>・<span class="term">FastAPI<span class="term-popup">Python製高速WebフレームワークAPIが簡潔に書ける。Swaggerドキュメントも自動生成</span></span> など主要AIライブラリがすべてPythonに集中しているため、AI案件では事実上の標準。</p>
+</div></div>
+<div class="section"><div class="section-title">🎯 得意な用途</div><div class="card">
+<p><strong>機械学習・深層学習</strong>：PyTorch / TensorFlow / scikit-learn が揃っており、モデルのプロトタイプから本番運用まで一貫してPythonで完結できる。</p>
+<p><strong>LLMアプリ開発</strong>：LangChain / LlamaIndex / OpenAI SDK などのエコシステムが充実。RAGやエージェント構築も得意。</p>
+<p><strong>データ分析・可視化</strong>：pandas / matplotlib / Jupyter Notebook の組み合わせが業界標準。データサイエンティストの共通言語。</p>
+<p><strong>Web API・自動化スクリプト</strong>：FastAPI や Flask でAPIサーバーを素早く立ち上げられる。スクレイピングや業務自動化にも使いやすい。</p>
+</div></div>
+<div class="section"><div class="section-title">⚖️ 他言語との比較</div><table class="compare-table">
+<thead><tr><th>観点</th><th>Python</th><th>Go</th><th>TypeScript</th></tr></thead>
+<tbody>
+<tr><td>実行速度</td><td class="bad">遅め</td><td class="good">速い</td><td>中程度</td></tr>
+<tr><td>AI/MLライブラリ</td><td class="good">圧倒的に豊富</td><td class="bad">ほぼなし</td><td>少ない</td></tr>
+<tr><td>学習コスト</td><td class="good">低い</td><td>中程度</td><td>中程度</td></tr>
+<tr><td>型安全性</td><td>型ヒントあり（任意）</td><td class="good">静的型付け</td><td class="good">静的型付け</td></tr>
+<tr><td>向いている場面</td><td>AI・データ・PoC</td><td>高トラフィックAPI</td><td>Webフロント・フルスタック</td></tr>
+</tbody></table></div>
+<div class="section"><div class="section-title">✅ 選ぶ理由 / ⚠ 選ばない理由</div><div class="card">
+<p><strong>選ぶ理由</strong>：AI・機械学習のエコシステムがPythonに一極集中。PoCフェーズでのスピードが最速。書きやすく読みやすいためチームへの展開も容易。</p>
+<p><strong>選ばない理由</strong>：<span class="term">高トラフィックAPI<span class="term-popup">1秒あたり数万〜数十万リクエストを捌く大規模なAPI。PythonよりGoやRustが有利な場面</span></span>（毎秒数万リクエスト超）はGoやRustが有利。<span class="term">組み込みシステム<span class="term-popup">家電・車・センサーなど専用ハードに直接乗るソフトウェア。メモリや処理速度に厳しい制約がある</span></span>にはメモリ効率が悪すぎる。</p>
+</div></div>
+<div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div><div class="qa-item">
+<div class="qa-q">Q.「このサービス、スケールしたらPythonで大丈夫ですか？」</div>
+<div class="qa-a">A.「非同期処理（FastAPIのasync/await）とworkerのスケールアウトで多くの場合は対応できます。ただし毎秒数十万リクエスト規模になるならGoへの移行も選択肢に入れます」</div>
+</div>
+<div class="qa-item">
+<div class="qa-q">Q.「PoCはPythonでやりましたが、本番もPythonでいいですか？」</div>
+<div class="qa-a">A.「AIモデルの推論を含むなら本番もPythonが現実的です。ただしAPIの外側（ゲートウェイ・ルーティング）はGoを使い分けることも有効です」</div>
+</div></div>
+  <div class="footer">
+    <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var tip=document.createElement('div');tip.id='term-tooltip';document.body.appendChild(tip);
+  var cur=null;
+  function show(t){
+    var p=t.querySelector('.term-popup');if(!p)return;
+    tip.textContent=p.textContent;tip.style.display='block';tip.classList.remove('below');
+    var r=t.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+    var left=r.left+r.width/2-tw/2;
+    left=Math.max(8,Math.min(left,window.innerWidth-tw-8));
+    var top=r.top-th-10;
+    if(top<8){top=r.bottom+10;tip.classList.add('below');}
+    tip.style.left=left+'px';tip.style.top=top+'px';cur=t;
+  }
+  function hide(){tip.style.display='none';cur=null;}
+  document.querySelectorAll('.term').forEach(function(t){
+    t.setAttribute('tabindex','0');
+    t.addEventListener('mouseenter',function(){show(t);});
+    t.addEventListener('mouseleave',hide);
+    t.addEventListener('focus',function(){show(t);});
+    t.addEventListener('blur',hide);
+    t.addEventListener('click',function(e){e.stopPropagation();if(cur===t)hide();else show(t);});
+  });
+  document.addEventListener('click',hide);
+  window.addEventListener('scroll',function(){if(cur)show(cur);},{passive:true});
+})();
+(function(){
+  var s=localStorage.getItem('tg_theme');
+  if(s==='light')document.body.classList.add('light');
+  var b=document.querySelector('.theme-toggle');
+  if(b){
+    b.addEventListener('click',function(){
+      document.body.classList.toggle('light');
+      var l=document.body.classList.contains('light');
+      b.textContent=l?'☀️':'🌙';
+      localStorage.setItem('tg_theme',l?'light':'dark');
+    });
+    b.textContent=document.body.classList.contains('light')?'☀️':'🌙';
+  }
+})();
+</script>
+</body>
+</html>
