@@ -97,6 +97,51 @@ h1 span { color: var(--accent); }
 body.light #term-tooltip { background: #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
 .footer a { color: var(--accent); text-decoration: none; }
 
+
+/* === 検索バー === */
+.search-wrap{position:relative;margin-bottom:28px;}
+.search-input{width:100%;padding:12px 44px 12px 16px;background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius);font-size:14px;color:var(--fg);font-family:var(--font-ui);outline:none;transition:border-color 0.2s;}
+.search-input:focus{border-color:var(--accent);}
+.search-input::placeholder{color:var(--fg-dim);}
+.search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--fg-dim);cursor:pointer;font-size:20px;line-height:1;display:none;padding:0;}
+.search-clear.visible{display:block;}
+.search-empty{text-align:center;padding:40px 20px;color:var(--fg-dim);font-size:14px;display:none;}
+.acc-item.search-hidden{display:none;}
+.acc-item .search-highlight{background:rgba(124,58,237,0.3);color:var(--fg-bright);border-radius:2px;}
+
+/* === ビジネスインパクトタグ === */
+.tag-biz{background:rgba(6,182,212,0.15);color:#22d3ee;}
+.tag-impact{background:rgba(16,185,129,0.12);color:#34d399;}
+
+/* === 対比メモ === */
+.contrast-note{display:flex;align-items:center;gap:8px;margin:10px 0;padding:8px 14px;background:rgba(124,58,237,0.06);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font-size:13px;color:var(--fg-dim);}
+.contrast-note strong{color:var(--fg);}
+.contrast-arrow{color:var(--accent);font-weight:700;}
+
+/* === 会議用フレーズ === */
+.meeting-toggle{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:7px 14px;background:rgba(245,158,11,0.08);border:1px dashed rgba(245,158,11,0.35);border-radius:6px;font-size:13px;color:#fbbf24;cursor:pointer;transition:all 0.2s;font-family:var(--font-ui);}
+.meeting-toggle:hover{background:rgba(245,158,11,0.15);}
+.meeting-content{max-height:0;overflow:hidden;transition:max-height 0.45s ease,opacity 0.3s ease;opacity:0;}
+.meeting-content.open{max-height:600px;opacity:1;}
+.meeting-inner{margin-top:10px;padding:14px 18px;background:rgba(245,158,11,0.04);border-left:3px solid #f59e0b;border-radius:0 6px 6px 0;}
+.meeting-row{margin-bottom:12px;}
+.meeting-row:last-child{margin-bottom:0;}
+.meeting-q{font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:4px;}
+.meeting-a{font-size:13px;color:var(--fg-dim);padding-left:12px;border-left:2px solid rgba(245,158,11,0.25);line-height:1.7;}
+
+/* === レーダーチャート === */
+.radar-section{margin-bottom:48px;}
+.radar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;}
+.radar-card{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius);padding:16px 12px;text-align:center;transition:border-color 0.2s;}
+.radar-card:hover{border-color:var(--accent);}
+.radar-lang{font-size:14px;font-weight:700;color:var(--fg-bright);margin-bottom:8px;}
+.radar-card svg{display:block;margin:0 auto;}
+.radar-labels{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:8px;}
+.radar-label{font-size:10px;color:var(--fg-dim);}
+.chapter-title{cursor:pointer;}
+body.light .meeting-inner{background:rgba(245,158,11,0.06);}
+body.light .contrast-note{background:rgba(124,58,237,0.04);}
+
 /* ライトモード */
 body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --fg-dim:#6b7280; --fg-bright:#1a1a2e; --border:#e5e7eb; }
 
@@ -138,6 +183,14 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
     </a>
   </div>
 
+
+  <!-- 検索バー -->
+  <div class="search-wrap">
+    <input class="search-input" type="search" id="searchInput" placeholder="🔍 用語を検索… （例: Docker, RAG, Python, マイクロサービス）" autocomplete="off">
+    <button class="search-clear" id="searchClear" aria-label="クリア">×</button>
+  </div>
+  <div class="search-empty" id="searchEmpty">「<span id="searchQuery"></span>」に一致する用語は見つかりませんでした</div>
+
   <!-- 第1章：言語特性マップ -->
   <div class="chapter">
     <div class="chapter-title"><span class="ch-badge">第1章</span>言語特性マップ</div>
@@ -159,6 +212,15 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>選ぶ理由</strong>：AIライブラリ（<span class="term">PyTorch<span class="term-popup">Metaが開発するPython製ディープラーニングフレームワーク。研究から本番まで業界標準</span></span>・<span class="term">LangChain<span class="term-popup">LLMを使ったアプリを素早く組み立てるPython/TSライブラリ。RAG・エージェント機能を提供</span></span>・<span class="term">FastAPI<span class="term-popup">Python製の高速WebフレームワークAPIが簡潔に書ける。自動でSwaggerドキュメントも生成</span></span>）が全部Pythonに集中している。PoCはPythonが最速。</p>
         <p><strong>選ばない理由</strong>：<span class="term">高トラフィックAPI<span class="term-popup">1秒あたり数万〜数十万リクエストを捌く大規模なAPI。PythonよりGoやRustが有利な場面</span></span>や<span class="term">組み込みシステム<span class="term-popup">家電・車・センサーなど専用ハードに直接乗るソフトウェア。メモリや処理速度に厳しい制約がある</span></span>には向かない。速度が必要な場面ではGoやRustを検討。</p>
         <a class="more-link" href="01_languages/python.html">さらに詳しく →</a>
+      <div class="tag-row"><span class="tag tag-biz">💼 開発スピード向上</span><span class="tag tag-biz">💼 AIコスト削減</span><span class="tag tag-biz">💼 PoC最速</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>Python</strong><span class="contrast-arrow">⇄</span><strong>Go</strong>　<strong>Python</strong><span class="contrast-arrow">⇄</span><strong>TypeScript</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「このシステム、将来スケールしたときPythonで大丈夫ですか？」</div><div class="meeting-a">非同期処理とスケールアウトで対応できます。毎秒数十万リクエスト超になればGoへの部分移行も選択肢です</div></div>
+<div class="meeting-row"><div class="meeting-q">💬 「PoCはPythonですが本番も同じでよいですか？」</div><div class="meeting-a">AI推論を含むなら本番もPythonが現実的です。APIゲートウェイ層だけGoにする使い分けも有効です</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -179,6 +241,15 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>選ぶ理由</strong>：フロント・バック両方をTypeScriptで書けるのでチームの認知コストが下がる。型エラーで事前にバグを防げる。</p>
         <p><strong>選ばない理由</strong>：小さなスクリプトにはオーバーキル。Pythonで済む処理にわざわざ使う必要はない。</p>
         <a class="more-link" href="01_languages/typescript.html">さらに詳しく →</a>
+      <div class="tag-row"><span class="tag tag-biz">💼 バグ削減</span><span class="tag tag-biz">💼 保守コスト削減</span><span class="tag tag-biz">💼 開発生産性向上</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>TypeScript</strong><span class="contrast-arrow">⇄</span><strong>Python</strong>　<strong>TypeScript (React)</strong><span class="contrast-arrow">⇄</span><strong>Vue</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「なぜJavaScriptではなくTypeScriptを選ぶのですか？」</div><div class="meeting-a">型定義によりIDEの補完が効き、実行前にバグを検出できます。チームが大きくなるほど効果が増します</div></div>
+<div class="meeting-row"><div class="meeting-q">💬 「フロントとバックで別の言語を使うのと、TypeScriptで統一するのとどちらがよいですか？」</div><div class="meeting-a">認知コスト削減と人材流動性の観点からTypeScript統一が現在の主流です。AIツール開発でもTypeScript SDKが標準です</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -199,6 +270,15 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>選ぶ理由</strong>：大量リクエストを捌くAPIに最適。ビルド結果が1ファイルになるのでデプロイが楽。</p>
         <p><strong>選ばない理由</strong>：AIアプリのPoCフェーズでは選ばない。Pythonライブラリのエコシステムに勝てない。</p>
         <a class="more-link" href="01_languages/go.html">さらに詳しく →</a>
+      <div class="tag-row"><span class="tag tag-biz">💼 インフラコスト削減</span><span class="tag tag-biz">💼 スループット向上</span><span class="tag tag-biz">💼 デプロイ安定</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>Go</strong><span class="contrast-arrow">⇄</span><strong>Python</strong>　<strong>Go</strong><span class="contrast-arrow">⇄</span><strong>Rust</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「APIが遅くなってきたのですがGoへの移行は必要ですか？」</div><div class="meeting-a">まず現状のボトルネック（DB? ロジック? インフラ?）を計測してからGoへの移行検討をします。多くの場合DBやキャッシュの改善が先です</div></div>
+<div class="meeting-row"><div class="meeting-q">💬 「GoとRust、どちらを選びますか？」</div><div class="meeting-a">Webサービス・APIならGoで十分です。組み込み・WebAssembly・極限パフォーマンスが必要な場面でのみRustを検討します</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -219,6 +299,15 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>選ぶ理由</strong>：メモリ管理が自動かつ安全。C/C++の代替として性能が必要な場面。</p>
         <p><strong>選ばない理由</strong>：Web/AI案件のPoCには向かない。習得に数ヶ月かかる。チームに書ける人が少ない。</p>
         <a class="more-link" href="01_languages/rust.html">さらに詳しく →</a>
+      <div class="tag-row"><span class="tag tag-biz">💼 セキュリティ強化</span><span class="tag tag-biz">💼 実行コスト最小化</span><span class="tag tag-biz">💼 長期信頼性</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>Rust</strong><span class="contrast-arrow">⇄</span><strong>Go</strong>　<strong>Rust</strong><span class="contrast-arrow">⇄</span><strong>C/C++</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「RustはC/C++より本当に安全なのですか？」</div><div class="meeting-a">はい。所有権システムによりメモリリーク・バッファオーバーフローをコンパイル時に防げます。ただし学習コストが高く、チームに書ける人材が必要です</div></div>
+<div class="meeting-row"><div class="meeting-q">💬 「このプロジェクトにRustを使うべきですか？」</div><div class="meeting-a">通常のWebサービスにはGoで十分です。組み込み・OS・WebAssembly・暗号処理など極限の性能・安全性が要求される場面でRustを選びます</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -238,6 +327,120 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>主要DB</strong>：PostgreSQL（本番向け）/ MySQL（Web定番）/ SQLite（軽量）/ BigQuery（分析）</p>
         <p><strong>今回の案件との関連</strong>：アサインの案件（自然言語→SQL変換MCP）はまさにここ。「ユーザーの日本語をSQLに変換する」ニーズがある。</p>
         <a class="more-link" href="01_languages/sql.html">さらに詳しく →</a>
+      <div class="tag-row"><span class="tag tag-biz">💼 データ可視化</span><span class="tag tag-biz">💼 意思決定支援</span><span class="tag tag-biz">💼 業務効率化</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>SQL (RDB)</strong><span class="contrast-arrow">⇄</span><strong>NoSQL</strong>　<strong>INNER JOIN</strong><span class="contrast-arrow">⇄</span><strong>LEFT JOIN</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「このクエリが遅いのですが、原因は何ですか？」</div><div class="meeting-a">EXPLAINコマンドで実行計画を確認します。多くの場合、適切なINDEXがないかJOINで大量データを結合しています</div></div>
+<div class="meeting-row"><div class="meeting-q">💬 「AIに日本語でデータを取得させることはできますか？」</div><div class="meeting-a">自然言語→SQL変換のAIツールで可能です。ただし生成されたSQLの妥当性確認には人間のSQL理解が依然必要です</div></div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- レーダーチャート -->
+  <div class="radar-section">
+    <div class="chapter-title" style="font-size:18px;font-weight:700;color:var(--fg-bright);margin-bottom:16px;">📊 言語特性レーダーチャート</div>
+    <p style="font-size:13px;color:var(--fg-dim);margin-bottom:16px;">各言語の6軸評価（実行速度 / AI&amp;ML / 学習容易さ / 型安全性 / フロント対応 / スケーラビリティ）</p>
+    <div class="radar-grid">
+      <div class="radar-card">
+        <div class="radar-lang">🐍 Python</div>
+        <svg width="140" height="140" viewBox="0 0 140 140">
+<polygon points="70.0,59.4 79.2,64.7 79.2,75.3 70.0,80.6 60.8,75.3 60.8,64.7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,48.7 88.4,59.4 88.4,80.6 70.0,91.3 51.6,80.6 51.6,59.4" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,38.1 97.6,54.0 97.6,86.0 70.0,101.9 42.4,86.0 42.4,54.0" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,27.4 106.9,48.7 106.9,91.3 70.0,112.6 33.1,91.3 33.1,48.7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,16.8 116.1,43.4 116.1,96.6 70.0,123.2 23.9,96.6 23.9,43.4" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="70.0" y2="16.8" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="116.1" y2="43.4" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="116.1" y2="96.6" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="70.0" y2="123.2" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="23.9" y2="96.6" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="23.9" y2="43.4" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<polygon points="70.0,48.7 116.1,43.4 116.1,96.6 70.0,91.3 60.8,75.3 42.4,54.0" fill="#7c3aed" fill-opacity="0.25" stroke="#7c3aed" stroke-width="1.5"/>
+<circle cx="70.0" cy="48.7" r="2.5" fill="#7c3aed"/>
+<circle cx="116.1" cy="43.4" r="2.5" fill="#7c3aed"/>
+<circle cx="116.1" cy="96.6" r="2.5" fill="#7c3aed"/>
+<circle cx="70.0" cy="91.3" r="2.5" fill="#7c3aed"/>
+<circle cx="60.8" cy="75.3" r="2.5" fill="#7c3aed"/>
+<circle cx="42.4" cy="54.0" r="2.5" fill="#7c3aed"/>
+</svg>
+        <div class="radar-labels"><span class="radar-label">速度▲ AI◎ 学習◎</span></div>
+      </div>
+      <div class="radar-card">
+        <div class="radar-lang">🔷 TypeScript</div>
+        <svg width="140" height="140" viewBox="0 0 140 140">
+<polygon points="70.0,59.4 79.2,64.7 79.2,75.3 70.0,80.6 60.8,75.3 60.8,64.7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,48.7 88.4,59.4 88.4,80.6 70.0,91.3 51.6,80.6 51.6,59.4" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,38.1 97.6,54.0 97.6,86.0 70.0,101.9 42.4,86.0 42.4,54.0" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,27.4 106.9,48.7 106.9,91.3 70.0,112.6 33.1,91.3 33.1,48.7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,16.8 116.1,43.4 116.1,96.6 70.0,123.2 23.9,96.6 23.9,43.4" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="70.0" y2="16.8" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="116.1" y2="43.4" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="116.1" y2="96.6" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="70.0" y2="123.2" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="23.9" y2="96.6" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="23.9" y2="43.4" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<polygon points="70.0,38.1 88.4,59.4 97.6,86.0 70.0,123.2 23.9,96.6 42.4,54.0" fill="#06b6d4" fill-opacity="0.25" stroke="#06b6d4" stroke-width="1.5"/>
+<circle cx="70.0" cy="38.1" r="2.5" fill="#06b6d4"/>
+<circle cx="88.4" cy="59.4" r="2.5" fill="#06b6d4"/>
+<circle cx="97.6" cy="86.0" r="2.5" fill="#06b6d4"/>
+<circle cx="70.0" cy="123.2" r="2.5" fill="#06b6d4"/>
+<circle cx="23.9" cy="96.6" r="2.5" fill="#06b6d4"/>
+<circle cx="42.4" cy="54.0" r="2.5" fill="#06b6d4"/>
+</svg>
+        <div class="radar-labels"><span class="radar-label">フロント◎ 型安全◎</span></div>
+      </div>
+      <div class="radar-card">
+        <div class="radar-lang">🔵 Go</div>
+        <svg width="140" height="140" viewBox="0 0 140 140">
+<polygon points="70.0,59.4 79.2,64.7 79.2,75.3 70.0,80.6 60.8,75.3 60.8,64.7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,48.7 88.4,59.4 88.4,80.6 70.0,91.3 51.6,80.6 51.6,59.4" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,38.1 97.6,54.0 97.6,86.0 70.0,101.9 42.4,86.0 42.4,54.0" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,27.4 106.9,48.7 106.9,91.3 70.0,112.6 33.1,91.3 33.1,48.7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,16.8 116.1,43.4 116.1,96.6 70.0,123.2 23.9,96.6 23.9,43.4" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="70.0" y2="16.8" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="116.1" y2="43.4" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="116.1" y2="96.6" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="70.0" y2="123.2" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="23.9" y2="96.6" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="23.9" y2="43.4" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<polygon points="70.0,16.8 79.2,64.7 106.9,91.3 70.0,112.6 60.8,75.3 23.9,43.4" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="1.5"/>
+<circle cx="70.0" cy="16.8" r="2.5" fill="#10b981"/>
+<circle cx="79.2" cy="64.7" r="2.5" fill="#10b981"/>
+<circle cx="106.9" cy="91.3" r="2.5" fill="#10b981"/>
+<circle cx="70.0" cy="112.6" r="2.5" fill="#10b981"/>
+<circle cx="60.8" cy="75.3" r="2.5" fill="#10b981"/>
+<circle cx="23.9" cy="43.4" r="2.5" fill="#10b981"/>
+</svg>
+        <div class="radar-labels"><span class="radar-label">速度◎ インフラ◎</span></div>
+      </div>
+      <div class="radar-card">
+        <div class="radar-lang">🦀 Rust</div>
+        <svg width="140" height="140" viewBox="0 0 140 140">
+<polygon points="70.0,59.4 79.2,64.7 79.2,75.3 70.0,80.6 60.8,75.3 60.8,64.7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,48.7 88.4,59.4 88.4,80.6 70.0,91.3 51.6,80.6 51.6,59.4" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,38.1 97.6,54.0 97.6,86.0 70.0,101.9 42.4,86.0 42.4,54.0" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,27.4 106.9,48.7 106.9,91.3 70.0,112.6 33.1,91.3 33.1,48.7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<polygon points="70.0,16.8 116.1,43.4 116.1,96.6 70.0,123.2 23.9,96.6 23.9,43.4" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="70.0" y2="16.8" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="116.1" y2="43.4" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="116.1" y2="96.6" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="70.0" y2="123.2" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="23.9" y2="96.6" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<line x1="70.0" y1="70.0" x2="23.9" y2="43.4" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+<polygon points="70.0,16.8 79.2,64.7 79.2,75.3 70.0,123.2 51.6,80.6 33.1,48.7" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="1.5"/>
+<circle cx="70.0" cy="16.8" r="2.5" fill="#f59e0b"/>
+<circle cx="79.2" cy="64.7" r="2.5" fill="#f59e0b"/>
+<circle cx="79.2" cy="75.3" r="2.5" fill="#f59e0b"/>
+<circle cx="70.0" cy="123.2" r="2.5" fill="#f59e0b"/>
+<circle cx="51.6" cy="80.6" r="2.5" fill="#f59e0b"/>
+<circle cx="33.1" cy="48.7" r="2.5" fill="#f59e0b"/>
+</svg>
+        <div class="radar-labels"><span class="radar-label">速度◎ 安全◎ 学習▲</span></div>
       </div>
     </div>
   </div>
@@ -257,6 +460,15 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>主要モデル</strong>：GPT-4o（OpenAI）/ Claude 3.5 Sonnet（Anthropic）/ Gemini（Google）/ GLM（Z.AI）</p>
         <p><strong>選び方のポイント</strong>：用途・コスト・レイテンシ・コンテキスト長で選ぶ。「全部GPT」は最適ではない。</p>
         <p><strong>限界</strong>：学習データのカットオフ日より新しい情報は知らない（→RAGで補完）。長い文章は末尾を忘れがち。</p>
+      <div class="tag-row"><span class="tag tag-biz">💼 業務自動化</span><span class="tag tag-biz">💼 サポートコスト削減</span><span class="tag tag-biz">💼 情報整理効率化</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>LLM</strong><span class="contrast-arrow">⇄</span><strong>RAG</strong>　<strong>Fine-tuning</strong><span class="contrast-arrow">⇄</span><strong>プロンプトエンジニアリング</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「どのLLMを選べばよいですか？」</div><div class="meeting-a">用途・コスト・レイテンシ・コンテキスト長で選びます。すべてGPT-4が最適ではなく、軽量タスクにはGPT-4o mini等のコストを抑えたモデルが合理的です</div></div>
+<div class="meeting-row"><div class="meeting-q">💬 「AIの回答が間違っていた場合の責任はどこにありますか？」</div><div class="meeting-a">現状LLMは確率的な予測であり誤りが発生します。重要判断には人間のレビューを挟む設計と、ハルシネーション対策（RAG・根拠提示）が必要です</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -286,6 +498,14 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>なぜ使うか</strong>：LLMは学習データにない情報（社内文書・最新情報）を知らない。RAGで「今この文書を見ながら答えて」ができる。</p>
         <p><strong>ハルシネーション対策</strong>：根拠となる文書を渡すことで嘘をつく確率を下げられる。</p>
         <div class="tag-row"><span class="tag tag-good">✅ 最新情報に対応</span><span class="tag tag-good">✅ Fine-tuningより安い</span><span class="tag tag-use">🔵 社内文書検索</span><span class="tag tag-use">🔵 カスタマーサポート</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>RAG</strong><span class="contrast-arrow">⇄</span><strong>Fine-tuning</strong>　<strong>RAG</strong><span class="contrast-arrow">⇄</span><strong>プロンプトのみ</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「RAGとFine-tuningどちらが必要ですか？」</div><div class="meeting-a">まずRAGを試します。Fine-tuningはデータが大量に必要でコストが高く、最終手段に近いです。RAGで社内文書・最新情報を参照できれば多くの課題は解決します</div></div>
+<div class="meeting-row"><div class="meeting-q">💬 「RAGを導入するといつでも正確な回答が得られますか？」</div><div class="meeting-a">精度は上がりますが100%ではありません。関連文書の品質・検索精度・チャンク設計に依存します。導入後も継続的なチューニングが必要です</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -408,6 +628,14 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>Dockerfile</strong>：コンテナの設計図。「このOSにこれをインストールしてこのコマンドで起動」を定義。</p>
         <p><strong>docker-compose</strong>：複数コンテナ（アプリ＋DB＋Redis等）をまとめて管理するツール。</p>
         <div class="tag-row"><span class="tag tag-ex">🔥 OpenClaw本番環境で使用中</span></div>
+      <div class="tag-row"><span class="tag tag-biz">💼 デプロイ安定化</span><span class="tag tag-biz">💼 環境コスト削減</span><span class="tag tag-biz">💼 開発効率向上</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>Docker (1台)</strong><span class="contrast-arrow">⇄</span><strong>Kubernetes (大規模)</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「なぜDockerを使うのですか？普通に動かせばよいのでは？」</div><div class="meeting-a">環境差異によるデプロイ失敗を防ぐためです。開発・テスト・本番で同じコンテナを動かすことで「自分のPCでは動く」問題を解消できます</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -472,6 +700,14 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
         <p><strong>CD（継続的デリバリー）</strong>：テストが通ったら自動で本番環境にデプロイ。人手を介さない。</p>
         <p><strong>主要ツール</strong>：GitHub Actions（最も普及）/ CircleCI / Jenkins</p>
         <div class="tag-row"><span class="tag tag-ex">🔥 NexusCoreのGitHub ActionsでCI/CD稼働中</span></div>
+      <div class="tag-row"><span class="tag tag-biz">💼 リリーススピード向上</span><span class="tag tag-biz">💼 品質保証</span><span class="tag tag-biz">💼 手動作業削減</span></div>
+      <div class="contrast-note">📌 対比して覚える：<strong>CI (テスト自動化)</strong><span class="contrast-arrow">⇄</span><strong>CD (デプロイ自動化)</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「CI/CDがないとどんな問題が起きますか？」</div><div class="meeting-a">手動デプロイによるヒューマンエラー・テスト漏れ・リリース頻度の低下が起きます。CI/CDで「コードをpushしたら自動で品質確認・本番反映」まで流れるのが理想です</div></div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -536,6 +772,14 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
           <tr><td><strong>向いてる規模</strong></td><td>スタートアップ・PoC</td><td>大規模・チーム分割時</td></tr>
         </table>
         <p style="margin-top:10px;font-size:13px;color:var(--fg-dim)">💡 「最初はモノリスで作って、スケールしてから分割」が鉄則。最初からマイクロサービスは過剰設計になりがち。</p>
+      <div class="contrast-note">📌 対比して覚える：<strong>モノリス</strong><span class="contrast-arrow">⇄</span><strong>マイクロサービス</strong>　<strong>垂直スケール</strong><span class="contrast-arrow">⇄</span><strong>水平スケール</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「マイクロサービスに移行すべきですか？」</div><div class="meeting-a">チームが10人以上になり、特定機能だけのスケールや別チームでの独立開発が必要になったら検討します。それ以前は移行コストがメリットを上回ります</div></div>
+<div class="meeting-row"><div class="meeting-q">💬 「マイクロサービスのリスクは何ですか？」</div><div class="meeting-a">サービス間通信の遅延・障害伝播のリスク・運用複雑性の増大です。分散トレーシングとサービスメッシュの導入も必要になります</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -553,6 +797,13 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
           <tr><td><strong>gRPC</strong></td><td>高速・型安全。サービス間通信向け</td><td>マイクロサービス同士の内部通信</td></tr>
         </table>
         <p style="margin-top:10px;font-size:13px;color:var(--fg-dim)">💡 迷ったらREST。GraphQL/gRPCは必要になってから検討。</p>
+      <div class="contrast-note">📌 対比して覚える：<strong>REST</strong><span class="contrast-arrow">⇄</span><strong>GraphQL</strong>　<strong>REST (外部公開)</strong><span class="contrast-arrow">⇄</span><strong>gRPC (内部通信)</strong></div>
+      <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+      <div class="meeting-content">
+        <div class="meeting-inner">
+<div class="meeting-row"><div class="meeting-q">💬 「GraphQLに移行するメリットはありますか？」</div><div class="meeting-a">モバイルアプリで通信量を削減したい場合に有効です。ただし学習コスト・キャッシュ設計・N+1問題など複雑さも増します。RESTで困っていなければ不要です</div></div>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -585,13 +836,125 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
     </div>
   </div>
 
+
+  <!-- 第5章：開発プロセス語彙 -->
+  <div class="chapter">
+    <div class="chapter-title"><span class="ch-badge">第5章</span>開発プロセス語彙</div>
+
+    <div class="acc-item" data-key="dev-scrum">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🏃 スクラム</div>
+        <div class="acc-summary">アジャイル開発の最も普及したフレームワーク</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>スプリント</strong>：1〜2週間の開発サイクル。期間内にやることを確定させ、終わりにデモ＆振り返りを実施。</p>
+        <p><strong>プロダクトオーナー（PO）</strong>：何を作るかを決める役割。ビジネス側の代表者。バックログの優先順位付けをする。</p>
+        <p><strong>スクラムマスター</strong>：チームがスクラムを正しく回せるよう支援する役割。マネージャーではなくファシリテーター。</p>
+        <p><strong>スプリントレビュー</strong>：スプリント終了時にステークホルダーへのデモ。「動くものを見せる」が原則。</p>
+        <p><strong>レトロスペクティブ（振り返り）</strong>：スプリント後にチームで「良かったこと・改善すること」を議論。プロセス改善の核心。</p>
+        <div class="tag-row"><span class="tag tag-good">✅ 短サイクルで方向修正可能</span><span class="tag tag-bad">⚠ 形骸化しやすい</span></div>
+        <div class="contrast-note">📌 対比して覚える：<strong>スクラム</strong><span class="contrast-arrow">⇄</span><strong>ウォーターフォール</strong>　<strong>スプリント計画</strong><span class="contrast-arrow">⇄</span><strong>バックログ整理</strong></div>
+        <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+        <div class="meeting-content"><div class="meeting-inner">
+          <div class="meeting-row"><div class="meeting-q">💬 「スプリントの途中で要件が変わったらどうなりますか？」</div><div class="meeting-a">スプリント中の変更は原則受け付けません。変更要件は次のスプリントバックログに積みます。緊急の場合はスプリントを中断してリプランニングします</div></div>
+          <div class="meeting-row"><div class="meeting-q">💬 「スクラムとカンバン、どちらが合っていますか？」</div><div class="meeting-a">定期的なリリースサイクルがあればスクラム。運用・サポートなど継続的なタスク処理にはカンバンが向いています</div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="dev-techdebt">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">💳 技術的負債（テックデット）</div>
+        <div class="acc-summary">将来の開発速度を下げる「手抜き」の蓄積</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>何が問題か</strong>：「今急いで作った粗雑なコード」は金融の負債と同様に利息が増える。放置するほど修正コストが膨らむ。</p>
+        <p><strong>具体例</strong>：テストのないコード・ドキュメントのない関数・将来拡張を考慮しないDB設計・古いライブラリの放置</p>
+        <p><strong>なぜ生まれるか</strong>：締め切り優先・人手不足・「後でやろう」の先送り文化</p>
+        <p><strong>対策</strong>：リファクタリングの時間をスプリントに組み込む。テックデット専用スプリントを設ける。SonarQubeなどのコード品質計測ツールを使う。</p>
+        <div class="tag-row"><span class="tag tag-bad">⚠ 放置で開発速度が指数的に低下</span><span class="tag tag-good">✅ 早期対処でコスト削減</span></div>
+        <div class="contrast-note">📌 対比して覚える：<strong>技術的負債</strong><span class="contrast-arrow">⇄</span><strong>リファクタリング（返済）</strong></div>
+        <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+        <div class="meeting-content"><div class="meeting-inner">
+          <div class="meeting-row"><div class="meeting-q">💬 「技術的負債の解消にどれくらい時間が必要ですか？」</div><div class="meeting-a">まず現状の負債を可視化（コード品質スコア・テストカバレッジ測定）し、優先度をつけます。一般的にスプリントの20%を負債解消に充てることが推奨されます</div></div>
+          <div class="meeting-row"><div class="meeting-q">💬 「新機能追加と技術的負債解消、どちらを優先すべきですか？」</div><div class="meeting-a">負債が開発速度を著しく下げている場合は負債解消を優先します。「今1週間使えば今後半年の速度が2倍になる」という試算をビジネス側に示すことが有効です</div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="dev-velocity">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">📈 ベロシティ / バーンダウンチャート</div>
+        <div class="acc-summary">開発チームの生産性を測る指標</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>ベロシティ</strong>：スプリントごとに完了したストーリーポイントの平均値。チームの処理能力の目安。「このチームは1スプリントで30ポイントこなせる」。</p>
+        <p><strong>ストーリーポイント</strong>：タスクの複雑さ・リスクを数値化したもの（時間ではなく相対的な難易度）。フィボナッチ数列（1,2,3,5,8,13…）で表すことが多い。</p>
+        <p><strong>バーンダウンチャート</strong>：残タスクが期限に向けて減っていくグラフ。理想ラインより上にあれば遅延のサイン。</p>
+        <p><strong>注意</strong>：ベロシティはチームの生産性を外部から評価する指標ではない。チーム自身のキャパシティ把握と計画精度向上が目的。</p>
+        <div class="tag-row"><span class="tag tag-good">✅ 進捗の客観的可視化</span><span class="tag tag-bad">⚠ 数字だけで評価すると逆効果</span></div>
+        <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+        <div class="meeting-content"><div class="meeting-inner">
+          <div class="meeting-row"><div class="meeting-q">💬 「ベロシティが下がっているのはなぜですか？」</div><div class="meeting-a">技術的負債の増加・メンバーの体調・割り込みタスクの増加・見積もり精度の問題などが考えられます。バーンダウンチャートと合わせて原因を特定します</div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="dev-slo">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">📋 SLA / SLO / SLI</div>
+        <div class="acc-summary">サービス品質の約束・目標・測定値</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>SLA（Service Level Agreement）</strong>：契約上の約束。「月間稼働率99.9%を保証する。下回ったら返金」。ユーザー・クライアントとの合意。</p>
+        <p><strong>SLO（Service Level Objective）</strong>：内部目標値。「稼働率99.95%を目指す」。SLAより高い目標を社内で設定するのが一般的。</p>
+        <p><strong>SLI（Service Level Indicator）</strong>：実際の測定値。「今月の稼働率は99.97%だった」。</p>
+        <p><strong>エラーバジェット</strong>：SLOとの差分。「99.95%目標なら月0.05%=21.6分まで停止してよい」。このバジェット内で新機能リリースリスクを管理する。</p>
+        <div class="tag-row"><span class="tag tag-good">✅ 信頼性の定量化</span><span class="tag tag-good">✅ リリースリスクの判断基準</span></div>
+        <div class="contrast-note">📌 対比して覚える：<strong>SLA（対外約束）</strong><span class="contrast-arrow">⇄</span><strong>SLO（内部目標）</strong><span class="contrast-arrow">⇄</span><strong>SLI（実測値）</strong></div>
+        <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+        <div class="meeting-content"><div class="meeting-inner">
+          <div class="meeting-row"><div class="meeting-q">💬 「このリリース、SLOに影響しますか？」</div><div class="meeting-a">エラーバジェットの残量を確認します。バジェットが豊富なら問題なし。枯渇気味なら機能フリーズ（リリース停止）を検討します</div></div>
+          <div class="meeting-row"><div class="meeting-q">💬 「SLA違反が発生した場合の対応フローは？」</div><div class="meeting-a">インシデントレスポンス手順に従い、障害の検知→影響範囲特定→復旧→ポストモーテム（再発防止策）の流れで対応します</div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="dev-refactor">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🔧 リファクタリング</div>
+        <div class="acc-summary">外部から見た動作を変えずに内部構造を改善すること</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>なぜ必要か</strong>：コードは書いた後も「読まれる・変更される・テストされる」。保守性の低いコードは変更コストが指数的に増加する。</p>
+        <p><strong>代表的なリファクタリング手法</strong>：</p>
+        <p>• <strong>関数の抽出</strong>：長い関数を小さな関数に分割</p>
+        <p>• <strong>変数名の改善</strong>：<code>x</code>→<code>userEmailAddress</code>など意味のある名前に</p>
+        <p>• <strong>重複の除去</strong>：同じ処理を共通関数にまとめる（DRY原則）</p>
+        <p><strong>テストがない状態でのリファクタリングは危険</strong>：動作が壊れても気づけない。テスト整備→リファクタリングの順が鉄則。</p>
+        <div class="tag-row"><span class="tag tag-good">✅ 保守コスト長期削減</span><span class="tag tag-bad">⚠ テストなしは危険</span></div>
+        <div class="contrast-note">📌 対比して覚える：<strong>リファクタリング（内部改善）</strong><span class="contrast-arrow">⇄</span><strong>新機能追加（外部変化）</strong></div>
+        <button class="meeting-toggle" onclick="toggleMeeting(this)">💼 会議でこう聞く ▾</button>
+        <div class="meeting-content"><div class="meeting-inner">
+          <div class="meeting-row"><div class="meeting-q">💬 「リファクタリングでユーザーへのメリットは何ですか？」</div><div class="meeting-a">直接的なメリットは見えませんが、開発速度の維持・バグ発生率の低下・新機能追加コストの削減という形で間接的にユーザー体験が向上します</div></div>
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
   <div class="footer">
     <p>📚 関連ガイド：
       <a href="https://fukukei23.github.io/python-reading-guide/">Python読解ガイド</a> ·
       <a href="https://fukukei23.github.io/interview-prep/">面接対策ガイド</a> ·
       <a href="https://github.com/fukukei23">GitHub</a>
     </p>
-    <p style="margin-top:8px">最終更新: 2026-06-09</p>
+    <p style="margin-top:8px">最終更新: 2026-06-10</p>
   </div>
 </div>
 
@@ -655,6 +1018,66 @@ document.querySelectorAll('.acc-item[data-key]').forEach(item => {
   document.addEventListener('click', function(){ hideTip(); });
   window.addEventListener('scroll', function(){ if (currentTerm) showTip(currentTerm); }, {passive:true});
 })();
+
+// 会議フレーズ トグル
+function toggleMeeting(btn) {
+  var content = btn.nextElementSibling;
+  var isOpen = content.classList.contains('open');
+  content.classList.toggle('open', !isOpen);
+  btn.textContent = isOpen ? '💼 会議でこう聞く ▾' : '💼 会議でこう聞く ▴';
+}
+
+// 全文検索
+(function(){
+  var input = document.getElementById('searchInput');
+  var clearBtn = document.getElementById('searchClear');
+  var emptyMsg = document.getElementById('searchEmpty');
+  var querySpan = document.getElementById('searchQuery');
+  if (!input) return;
+
+  function search(q) {
+    var items = document.querySelectorAll('.acc-item');
+    var matched = 0;
+    q = q.trim().toLowerCase();
+    items.forEach(function(item) {
+      var text = item.textContent.toLowerCase();
+      if (!q || text.indexOf(q) !== -1) {
+        item.classList.remove('search-hidden');
+        if (q) {
+          // アコーディオンを自動展開
+          item.classList.add('open');
+        }
+        matched++;
+      } else {
+        item.classList.add('search-hidden');
+      }
+    });
+    // チャプターの表示/非表示
+    document.querySelectorAll('.chapter').forEach(function(ch) {
+      var visible = ch.querySelectorAll('.acc-item:not(.search-hidden)').length > 0;
+      ch.style.display = visible ? '' : 'none';
+    });
+    if (emptyMsg) {
+      emptyMsg.style.display = (q && matched === 0) ? 'block' : 'none';
+      if (querySpan) querySpan.textContent = q;
+    }
+    clearBtn.classList.toggle('visible', q.length > 0);
+  }
+
+  input.addEventListener('input', function(){ search(this.value); });
+  clearBtn.addEventListener('click', function(){
+    input.value = '';
+    search('');
+    // アコーディオンを元の状態に戻す（LocalStorage反映）
+    document.querySelectorAll('.acc-item[data-key]').forEach(function(item){
+      var key = item.dataset.key;
+      var saved = localStorage.getItem('acc_' + key);
+      item.classList.toggle('open', saved === 'true');
+    });
+    document.querySelectorAll('.chapter').forEach(function(ch){ ch.style.display = ''; });
+  });
+})();
+
 </script>
 </body>
 </html>
