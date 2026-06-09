@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>テクニカルアーキテクト語彙帳</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #1e1e2e; --bg-raised: #262638; --bg-deep: #1a1a28;
+  --accent: #7c3aed; --accent-dim: rgba(124,58,237,0.2);
+  --accent2: #06b6d4; --accent3: #f59e0b; --accent4: #10b981;
+  --fg: #e4e4f0; --fg-dim: #9494ac; --fg-bright: #fff;
+  --border: #3a3a52; --radius: 10px;
+  --font-ui: "Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",sans-serif;
+}
+body { font-family: var(--font-ui); background: var(--bg); color: var(--fg); line-height: 1.8; min-height: 100vh; }
+body::before { content:''; position:fixed; top:-30%; left:-20%; width:70vw; height:70vw; background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transparent 65%); pointer-events:none; }
+.container { max-width: 800px; margin: 0 auto; padding: 48px 20px 80px; position: relative; z-index: 1; }
+h1 { font-size: 30px; font-weight: 800; color: var(--fg-bright); margin-bottom: 6px; }
+h1 span { color: var(--accent); }
+.subtitle { color: var(--fg-dim); font-size: 15px; margin-bottom: 12px; }
+.concept-note { background: var(--accent-dim); border: 1px solid var(--accent); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 40px; font-size: 14px; color: var(--fg); }
+.concept-note strong { color: var(--accent); }
+
+/* テーマ切替 */
+.theme-toggle { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 15px; color: var(--fg-dim); position: absolute; top: 48px; right: 20px; transition: all 0.2s; }
+.theme-toggle:hover { border-color: var(--accent); color: var(--fg); }
+
+/* 章タイトル */
+.chapter { margin-bottom: 48px; }
+.chapter-title { font-size: 20px; font-weight: 800; color: var(--fg-bright); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+.chapter-title .ch-badge { background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 20px; }
+
+/* アコーディオンカード */
+.acc-item { background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
+.acc-item.open { border-color: var(--accent); }
+.acc-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px; cursor: pointer; user-select: none; transition: background 0.2s; }
+.acc-header:hover { background: rgba(124,58,237,0.08); }
+.acc-icon { font-size: 13px; color: var(--fg-dim); transition: transform 0.25s; flex-shrink: 0; }
+.acc-item.open .acc-icon { transform: rotate(90deg); color: var(--accent); }
+.acc-title { font-size: 15px; font-weight: 600; color: var(--fg-bright); flex: 1; }
+.acc-summary { font-size: 13px; color: var(--fg-dim); }
+.acc-body { display: none; padding: 0 20px 18px 48px; animation: fadeIn 0.2s ease; }
+.acc-item.open .acc-body { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 本文スタイル */
+.acc-body p { font-size: 14px; color: var(--fg); margin-bottom: 10px; }
+.acc-body strong { color: var(--fg-bright); }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.tag { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+.tag-good { background: rgba(16,185,129,0.15); color: #34d399; }
+.tag-bad { background: rgba(239,68,68,0.15); color: #f87171; }
+.tag-use { background: rgba(6,182,212,0.15); color: var(--accent2); }
+.tag-ex { background: rgba(245,158,11,0.15); color: var(--accent3); }
+.more-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 12px; font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 600; }
+.more-link:hover { text-decoration: underline; }
+
+/* 比較テーブル */
+.compare-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+.compare-table th { background: var(--bg-deep); color: var(--fg-dim); font-weight: 700; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.compare-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--fg); vertical-align: top; }
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table .good { color: #34d399; }
+.compare-table .bad { color: #f87171; }
+
+/* 関連サイトナビ */
+.nav-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 40px; }
+.nav-card { display: flex; align-items: center; gap: 12px; background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; text-decoration: none; color: var(--fg); transition: all 0.2s; }
+.nav-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.nav-card.current { border-color: var(--accent); background: var(--accent-dim); }
+.nav-card .nav-icon { font-size: 22px; flex-shrink: 0; }
+.nav-card .nav-text { font-size: 13px; }
+.nav-card .nav-name { font-weight: 700; color: var(--fg-bright); font-size: 14px; }
+
+/* フッター */
+.footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--fg-dim); font-size: 13px; text-align: center; }
+.footer a { color: var(--accent); text-decoration: none; }
+
+/* ライトモード */
+body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --fg-dim:#6b7280; --fg-bright:#1a1a2e; --border:#e5e7eb; }
+
+@media (max-width: 600px) {
+  .container { padding: 32px 14px 60px; }
+  h1 { font-size: 22px; }
+  .acc-body { padding-left: 20px; }
+  .nav-links { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <button class="theme-toggle" onclick="document.body.classList.toggle('light')" aria-label="テーマ切替">🌙</button>
+
+  <h1>テクニカル<span>アーキテクト</span>語彙帳</h1>
+  <p class="subtitle">書けなくていい。会議で使える知識を持つ。</p>
+  <div class="concept-note">
+    <strong>このガイドのコンセプト</strong>：コードを手書きする必要はない。各技術の「何ができるか・なぜ選ぶか・どんなトレードオフがあるか」を知っていれば、設計会議・クライアント折衝・技術選定の場で話せる。
+  </div>
+
+  <!-- 関連ガイドナビ -->
+  <div class="nav-links">
+    <a class="nav-card" href="https://fukukei23.github.io/python-reading-guide/">
+      <span class="nav-icon">🐍</span>
+      <div class="nav-text"><div class="nav-name">Python 読解ガイド</div>コードを読んで理解する</div>
+    </a>
+    <a class="nav-card current" href="#">
+      <span class="nav-icon">🗺️</span>
+      <div class="nav-text"><div class="nav-name">テクニカルアーキテクト語彙帳</div>会議で使える語彙を持つ</div>
+    </a>
+    <a class="nav-card" href="https://fukukei23.github.io/interview-prep/">
+      <span class="nav-icon">💼</span>
+      <div class="nav-text"><div class="nav-name">面接対策ガイド</div>面接前にサクッと復習</div>
+    </a>
+  </div>
+
+  <!-- 第1章：言語特性マップ -->
+  <div class="chapter">
+    <div class="chapter-title"><span class="ch-badge">第1章</span>言語特性マップ</div>
+
+    <div class="acc-item" data-key="lang-python">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🐍 Python</div>
+        <div class="acc-summary">AIと相性◎。書きやすいが実行速度は遅め</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>一言で言うと</strong>：「人間が読みやすい言語。特にAI・データ処理の標準語」</p>
+        <div class="tag-row">
+          <span class="tag tag-good">✅ AI/ML</span><span class="tag tag-good">✅ データ処理</span><span class="tag tag-good">✅ スクリプト</span><span class="tag tag-good">✅ Web API</span>
+          <span class="tag tag-bad">⚠ 実行速度</span><span class="tag tag-bad">⚠ 型の曖昧さ</span>
+        </div>
+        <p><strong>得意な用途</strong>：機械学習・LLMアプリ開発（FastAPI）・データ分析・自動化スクリプト</p>
+        <p><strong>有名な使用例</strong>：ChatGPT（OpenAI）・YouTube・Instagram・Airbnb</p>
+        <p><strong>選ぶ理由</strong>：AIライブラリ（PyTorch・LangChain・FastAPI）が全部Pythonに集中している。PoCはPythonが最速。</p>
+        <p><strong>選ばない理由</strong>：高トラフィックAPIや組み込みシステムには向かない。速度が必要な場面ではGoやRustを検討。</p>
+        <a class="more-link" href="01_languages/python.html">さらに詳しく →</a>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="lang-ts">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🔷 TypeScript</div>
+        <div class="acc-summary">JavaScriptに型を追加。フロント/バックエンド両対応</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>一言で言うと</strong>：「JavaScriptの"信頼できる版"。Webの実質標準語」</p>
+        <div class="tag-row">
+          <span class="tag tag-good">✅ フロントエンド</span><span class="tag tag-good">✅ サーバーサイド</span><span class="tag tag-good">✅ 型安全</span>
+          <span class="tag tag-bad">⚠ 設定が複雑</span><span class="tag tag-bad">⚠ ビルドが必要</span>
+        </div>
+        <p><strong>得意な用途</strong>：React/Next.jsによるWebアプリ、Node.jsサーバー、MCPサーバー構築</p>
+        <p><strong>有名な使用例</strong>：Slack・Figma・Notion・多くのSaaSフロントエンド</p>
+        <p><strong>選ぶ理由</strong>：フロント・バック両方をTypeScriptで書けるのでチームの認知コストが下がる。型エラーで事前にバグを防げる。</p>
+        <p><strong>選ばない理由</strong>：小さなスクリプトにはオーバーキル。Pythonで済む処理にわざわざ使う必要はない。</p>
+        <a class="more-link" href="01_languages/typescript.html">さらに詳しく →</a>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="lang-go">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🔵 Go（Golang）</div>
+        <div class="acc-summary">シンプルで高速。インフラ・マイクロサービス向き</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>一言で言うと</strong>：「速い・シンプル・並行処理が得意。インフラの言語」</p>
+        <div class="tag-row">
+          <span class="tag tag-good">✅ 高速実行</span><span class="tag tag-good">✅ 並行処理</span><span class="tag tag-good">✅ シングルバイナリ</span>
+          <span class="tag tag-bad">⚠ AIライブラリが少ない</span><span class="tag tag-bad">⚠ ジェネリクスが弱め</span>
+        </div>
+        <p><strong>得意な用途</strong>：APIサーバー・Dockerなどのインフラツール・マイクロサービス</p>
+        <p><strong>有名な使用例</strong>：Docker・Kubernetes・Terraform・Uber・Dropbox</p>
+        <p><strong>選ぶ理由</strong>：大量リクエストを捌くAPIに最適。ビルド結果が1ファイルになるのでデプロイが楽。</p>
+        <p><strong>選ばない理由</strong>：AIアプリのPoCフェーズでは選ばない。Pythonライブラリのエコシステムに勝てない。</p>
+        <a class="more-link" href="01_languages/go.html">さらに詳しく →</a>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="lang-rust">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🦀 Rust</div>
+        <div class="acc-summary">極限のパフォーマンスとメモリ安全性。学習コスト高</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>一言で言うと</strong>：「速さと安全性を両立する、最難関の言語」</p>
+        <div class="tag-row">
+          <span class="tag tag-good">✅ 最高速</span><span class="tag tag-good">✅ メモリ安全</span><span class="tag tag-good">✅ 組み込み</span>
+          <span class="tag tag-bad">⚠ 学習コスト最高</span><span class="tag tag-bad">⚠ 開発速度遅め</span>
+        </div>
+        <p><strong>得意な用途</strong>：ゲームエンジン・組み込みシステム・WebAssembly・OS開発</p>
+        <p><strong>有名な使用例</strong>：Figma（WebAssembly部分）・Cloudflare Workers・Discord（一部）</p>
+        <p><strong>選ぶ理由</strong>：メモリ管理が自動かつ安全。C/C++の代替として性能が必要な場面。</p>
+        <p><strong>選ばない理由</strong>：Web/AI案件のPoCには向かない。習得に数ヶ月かかる。チームに書ける人が少ない。</p>
+        <a class="more-link" href="01_languages/rust.html">さらに詳しく →</a>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="lang-sql">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🗄️ SQL</div>
+        <div class="acc-summary">データベース専用言語。JOINやインデックスが重要</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>一言で言うと</strong>：「データを取り出す・集計する・更新するための専用言語」</p>
+        <div class="tag-row">
+          <span class="tag tag-good">✅ データ取得</span><span class="tag tag-good">✅ 集計/分析</span><span class="tag tag-good">✅ 汎用性高い</span>
+          <span class="tag tag-bad">⚠ 大量データでは設計が重要</span>
+        </div>
+        <p><strong>重要概念</strong>：SELECT（取得）/ JOIN（結合）/ INDEX（高速化）/ トランザクション（整合性保証）</p>
+        <p><strong>主要DB</strong>：PostgreSQL（本番向け）/ MySQL（Web定番）/ SQLite（軽量）/ BigQuery（分析）</p>
+        <p><strong>今回の案件との関連</strong>：アサインの案件（自然言語→SQL変換MCP）はまさにここ。「ユーザーの日本語をSQLに変換する」ニーズがある。</p>
+        <a class="more-link" href="01_languages/sql.html">さらに詳しく →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第2章：AIスタック語彙 -->
+  <div class="chapter">
+    <div class="chapter-title"><span class="ch-badge">第2章</span>AIスタック語彙</div>
+
+    <div class="acc-item" data-key="ai-llm">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🧠 LLM（大規模言語モデル）</div>
+        <div class="acc-summary">GPT・Claude・Gemini等。自然言語を理解・生成するAI</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>何ができるか</strong>：文章生成・要約・翻訳・コード生成・質問応答。会話形式で指示できる。</p>
+        <p><strong>主要モデル</strong>：GPT-4o（OpenAI）/ Claude 3.5 Sonnet（Anthropic）/ Gemini（Google）/ GLM（Z.AI）</p>
+        <p><strong>選び方のポイント</strong>：用途・コスト・レイテンシ・コンテキスト長で選ぶ。「全部GPT」は最適ではない。</p>
+        <p><strong>限界</strong>：学習データのカットオフ日より新しい情報は知らない（→RAGで補完）。長い文章は末尾を忘れがち。</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="ai-finetune">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🎯 Fine-tuning（ファインチューニング）</div>
+        <div class="acc-summary">既存LLMを特定タスク用に追加学習させること</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>何をするか</strong>：汎用LLMに自社データ・ドメイン知識を追加学習させ、特定タスクの精度を上げる。</p>
+        <p><strong>必要なもの</strong>：大量の教師データ（入力→正解出力のペア）＋GPU計算コスト＋MLエンジニア</p>
+        <p><strong>いつ選ぶか</strong>：プロンプトだけでは精度が出ない時・特定の口調や形式を学習させたい時</p>
+        <p><strong>いつ選ばないか</strong>：まずRAGやプロンプトエンジニアリングで試す。Fine-tuningは最終手段に近い。コストが高い。</p>
+        <div class="tag-row"><span class="tag tag-bad">⚠ コスト高</span><span class="tag tag-bad">⚠ データ大量必要</span><span class="tag tag-good">✅ 高精度化</span></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="ai-rag">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">📚 RAG（Retrieval-Augmented Generation）</div>
+        <div class="acc-summary">外部DBから関連情報を検索してLLMに渡す手法</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>仕組み</strong>：①ユーザーの質問を受け取る → ②関連ドキュメントをベクトルDBで検索 → ③LLMに質問＋ドキュメントを一緒に渡して回答させる</p>
+        <p><strong>なぜ使うか</strong>：LLMは学習データにない情報（社内文書・最新情報）を知らない。RAGで「今この文書を見ながら答えて」ができる。</p>
+        <p><strong>ハルシネーション対策</strong>：根拠となる文書を渡すことで嘘をつく確率を下げられる。</p>
+        <div class="tag-row"><span class="tag tag-good">✅ 最新情報に対応</span><span class="tag tag-good">✅ Fine-tuningより安い</span><span class="tag tag-use">🔵 社内文書検索</span><span class="tag tag-use">🔵 カスタマーサポート</span></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="ai-embed">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">📐 Embedding（埋め込み）</div>
+        <div class="acc-summary">テキストを数値ベクトルに変換する技術</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>何をするか</strong>：「東京」「Japan's capital」「首都」→ 似た数値ベクトルに変換。意味が近い文章は数値も近くなる。</p>
+        <p><strong>用途</strong>：類似文章検索・RAGの「関連文書を探す」部分・レコメンドエンジン</p>
+        <p><strong>主要サービス</strong>：OpenAI text-embedding-3 / Cohere Embed / Google Vertex AI Embeddings</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="ai-prompt">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">✍️ プロンプトエンジニアリング</div>
+        <div class="acc-summary">LLMへの指示文を最適化する技術</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>主要テクニック</strong>：</p>
+        <p>• <strong>Few-shot</strong>：「例を3つ見せてから本番指示」→ 精度向上</p>
+        <p>• <strong>Chain-of-Thought</strong>：「ステップごとに考えて」→ 複雑な推論に有効</p>
+        <p>• <strong>System prompt</strong>：「あなたは○○の専門家です」→ キャラクター・制約を設定</p>
+        <p>• <strong>Few-shot + CoT</strong>：両方組み合わせると最強</p>
+        <p><strong>重要な考え方</strong>：Fine-tuningの前に必ずプロンプトで試す。コストがゼロで改善できる。</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="ai-agent">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🤖 AIエージェント</div>
+        <div class="acc-summary">LLMがツールを自律的に使いタスクを実行する仕組み</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>通常のLLMとの違い</strong>：LLMは「返答するだけ」。エージェントは「ツールを使いながら自律的に行動する」。</p>
+        <p><strong>例</strong>：「最新のニュースをまとめてSlackに送って」→ Web検索ツール → まとめ生成 → Slack送信ツール を自動で使う</p>
+        <p><strong>主要フレームワーク</strong>：LangChain / LlamaIndex / OpenAI Assistants / Claude + MCP</p>
+        <p><strong>課題</strong>：ループ・無限実行・コスト暴走のリスク。品質ゲートと予算上限が必須。</p>
+        <div class="tag-row"><span class="tag tag-ex">🔥 NexusCoreで実装済み</span></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="ai-mcp">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🔌 MCP（Model Context Protocol）</div>
+        <div class="acc-summary">AIエージェントが外部ツールを呼び出す標準プロトコル</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>何をするか</strong>：Claude / Cursorなどのエージェントが外部サービス（GitHub・Slack・DB等）を統一した形式で呼び出せるようにする規格。</p>
+        <p><strong>USB-Cのような存在</strong>：「どのAIでも、どのツールにも繋げられる標準端子」</p>
+        <p><strong>サーバー側</strong>：ツール提供者がMCPサーバーを実装（Python or TypeScript）</p>
+        <p><strong>クライアント側</strong>：Claude Code / Cursor / Continue等が自動でツールを呼び出す</p>
+        <div class="tag-row"><span class="tag tag-ex">🔥 GLM/MiniMax MCPを自作・運用済み</span></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="ai-vectordb">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🗃️ ベクトルDB</div>
+        <div class="acc-summary">Embeddingを保存・検索する専用データベース</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>通常のDBとの違い</strong>：通常のDBは「完全一致・条件一致」で検索。ベクトルDBは「意味が近い順」で検索できる。</p>
+        <p><strong>主要サービス</strong>：Pinecone（クラウド）/ Chroma（ローカル・軽量）/ Weaviate / pgvector（PostgreSQL拡張）</p>
+        <p><strong>使われる場面</strong>：RAGの文書検索・類似商品検索・重複検知</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第3章：インフラ・クラウド語彙 -->
+  <div class="chapter">
+    <div class="chapter-title"><span class="ch-badge">第3章</span>インフラ・クラウド語彙</div>
+
+    <div class="acc-item" data-key="infra-compare">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">⚖️ サーバーレス vs コンテナ vs VM</div>
+        <div class="acc-summary">3つの実行環境のトレードオフ</div>
+      </div>
+      <div class="acc-body">
+        <table class="compare-table">
+          <tr><th>方式</th><th>メリット</th><th>デメリット</th><th>向いてる用途</th></tr>
+          <tr>
+            <td><strong>サーバーレス</strong><br>（Lambda等）</td>
+            <td class="good">管理ゼロ<br>使った分だけ課金</td>
+            <td class="bad">コールドスタート<br>実行時間上限</td>
+            <td>イベント駆動・軽量API</td>
+          </tr>
+          <tr>
+            <td><strong>コンテナ</strong><br>（Docker/ECS）</td>
+            <td class="good">環境再現性◎<br>柔軟</td>
+            <td class="bad">オーケストレーション学習コスト</td>
+            <td>Webアプリ・マイクロサービス</td>
+          </tr>
+          <tr>
+            <td><strong>VM</strong><br>（EC2等）</td>
+            <td class="good">自由度最高<br>長期稼働に強い</td>
+            <td class="bad">管理コスト高<br>起動が遅い</td>
+            <td>フル制御が必要な場面</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="infra-docker">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🐳 Docker</div>
+        <div class="acc-summary">アプリをコンテナ化して環境差異をなくす技術</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>何を解決するか</strong>：「自分のPCでは動くのに本番で動かない」問題。アプリと依存関係を箱（コンテナ）に詰めて、どこでも同じ動作を保証。</p>
+        <p><strong>Dockerfile</strong>：コンテナの設計図。「このOSにこれをインストールしてこのコマンドで起動」を定義。</p>
+        <p><strong>docker-compose</strong>：複数コンテナ（アプリ＋DB＋Redis等）をまとめて管理するツール。</p>
+        <div class="tag-row"><span class="tag tag-ex">🔥 OpenClaw本番環境で使用中</span></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="infra-k8s">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">☸️ Kubernetes（K8s）</div>
+        <div class="acc-summary">コンテナを大規模管理するオーケストレーション基盤</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>Dockerとの違い</strong>：Dockerは「1台のコンテナを動かす」。K8sは「100台のコンテナを自動管理する」。</p>
+        <p><strong>できること</strong>：コンテナの自動スケール・障害時の自動再起動・ローリングアップデート</p>
+        <p><strong>いつ必要か</strong>：大規模サービス（数十台以上）になってから。小規模PoCには不要。</p>
+        <div class="tag-row"><span class="tag tag-bad">⚠ 学習コスト高。PoCでは過剰</span></div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="infra-aws">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">☁️ AWS 主要サービス</div>
+        <div class="acc-summary">クラウド最大手。サービス数200以上</div>
+      </div>
+      <div class="acc-body">
+        <table class="compare-table">
+          <tr><th>サービス</th><th>一言説明</th><th>よく使う場面</th></tr>
+          <tr><td><strong>Lambda</strong></td><td>サーバーレス関数実行</td><td>APIエンドポイント・イベント処理</td></tr>
+          <tr><td><strong>S3</strong></td><td>ファイルストレージ</td><td>画像・動画・ログの保存</td></tr>
+          <tr><td><strong>RDS</strong></td><td>マネージドDB（PostgreSQL等）</td><td>本番DBの定番</td></tr>
+          <tr><td><strong>ECS</strong></td><td>Dockerコンテナ管理</td><td>Webアプリのコンテナ実行</td></tr>
+          <tr><td><strong>Bedrock</strong></td><td>AWS上でLLMを使う</td><td>Claude/Llama等をAPI経由で利用</td></tr>
+          <tr><td><strong>API Gateway</strong></td><td>APIの入り口管理</td><td>認証・レート制限・ルーティング</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="infra-gcp">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🌐 GCP 主要サービス</div>
+        <div class="acc-summary">Google Cloud。AI/ML系が特に強い</div>
+      </div>
+      <div class="acc-body">
+        <table class="compare-table">
+          <tr><th>サービス</th><th>一言説明</th></tr>
+          <tr><td><strong>Cloud Run</strong></td><td>コンテナをサーバーレスで実行（AWSのLambda＋ECSの中間）</td></tr>
+          <tr><td><strong>BigQuery</strong></td><td>超高速な大規模データ分析専用DB</td></tr>
+          <tr><td><strong>Vertex AI</strong></td><td>GeminiなどのLLM・MLモデルをAPIで提供</td></tr>
+          <tr><td><strong>Cloud Storage</strong></td><td>S3相当のファイルストレージ</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="infra-cicd">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">⚙️ CI/CD</div>
+        <div class="acc-summary">コードをpushすると自動でテスト・デプロイが走る仕組み</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>CI（継続的インテグレーション）</strong>：コードをpushするたびに自動でテストを実行。壊れた変更を早期発見。</p>
+        <p><strong>CD（継続的デリバリー）</strong>：テストが通ったら自動で本番環境にデプロイ。人手を介さない。</p>
+        <p><strong>主要ツール</strong>：GitHub Actions（最も普及）/ CircleCI / Jenkins</p>
+        <div class="tag-row"><span class="tag tag-ex">🔥 NexusCoreのGitHub ActionsでCI/CD稼働中</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第4章：プロジェクト進行語彙 -->
+  <div class="chapter">
+    <div class="chapter-title"><span class="ch-badge">第4章</span>プロジェクト進行語彙</div>
+
+    <div class="acc-item" data-key="proj-poc">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🔬 PoC（Proof of Concept）</div>
+        <div class="acc-summary">実現可能性を検証する試作フェーズ</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>目的</strong>：「本当にこの技術で解決できるか？」を少ないコストで確かめること。本番品質は求めない。</p>
+        <p><strong>PoCで問われること</strong>：技術的実現性・コスト・精度・ユーザー受容性</p>
+        <p><strong>PoC→本番のよくある落とし穴</strong>：「PoCは動いたが本番スケールに耐えられない」「精度90%で合格したが本番データでは70%」</p>
+        <p><strong>今の自分との関連</strong>：アサイン・GNUS等の案件はPoCフェーズが多い。「完璧でなくていい・速さが正義」の段階。</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="proj-mvp">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🚀 MVP（Minimum Viable Product）</div>
+        <div class="acc-summary">最小限の機能で市場検証するプロダクト</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>PoCとの違い</strong>：PoCは「技術の検証」。MVPは「ユーザーに使ってもらって価値を検証するプロダクト」。</p>
+        <p><strong>原則</strong>：機能を削りに削って、コアバリューだけを届ける最小単位で出す。</p>
+        <p><strong>よくある失敗</strong>：「あれもこれも実装してからリリース」→ 時間と資金が尽きる。</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="proj-agile">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🔄 アジャイル / スプリント</div>
+        <div class="acc-summary">2週間単位で開発を繰り返す手法</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>スプリント</strong>：1〜2週間の開発サイクル。期間内にやることを事前に決め、終わったらレビュー→次のスプリントへ。</p>
+        <p><strong>デイリースタンドアップ</strong>：毎朝15分の進捗共有。「昨日やったこと・今日やること・詰まってること」を共有。</p>
+        <p><strong>ウォーターフォールとの違い</strong>：ウォーターフォールは「全部設計→全部実装→全部テスト」。アジャイルは「小さく作って小さく届ける」。</p>
+        <p><strong>バックログ</strong>：未着手タスクの一覧。優先度順に並べてスプリントで消化していく。</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="proj-arch">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🏗️ モノリス vs マイクロサービス</div>
+        <div class="acc-summary">アーキテクチャの2大選択肢</div>
+      </div>
+      <div class="acc-body">
+        <table class="compare-table">
+          <tr><th></th><th>モノリス</th><th>マイクロサービス</th></tr>
+          <tr><td><strong>構造</strong></td><td>1つのアプリに全機能</td><td>機能ごとに独立したサービス群</td></tr>
+          <tr><td><strong>メリット</strong></td><td class="good">シンプル・開発が速い</td><td class="good">スケールしやすい・障害が分離</td></tr>
+          <tr><td><strong>デメリット</strong></td><td class="bad">大きくなると管理困難</td><td class="bad">運用複雑・通信コスト</td></tr>
+          <tr><td><strong>向いてる規模</strong></td><td>スタートアップ・PoC</td><td>大規模・チーム分割時</td></tr>
+        </table>
+        <p style="margin-top:10px;font-size:13px;color:var(--fg-dim)">💡 「最初はモノリスで作って、スケールしてから分割」が鉄則。最初からマイクロサービスは過剰設計になりがち。</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="proj-api">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🔗 API設計：REST / GraphQL / gRPC</div>
+        <div class="acc-summary">サービス間通信の3方式の違い</div>
+      </div>
+      <div class="acc-body">
+        <table class="compare-table">
+          <tr><th>方式</th><th>特徴</th><th>向いてる場面</th></tr>
+          <tr><td><strong>REST</strong></td><td>URL＋HTTP動詞。最も普及</td><td>Webアプリ・公開API</td></tr>
+          <tr><td><strong>GraphQL</strong></td><td>必要なデータだけ取得できる</td><td>モバイルアプリ・複雑なデータ取得</td></tr>
+          <tr><td><strong>gRPC</strong></td><td>高速・型安全。サービス間通信向け</td><td>マイクロサービス同士の内部通信</td></tr>
+        </table>
+        <p style="margin-top:10px;font-size:13px;color:var(--fg-dim)">💡 迷ったらREST。GraphQL/gRPCは必要になってから検討。</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="proj-auth">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🔐 認証（AuthN）/ 認可（AuthZ）</div>
+        <div class="acc-summary">「誰か」と「何ができるか」の違い</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>認証（Authentication）</strong>：「あなたは誰ですか？」→ ログイン・本人確認</p>
+        <p><strong>認可（Authorization）</strong>：「あなたには何の権限がありますか？」→ 管理者/一般ユーザーの分岐</p>
+        <p><strong>JWT（JSON Web Token）</strong>：ログイン後にサーバーが発行するトークン。次のリクエストに添付して「認証済み」を証明。</p>
+        <p><strong>OAuth2</strong>：「Googleでログイン」「GitHubでログイン」の仕組み。自分でパスワード管理しなくていい。</p>
+      </div>
+    </div>
+
+    <div class="acc-item" data-key="proj-cors">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🌐 CORS</div>
+        <div class="acc-summary">ブラウザのオリジン間リクエスト制限。フロント・バック連携で必ず出る</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>何が起きるか</strong>：フロント（localhost:3000）がバックエンド（localhost:8000）を呼ぶと、ブラウザがブロックする。</p>
+        <p><strong>なぜ存在するか</strong>：悪意あるサイトが別サイトのAPIを勝手に呼び出すのを防ぐセキュリティ機能。</p>
+        <p><strong>解決方法</strong>：サーバー側のレスポンスヘッダーに「このオリジンからのアクセスは許可」と明示する。</p>
+        <p><strong>会議で出たら</strong>：「バックエンドのCORS設定で許可するオリジンを追加する必要があります」で通じる。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>📚 関連ガイド：
+      <a href="https://fukukei23.github.io/python-reading-guide/">Python読解ガイド</a> ·
+      <a href="https://fukukei23.github.io/interview-prep/">面接対策ガイド</a> ·
+      <a href="https://github.com/fukukei23">GitHub</a>
+    </p>
+    <p style="margin-top:8px">最終更新: 2026-06-09</p>
+  </div>
+</div>
+
+<script>
+// アコーディオン開閉
+function toggle(header) {
+  const item = header.closest('.acc-item');
+  const isOpen = item.classList.contains('open');
+  item.classList.toggle('open', !isOpen);
+  // localStorageに保存
+  const key = item.dataset.key;
+  if (key) localStorage.setItem('acc_' + key, (!isOpen).toString());
+}
+
+// ページ読み込み時に展開状態を復元
+document.querySelectorAll('.acc-item[data-key]').forEach(item => {
+  const key = item.dataset.key;
+  if (localStorage.getItem('acc_' + key) === 'true') {
+    item.classList.add('open');
+  }
+});
+</script>
+</body>
+</html>
