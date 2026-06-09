@@ -76,6 +76,25 @@ h1 span { color: var(--accent); }
 
 /* フッター */
 .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--fg-dim); font-size: 13px; text-align: center; }
+
+/* 用語ツールチップ */
+.term { border-bottom: 1px dashed var(--accent); cursor: help; color: #c4b5fd; transition: color 0.2s; }
+.term:hover, .term:focus { color: #fff; }
+.term-popup { display: none; }
+#term-tooltip {
+  display: none; position: fixed;
+  background: var(--bg-raised); border: 1px solid var(--accent);
+  border-radius: 8px; padding: 8px 14px; font-size: 13px; color: var(--fg);
+  line-height: 1.6; white-space: normal; max-width: 300px;
+  z-index: 99999; box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,58,237,0.3);
+  pointer-events: none;
+}
+#term-tooltip::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--accent);
+}
+#term-tooltip.below::after { top: auto; bottom: 100%; border-top-color: transparent; border-bottom-color: var(--accent); }
+body.light #term-tooltip { background: #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
 .footer a { color: var(--accent); text-decoration: none; }
 
 /* ライトモード */
@@ -135,10 +154,10 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
           <span class="tag tag-good">✅ AI/ML</span><span class="tag tag-good">✅ データ処理</span><span class="tag tag-good">✅ スクリプト</span><span class="tag tag-good">✅ Web API</span>
           <span class="tag tag-bad">⚠ 実行速度</span><span class="tag tag-bad">⚠ 型の曖昧さ</span>
         </div>
-        <p><strong>得意な用途</strong>：機械学習・LLMアプリ開発（FastAPI）・データ分析・自動化スクリプト</p>
+        <p><strong>得意な用途</strong>：機械学習・LLMアプリ開発（<span class="term">FastAPI<span class="term-popup">Python製の高速WebフレームワークAPIが簡潔に書ける。自動でSwaggerドキュメントも生成</span></span>）・データ分析・自動化スクリプト</p>
         <p><strong>有名な使用例</strong>：ChatGPT（OpenAI）・YouTube・Instagram・Airbnb</p>
-        <p><strong>選ぶ理由</strong>：AIライブラリ（PyTorch・LangChain・FastAPI）が全部Pythonに集中している。PoCはPythonが最速。</p>
-        <p><strong>選ばない理由</strong>：高トラフィックAPIや組み込みシステムには向かない。速度が必要な場面ではGoやRustを検討。</p>
+        <p><strong>選ぶ理由</strong>：AIライブラリ（<span class="term">PyTorch<span class="term-popup">Metaが開発するPython製ディープラーニングフレームワーク。研究から本番まで業界標準</span></span>・<span class="term">LangChain<span class="term-popup">LLMを使ったアプリを素早く組み立てるPython/TSライブラリ。RAG・エージェント機能を提供</span></span>・<span class="term">FastAPI<span class="term-popup">Python製の高速WebフレームワークAPIが簡潔に書ける。自動でSwaggerドキュメントも生成</span></span>）が全部Pythonに集中している。PoCはPythonが最速。</p>
+        <p><strong>選ばない理由</strong>：<span class="term">高トラフィックAPI<span class="term-popup">1秒あたり数万〜数十万リクエストを捌く大規模なAPI。PythonよりGoやRustが有利な場面</span></span>や<span class="term">組み込みシステム<span class="term-popup">家電・車・センサーなど専用ハードに直接乗るソフトウェア。メモリや処理速度に厳しい制約がある</span></span>には向かない。速度が必要な場面ではGoやRustを検討。</p>
         <a class="more-link" href="01_languages/python.html">さらに詳しく →</a>
       </div>
     </div>
@@ -308,7 +327,7 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
       <div class="acc-body">
         <p><strong>通常のLLMとの違い</strong>：LLMは「返答するだけ」。エージェントは「ツールを使いながら自律的に行動する」。</p>
         <p><strong>例</strong>：「最新のニュースをまとめてSlackに送って」→ Web検索ツール → まとめ生成 → Slack送信ツール を自動で使う</p>
-        <p><strong>主要フレームワーク</strong>：LangChain / LlamaIndex / OpenAI Assistants / Claude + MCP</p>
+        <p><strong>主要フレームワーク</strong>：<span class="term">LangChain<span class="term-popup">LLMを使ったアプリを素早く組み立てるPython/TSライブラリ。RAG・エージェント機能を提供</span></span> / LlamaIndex / OpenAI Assistants / Claude + MCP</p>
         <p><strong>課題</strong>：ループ・無限実行・コスト暴走のリスク。品質ゲートと予算上限が必須。</p>
         <div class="tag-row"><span class="tag tag-ex">🔥 NexusCoreで実装済み</span></div>
       </div>
@@ -594,6 +613,48 @@ document.querySelectorAll('.acc-item[data-key]').forEach(item => {
     item.classList.add('open');
   }
 });
+</script>
+<script>
+// 用語ツールチップ
+(function(){
+  var tip = document.createElement('div');
+  tip.id = 'term-tooltip';
+  document.body.appendChild(tip);
+  var currentTerm = null;
+
+  function showTip(term) {
+    var popup = term.querySelector('.term-popup');
+    if (!popup) return;
+    tip.textContent = popup.textContent;
+    tip.style.display = 'block';
+    tip.classList.remove('below');
+    var r = term.getBoundingClientRect();
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    var left = r.left + r.width / 2 - tw / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+    var top = r.top - th - 10;
+    if (top < 8) { top = r.bottom + 10; tip.classList.add('below'); }
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+    currentTerm = term;
+  }
+
+  function hideTip() { tip.style.display = 'none'; currentTerm = null; }
+
+  document.querySelectorAll('.term').forEach(function(t) {
+    t.setAttribute('tabindex', '0');
+    t.addEventListener('mouseenter', function(){ showTip(t); });
+    t.addEventListener('mouseleave', function(){ hideTip(); });
+    t.addEventListener('focus', function(){ showTip(t); });
+    t.addEventListener('blur', function(){ hideTip(); });
+    t.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (currentTerm === t) hideTip(); else showTip(t);
+    });
+  });
+  document.addEventListener('click', function(){ hideTip(); });
+  window.addEventListener('scroll', function(){ if (currentTerm) showTip(currentTerm); }, {passive:true});
+})();
 </script>
 </body>
 </html>
