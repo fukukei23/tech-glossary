@@ -16,22 +16,24 @@ LANGUAGES = ["typescript", "go", "rust", "sql", "python"]
 _md = mistune.create_markdown(escape=False)
 
 
-def render_terms(body: str, terms: list) -> str:
-    """body内の **用語** を terms の定義で展開（tooltip用）。
-
-    mistune前後に適用。今回は **用語** を <strong>用語</strong> のまま残す
-    （tooltip未実装はPhase2以降）。
-    """
-    # Phase1 は **用語** -> <strong>用語</strong> の標準Markdown変換のみ
-    return body
+def apply_tooltips(html: str, terms: list) -> str:
+    """mistune出力の <strong>用語</strong> を tooltip span に置換（現行HTML同等）"""
+    for t in terms:
+        word = t["word"]
+        defn = t["def"]
+        html = html.replace(
+            f"<strong>{word}</strong>",
+            f'<span class="term">{word}<span class="term-popup">{defn}</span></span>',
+        )
+    return html
 
 
 def load_language(name: str) -> dict:
     """YAML読込 + body を Markdown->HTML 化して summary.body_md に格納"""
     with open(LANG_DIR / f"{name}.yaml", encoding="utf-8") as f:
         data = yaml.safe_load(f)
-    body = render_terms(data["summary"]["body"], data.get("terms", []))
-    data["summary"]["body_md"] = _md(body)
+    body_md = _md(data["summary"]["body"])
+    data["summary"]["body_md"] = apply_tooltips(body_md, data.get("terms", []))
     # pros_cons も Markdown 変換（choose/avoid 内の **太字** 等を反映）
     pc = data["pros_cons"]
     pc["choose_md"] = _md(pc["choose"])
