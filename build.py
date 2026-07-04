@@ -32,6 +32,10 @@ def load_language(name: str) -> dict:
         data = yaml.safe_load(f)
     body = render_terms(data["summary"]["body"], data.get("terms", []))
     data["summary"]["body_md"] = _md(body)
+    # pros_cons も Markdown 変換（choose/avoid 内の **太字** 等を反映）
+    pc = data["pros_cons"]
+    pc["choose_md"] = _md(pc["choose"])
+    pc["avoid_md"] = _md(pc["avoid"]) if pc.get("avoid") else ""
     return data
 
 

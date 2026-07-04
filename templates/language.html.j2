@@ -47,8 +47,8 @@
   </table></div>
 
   <div class="section"><div class="section-title">✅ 選ぶ理由 / ⚠ 選ばない理由</div><div class="card">
-    <p><strong>選ぶ理由</strong>：{{ lang.pros_cons.choose }}</p>
-    {% if lang.pros_cons.avoid %}<p><strong>選ばない理由</strong>：{{ lang.pros_cons.avoid }}</p>{% endif %}
+    <p><strong>選ぶ理由</strong>：{{ lang.pros_cons.choose_md | safe }}</p>
+    {% if lang.pros_cons.avoid_md %}<p><strong>選ばない理由</strong>：{{ lang.pros_cons.avoid_md | safe }}</p>{% endif %}
   </div></div>
 
   <div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div>
