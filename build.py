@@ -1,4 +1,5 @@
 """tech-glossary ビルドスクリプト: languages/*.yaml -> 01_languages/*.html + index.html"""
+import html as _html
 import sys
 from pathlib import Path
 
@@ -18,16 +19,20 @@ LANGUAGES = ["typescript", "go", "rust", "sql", "python"]
 _md = mistune.create_markdown(escape=True)
 
 
-def apply_tooltips(html: str, terms: list) -> str:
-    """mistune出力の <strong>用語</strong> を tooltip span に置換（現行HTML同等）"""
+def apply_tooltips(content: str, terms: list) -> str:
+    """mistune出力の <strong>用語</strong> を tooltip span に置換（現行HTML同等）。
+
+    word/def は html.escape でエスケープ（XSS対策）。mistune も escape=True で
+    body 側をエスケープしているので、word もエスケープして突合せる。
+    """
     for t in terms:
-        word = t["word"]
-        defn = t["def"]
-        html = html.replace(
+        word = _html.escape(t["word"], quote=False)
+        defn = _html.escape(t["def"], quote=False)
+        content = content.replace(
             f"<strong>{word}</strong>",
             f'<span class="term">{word}<span class="term-popup">{defn}</span></span>',
         )
-    return html
+    return content
 
 
 def load_language(name: str) -> dict:
