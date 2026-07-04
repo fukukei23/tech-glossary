@@ -1,0 +1,59 @@
+id: sql
+name: SQL
+icon: "🗄️"
+tagline: "データベース専用言語。JOINやインデックスが重要"
+tags:
+  fit_for: ["データ取得", "集計/分析", "汎用性高い"]
+  avoid_for: ["大量データでは設計が重要"]
+
+summary:
+  quote: "データを取り出す・集計する・更新するための専用言語"
+  body: |
+    1970年代から使われ続ける最も普及したデータ操作言語。**リレーショナルDB**と組み合わせて使う。
+    AIがSQLを自動生成するツールが増えているが、生成されたSQLの妥当性を判断するには基礎理解が必要。
+
+use_cases:
+  - title: "SELECT（取得）"
+    desc: "テーブルからデータを取り出す基本操作。条件（WHERE）・並び替え（ORDER BY）・件数制限（LIMIT）を組み合わせる。"
+  - title: "JOIN（結合）"
+    desc: "複数テーブルを関連付けて一つの結果セットにする。**INNER JOIN**・**LEFT JOIN**の違いを理解することが重要。"
+  - title: "INDEX（インデックス）"
+    desc: "検索を高速化する仕組み。本の索引と同じ原理。大量データのクエリが遅い場合は適切なINDEXが解決策になる。"
+  - title: "トランザクション"
+    desc: "複数の操作を「全部成功か全部失敗」にまとめる仕組み。銀行の送金（引き落としと入金が必ずセット）が典型例。"
+
+compare:
+  headers: [特徴, 使い道]
+  rows:
+    - axis: "PostgreSQL"
+      values: ["高機能・本番向け", "本番Webサービス・AIアプリのデータストア"]
+      marks: ["good", ""]
+    - axis: "MySQL"
+      values: ["Web定番・シンプル", "WordPress・伝統的なWebアプリ"]
+      marks: ["", ""]
+    - axis: "SQLite"
+      values: ["ファイル1つで完結", "開発環境・モバイルアプリ・軽量ツール"]
+      marks: ["good", ""]
+    - axis: "BigQuery"
+      values: ["列指向・大規模分析向け", "数TB超のデータ分析・BIダッシュボード"]
+      marks: ["", ""]
+
+pros_cons:
+  choose: "自然言語→SQL変換ツールが増えており、生成されたSQLの妥当性を判断するには基礎理解が必須。AIが書いたSQLのレビュー（JOIN方向・インデックス不足）にも知識が必要。**pgvector**のようにPostgreSQLでベクトル検索も可能になり、SQL＋AIの組み合わせが広がっている。"
+  avoid: ""
+
+qa:
+  - q: "このクエリ、なぜ遅いですか？"
+    a: "EXPLAINコマンドで実行計画を確認します。多くの場合、適切なINDEXがない（フルスキャン）か、JOINで大量のデータを結合している場合です"
+  - q: "NoSQLじゃなくSQLを使う理由は？"
+    a: "データ間の関係が複雑でJOINが必要なら、RDBが有利です。NoSQLはスキーマが柔軟でスケールしやすい反面、複雑なクエリが書きにくい。用途に応じて使い分けます"
+
+terms:
+  - word: "リレーショナルDB"
+    def: "データを表（テーブル）形式で管理し、テーブル間の関係を定義できるデータベース。PostgreSQL・MySQL・SQLiteなどが代表"
+  - word: "INNER JOIN"
+    def: "両テーブルで一致するデータのみ取得。一致しない行は除外される"
+  - word: "LEFT JOIN"
+    def: "左テーブルの全行＋右テーブルの一致行を取得。一致しない場合はNULLが入る"
+  - word: "pgvector"
+    def: "PostgreSQLの拡張機能。ベクトル（数値の配列）を保存・類似検索できる。RAG実装でよく使われる"

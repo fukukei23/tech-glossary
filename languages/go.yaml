@@ -1,0 +1,58 @@
+id: go
+name: "Go（Golang）"
+icon: "🔵"
+tagline: "シンプルで高速。インフラ・マイクロサービス向き"
+tags:
+  fit_for: ["高速実行", "並行処理", "シングルバイナリ"]
+  avoid_for: ["AIライブラリが少ない", "ジェネリクスが弱め"]
+
+summary:
+  quote: "速い・シンプル・並行処理が得意。インフラの言語"
+  body: |
+    Googleが開発。**静的型付け**でコンパイルが速く、実行バイナリが1ファイルで完結するためデプロイが簡単。
+    **ゴルーチン**による並行処理が得意で、Docker・Kubernetes・Terraformなどインフラツールの大半がGoで書かれている。
+
+use_cases:
+  - title: "高トラフィックAPIサーバー"
+    desc: "毎秒数万〜数十万リクエストを捌く場面でPythonより大幅に有利。メモリ使用量も少ない。"
+  - title: "インフラ・CLIツール"
+    desc: "シングルバイナリで配布できるためサーバーへのデプロイやCLIツール配布が非常に簡単。"
+  - title: "マイクロサービス"
+    desc: "軽量で起動が速く、コンテナ（Docker）との相性が良い。gRPCとの組み合わせが定番。"
+  - title: "有名事例"
+    desc: "Docker・Kubernetes・Terraform・Grafana・Uber（APIゲートウェイ）・Dropbox（高性能部分）"
+
+compare:
+  headers: [Go, Python, Rust]
+  rows:
+    - axis: "実行速度"
+      values: ["速い", "遅め", "最速クラス"]
+      marks: ["good", "bad", "good"]
+    - axis: "学習コスト"
+      values: ["低め", "低い", "非常に高い"]
+      marks: ["good", "good", "bad"]
+    - axis: "並行処理"
+      values: ["ゴルーチンで容易", "asyncio（やや難）", "安全だが複雑"]
+      marks: ["good", "", ""]
+    - axis: "メモリ管理"
+      values: ["GC（自動）", "GC（自動）", "手動（安全）"]
+      marks: ["", "", "good"]
+    - axis: "向いている場面"
+      values: ["高トラフィックAPI・インフラ", "AI・PoC", "組み込み・OS"]
+      marks: ["", "", ""]
+
+pros_cons:
+  choose: "大量リクエストを捌くAPIに最適。シングルバイナリでデプロイが楽。Rustほど難しくなく、Pythonより速い「ちょうどいい」言語。"
+  avoid: "AIアプリのPoCフェーズでは選ばない。Pythonライブラリ（PyTorch等）のエコシステムに勝てない。ジェネリクスが弱く抽象的な設計が難しい場面も。"
+
+qa:
+  - q: "APIサーバー、PythonからGoに移行する必要ありますか？"
+    a: "現状のトラフィックが問題なければ不要です。ただしPythonのFastAPIで毎秒1万リクエスト超になってきたら、GoへのAPIゲートウェイ移行を検討するタイミングです"
+  - q: "GoとRustどちらを選びますか？"
+    a: "ほとんどのWebサービス・API用途ではGoで十分です。ゲームエンジン・組み込みデバイス・WebAssemblyが必要な場合にRustを選びます"
+
+terms:
+  - word: "静的型付け"
+    def: "コードを実行する前にデータの型を確認する仕組み。バグを事前に検出できる"
+  - word: "ゴルーチン"
+    def: "Goの軽量な並行処理の単位。OSスレッドより数千倍軽く、大量リクエストを効率よく処理できる"

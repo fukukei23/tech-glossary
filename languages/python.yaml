@@ -1,0 +1,64 @@
+id: python
+name: Python
+icon: "🐍"
+tagline: "AIと相性◎。書きやすいが実行速度は遅め"
+tags:
+  fit_for: ["AI/ML", "データ処理", "スクリプト", "Web API"]
+  avoid_for: ["実行速度", "型の曖昧さ"]
+
+summary:
+  quote: "人間が読みやすい言語。特にAI・データ処理の業界標準語"
+  body: |
+    コードが英語の散文に近く初学者でも読みやすい。**PyTorch**・**LangChain**・**FastAPI**
+    など主要AIライブラリがすべてPythonに集中しているため、AI案件では事実上の標準。
+
+use_cases:
+  - title: "機械学習・深層学習"
+    desc: "PyTorch / TensorFlow / scikit-learn が揃っており、モデルのプロトタイプから本番運用まで一貫してPythonで完結できる。"
+  - title: "LLMアプリ開発"
+    desc: "LangChain / LlamaIndex / OpenAI SDK などのエコシステムが充実。RAGやエージェント構築も得意。"
+  - title: "データ分析・可視化"
+    desc: "pandas / matplotlib / Jupyter Notebook の組み合わせが業界標準。データサイエンティストの共通言語。"
+  - title: "Web API・自動化スクリプト"
+    desc: "FastAPI や Flask でAPIサーバーを素早く立ち上げられる。スクレイピングや業務自動化にも使いやすい。"
+
+compare:
+  headers: [Python, Go, TypeScript]
+  rows:
+    - axis: "実行速度"
+      values: ["遅め", "速い", "中程度"]
+      marks: ["bad", "good", ""]
+    - axis: "AI/MLライブラリ"
+      values: ["圧倒的に豊富", "ほぼなし", "少ない"]
+      marks: ["good", "bad", ""]
+    - axis: "学習コスト"
+      values: ["低い", "中程度", "中程度"]
+      marks: ["good", "", ""]
+    - axis: "型安全性"
+      values: ["型ヒントあり（任意）", "静的型付け", "静的型付け"]
+      marks: ["", "good", "good"]
+    - axis: "向いている場面"
+      values: ["AI・データ・PoC", "高トラフィックAPI", "Webフロント・フルスタック"]
+      marks: ["", "", ""]
+
+pros_cons:
+  choose: "AI・機械学習のエコシステムがPythonに一極集中。PoCフェーズでのスピードが最速。書きやすく読みやすいためチームへの展開も容易。"
+  avoid: "**高トラフィックAPI**（毎秒数万リクエスト超）はGoやRustが有利。**組み込みシステム**にはメモリ効率が悪すぎる。"
+
+qa:
+  - q: "このサービス、スケールしたらPythonで大丈夫ですか？"
+    a: "非同期処理（FastAPIのasync/await）とworkerのスケールアウトで多くの場合は対応できます。ただし毎秒数十万リクエスト規模になるならGoへの移行も選択肢に入ります"
+  - q: "PoCはPythonでやりましたが、本番もPythonでいいですか？"
+    a: "AIモデルの推論を含むなら本番もPythonが現実的です。ただしAPIの外側（ゲートウェイ・ルーティング）はGoを使い分けることも有効です"
+
+terms:
+  - word: "PyTorch"
+    def: "MetaのPython製ディープラーニングフレームワーク。研究から本番まで業界標準"
+  - word: "LangChain"
+    def: "LLMアプリを素早く組むPython/TSライブラリ。RAGやエージェント機能を提供"
+  - word: "FastAPI"
+    def: "Python製高速WebフレームワークAPIが簡潔に書ける。Swaggerドキュメントも自動生成"
+  - word: "高トラフィックAPI"
+    def: "1秒あたり数万〜数十万リクエストを捌く大規模なAPI。PythonよりGoやRustが有利な場面"
+  - word: "組み込みシステム"
+    def: "家電・車・センサーなど専用ハードに直接乗るソフトウェア。メモリや処理速度に厳しい制約がある"
