@@ -195,102 +195,26 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
   <div class="chapter">
     <div class="chapter-title"><span class="ch-badge">第1章</span>言語特性マップ</div>
 
-    
-    <div class="acc-item" data-key="lang-typescript">
+    {% for lang in languages %}
+    <div class="acc-item" data-key="lang-{{ lang.id }}">
       <div class="acc-header" onclick="toggle(this)">
         <span class="acc-icon">▶</span>
-        <div class="acc-title">🔷 TypeScript</div>
-        <div class="acc-summary">JavaScriptに型を追加。フロント/バックエンド両対応</div>
+        <div class="acc-title">{{ lang.icon }} {{ lang.name }}</div>
+        <div class="acc-summary">{{ lang.tagline }}</div>
       </div>
       <div class="acc-body">
-        <p><strong>一言で言うと</strong>：「JavaScriptの信頼できる版。Webの実質標準語」</p>
+        <p><strong>一言で言うと</strong>：「{{ lang.summary.quote }}」</p>
         <div class="tag-row">
-          <span class="tag tag-good">✅ フロントエンド</span><span class="tag tag-good">✅ サーバーサイド</span><span class="tag tag-good">✅ 型安全</span>
-          <span class="tag tag-bad">⚠ 設定が複雑</span><span class="tag tag-bad">⚠ ビルドが必要</span>
+          {% for tag in lang.tags.fit_for %}<span class="tag tag-good">✅ {{ tag }}</span>{% endfor %}
+          {% for tag in lang.tags.avoid_for %}<span class="tag tag-bad">⚠ {{ tag }}</span>{% endfor %}
         </div>
-        <p><strong>得意な用途</strong>：Webフロントエンド・Node.jsサーバー・MCPサーバー・CLIツール・フルスタック開発</p>
-        <p><strong>選ぶ理由</strong>：フロントとバックを同じ言語で書けるためチームの認知コストが下がる。型エラーでバグを事前検出。Webサービス開発では現実的に最有力。</p>
-        <p><strong>選ばない理由</strong>：小さなスクリプトや自動化ツールにはオーバーキル。AIモデル推論など計算集約タスクはPythonの方が圧倒的にライブラリが充実。</p>
-        <a class="more-link" href="01_languages/typescript.html">さらに詳しく →</a>
+        <p><strong>得意な用途</strong>：{% for uc in lang.use_cases %}{{ uc.title }}{% if not loop.last %}・{% endif %}{% endfor %}</p>
+        <p><strong>選ぶ理由</strong>：{{ lang.pros_cons.choose }}</p>
+        {% if lang.pros_cons.avoid %}<p><strong>選ばない理由</strong>：{{ lang.pros_cons.avoid }}</p>{% endif %}
+        <a class="more-link" href="01_languages/{{ lang.id }}.html">さらに詳しく →</a>
       </div>
     </div>
-    
-    <div class="acc-item" data-key="lang-go">
-      <div class="acc-header" onclick="toggle(this)">
-        <span class="acc-icon">▶</span>
-        <div class="acc-title">🔵 Go（Golang）</div>
-        <div class="acc-summary">シンプルで高速。インフラ・マイクロサービス向き</div>
-      </div>
-      <div class="acc-body">
-        <p><strong>一言で言うと</strong>：「速い・シンプル・並行処理が得意。インフラの言語」</p>
-        <div class="tag-row">
-          <span class="tag tag-good">✅ 高速実行</span><span class="tag tag-good">✅ 並行処理</span><span class="tag tag-good">✅ シングルバイナリ</span>
-          <span class="tag tag-bad">⚠ AIライブラリが少ない</span><span class="tag tag-bad">⚠ ジェネリクスが弱め</span>
-        </div>
-        <p><strong>得意な用途</strong>：高トラフィックAPIサーバー・インフラ・CLIツール・マイクロサービス・有名事例</p>
-        <p><strong>選ぶ理由</strong>：大量リクエストを捌くAPIに最適。シングルバイナリでデプロイが楽。Rustほど難しくなく、Pythonより速い「ちょうどいい」言語。</p>
-        <p><strong>選ばない理由</strong>：AIアプリのPoCフェーズでは選ばない。Pythonライブラリ（PyTorch等）のエコシステムに勝てない。ジェネリクスが弱く抽象的な設計が難しい場面も。</p>
-        <a class="more-link" href="01_languages/go.html">さらに詳しく →</a>
-      </div>
-    </div>
-    
-    <div class="acc-item" data-key="lang-rust">
-      <div class="acc-header" onclick="toggle(this)">
-        <span class="acc-icon">▶</span>
-        <div class="acc-title">🦀 Rust</div>
-        <div class="acc-summary">極限のパフォーマンスとメモリ安全性。学習コスト高</div>
-      </div>
-      <div class="acc-body">
-        <p><strong>一言で言うと</strong>：「速さと安全性を両立する、最難関の言語」</p>
-        <div class="tag-row">
-          <span class="tag tag-good">✅ 最高速</span><span class="tag tag-good">✅ メモリ安全</span><span class="tag tag-good">✅ 組み込み</span>
-          <span class="tag tag-bad">⚠ 学習コスト最高</span><span class="tag tag-bad">⚠ 開発速度遅め</span>
-        </div>
-        <p><strong>得意な用途</strong>：組み込みシステム・OS開発・WebAssembly（Wasm）・ゲームエンジン・グラフィクス・暗号・セキュリティ</p>
-        <p><strong>選ぶ理由</strong>：C/C++の置き換えとして「速くて安全」が必要な場面。メモリリークやバッファオーバーフローをコンパイル時に防げる。長期運用するシステムの信頼性が上がる。</p>
-        <p><strong>選ばない理由</strong>：Web・AI案件のPoCには絶対に向かない。所有権・借用の概念習得に数ヶ月必要。チームにRustが書ける人材を確保することが難しい。</p>
-        <a class="more-link" href="01_languages/rust.html">さらに詳しく →</a>
-      </div>
-    </div>
-    
-    <div class="acc-item" data-key="lang-sql">
-      <div class="acc-header" onclick="toggle(this)">
-        <span class="acc-icon">▶</span>
-        <div class="acc-title">🗄️ SQL</div>
-        <div class="acc-summary">データベース専用言語。JOINやインデックスが重要</div>
-      </div>
-      <div class="acc-body">
-        <p><strong>一言で言うと</strong>：「データを取り出す・集計する・更新するための専用言語」</p>
-        <div class="tag-row">
-          <span class="tag tag-good">✅ データ取得</span><span class="tag tag-good">✅ 集計/分析</span><span class="tag tag-good">✅ 汎用性高い</span>
-          <span class="tag tag-bad">⚠ 大量データでは設計が重要</span>
-        </div>
-        <p><strong>得意な用途</strong>：SELECT（取得）・JOIN（結合）・INDEX（インデックス）・トランザクション</p>
-        <p><strong>選ぶ理由</strong>：自然言語→SQL変換ツールが増えており、生成されたSQLの妥当性を判断するには基礎理解が必須。AIが書いたSQLのレビュー（JOIN方向・インデックス不足）にも知識が必要。**pgvector**のようにPostgreSQLでベクトル検索も可能になり、SQL＋AIの組み合わせが広がっている。</p>
-        
-        <a class="more-link" href="01_languages/sql.html">さらに詳しく →</a>
-      </div>
-    </div>
-    
-    <div class="acc-item" data-key="lang-python">
-      <div class="acc-header" onclick="toggle(this)">
-        <span class="acc-icon">▶</span>
-        <div class="acc-title">🐍 Python</div>
-        <div class="acc-summary">AIと相性◎。書きやすいが実行速度は遅め</div>
-      </div>
-      <div class="acc-body">
-        <p><strong>一言で言うと</strong>：「人間が読みやすい言語。特にAI・データ処理の業界標準語」</p>
-        <div class="tag-row">
-          <span class="tag tag-good">✅ AI/ML</span><span class="tag tag-good">✅ データ処理</span><span class="tag tag-good">✅ スクリプト</span><span class="tag tag-good">✅ Web API</span>
-          <span class="tag tag-bad">⚠ 実行速度</span><span class="tag tag-bad">⚠ 型の曖昧さ</span>
-        </div>
-        <p><strong>得意な用途</strong>：機械学習・深層学習・LLMアプリ開発・データ分析・可視化・Web API・自動化スクリプト</p>
-        <p><strong>選ぶ理由</strong>：AI・機械学習のエコシステムがPythonに一極集中。PoCフェーズでのスピードが最速。書きやすく読みやすいためチームへの展開も容易。</p>
-        <p><strong>選ばない理由</strong>：**高トラフィックAPI**（毎秒数万リクエスト超）はGoやRustが有利。**組み込みシステム**にはメモリ効率が悪すぎる。</p>
-        <a class="more-link" href="01_languages/python.html">さらに詳しく →</a>
-      </div>
-    </div>
-    
+    {% endfor %}
   </div>
 
 
