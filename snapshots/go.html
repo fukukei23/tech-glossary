@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Go（Golang） — テクニカルアーキテクト語彙帳</title>
+<meta name="description" content="Go（Golang）の用途・選定理由・トレードオフを解説">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#1e1e2e;--bg-raised:#262638;--bg-deep:#1a1a28;
+  --accent:#7c3aed;--accent-dim:rgba(124,58,237,0.2);
+  --fg:#e4e4f0;--fg-dim:#9494ac;--fg-bright:#fff;
+  --border:#3a3a52;--radius:10px;
+  --font-ui:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",sans-serif;
+}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--fg);line-height:1.8;min-height:100vh;}
+body::before{content:'';position:fixed;top:-30%;left:-20%;width:70vw;height:70vw;background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transparent 65%);pointer-events:none;}
+.container{max-width:780px;margin:0 auto;padding:40px 20px 80px;position:relative;z-index:1;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--fg-dim);text-decoration:none;margin-bottom:32px;transition:color 0.2s;}
+.back-link:hover{color:var(--accent);}
+.lang-header{margin-bottom:40px;}
+.lang-icon{font-size:48px;margin-bottom:12px;}
+h1{font-size:32px;font-weight:800;color:var(--fg-bright);margin-bottom:6px;}
+.lang-tagline{font-size:16px;color:var(--fg-dim);margin-bottom:16px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+.tag{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.tag-good{background:rgba(16,185,129,0.15);color:#34d399;}
+.tag-bad{background:rgba(239,68,68,0.15);color:#f87171;}
+.section{margin-bottom:40px;}
+.section-title{font-size:18px;font-weight:700;color:var(--fg-bright);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.card{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;}
+.card p{font-size:14px;line-height:1.9;margin-bottom:10px;}
+.card p:last-child{margin-bottom:0;}
+.card strong{color:var(--fg-bright);}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+.compare-table th{background:var(--bg-deep);color:var(--fg-dim);font-weight:700;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.compare-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--fg);vertical-align:top;}
+.compare-table tr:last-child td{border-bottom:none;}
+.good{color:#34d399;}.bad{color:#f87171;}
+.qa-item{margin-bottom:16px;}
+.qa-q{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.qa-a{font-size:14px;color:var(--fg);padding-left:16px;border-left:2px solid var(--border);}
+.term{border-bottom:1px dashed var(--accent);cursor:help;color:#c4b5fd;transition:color 0.2s;}
+.term:hover,.term:focus{color:#fff;}
+.term-popup{display:none;}
+#term-tooltip{display:none;position:fixed;background:var(--bg-raised);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--fg);line-height:1.6;white-space:normal;max-width:300px;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.4);pointer-events:none;}
+#term-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--accent);}
+#term-tooltip.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--accent);}
+.footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--border);color:var(--fg-dim);font-size:13px;text-align:center;}
+.footer a{color:var(--accent);text-decoration:none;}
+body.light{--bg:#f8f9fa;--bg-raised:#fff;--bg-deep:#f1f3f5;--fg:#2d2d3f;--fg-dim:#6b7280;--fg-bright:#1a1a2e;--border:#e5e7eb;}
+body.light #term-tooltip{background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+.theme-toggle{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:15px;color:var(--fg-dim);position:fixed;top:20px;right:20px;z-index:100;transition:all 0.2s;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--fg);}
+@media(max-width:600px){.container{padding:24px 14px 60px;}h1{font-size:24px;}}
+</style>
+</head>
+<body>
+<button class="theme-toggle">🌙</button>
+<div class="container">
+  <a class="back-link" href="../index.html">← 語彙帳トップに戻る</a>
+  <div class="lang-header">
+    <div class="lang-icon">🔵</div>
+    <h1>Go（Golang）</h1>
+    <p class="lang-tagline">シンプルで高速。インフラ・マイクロサービス向き</p>
+    <div class="tag-row"><span class="tag tag-good">✅ 高速実行</span><span class="tag tag-good">✅ 並行処理</span><span class="tag tag-good">✅ シングルバイナリ</span><span class="tag tag-bad">⚠ AIライブラリが少ない</span><span class="tag tag-bad">⚠ ジェネリクスが弱め</span></div>
+  </div>
+  <div class="section"><div class="section-title">📌 一言で言うと</div><div class="card">
+<p>「速い・シンプル・並行処理が得意。インフラの言語」</p>
+<p>Googleが開発。<span class="term">静的型付け<span class="term-popup">コードを実行する前にデータの型を確認する仕組み。バグを事前に検出できる</span></span>でコンパイルが速く、実行バイナリが1ファイルで完結するためデプロイが簡単。<span class="term">ゴルーチン<span class="term-popup">Goの軽量な並行処理の単位。OSスレッドより数千倍軽く、大量リクエストを効率よく処理できる</span></span>による並行処理が得意で、Docker・Kubernetes・Terraformなどインフラツールの大半がGoで書かれている。</p>
+</div></div>
+<div class="section"><div class="section-title">🎯 得意な用途</div><div class="card">
+<p><strong>高トラフィックAPIサーバー</strong>：毎秒数万〜数十万リクエストを捌く場面でPythonより大幅に有利。メモリ使用量も少ない。</p>
+<p><strong>インフラ・CLIツール</strong>：シングルバイナリで配布できるためサーバーへのデプロイやCLIツール配布が非常に簡単。</p>
+<p><strong>マイクロサービス</strong>：軽量で起動が速く、コンテナ（Docker）との相性が良い。gRPCとの組み合わせが定番。</p>
+<p><strong>有名事例</strong>：Docker・Kubernetes・Terraform・Grafana・Uber（APIゲートウェイ）・Dropbox（高性能部分）</p>
+</div></div>
+<div class="section"><div class="section-title">⚖️ 他言語との比較</div><table class="compare-table">
+<thead><tr><th>観点</th><th>Go</th><th>Python</th><th>Rust</th></tr></thead>
+<tbody>
+<tr><td>実行速度</td><td class="good">速い</td><td class="bad">遅め</td><td class="good">最速クラス</td></tr>
+<tr><td>学習コスト</td><td class="good">低め</td><td class="good">低い</td><td class="bad">非常に高い</td></tr>
+<tr><td>並行処理</td><td class="good">ゴルーチンで容易</td><td>asyncio（やや難）</td><td>安全だが複雑</td></tr>
+<tr><td>メモリ管理</td><td>GC（自動）</td><td>GC（自動）</td><td class="good">手動（安全）</td></tr>
+<tr><td>向いている場面</td><td>高トラフィックAPI・インフラ</td><td>AI・PoC</td><td>組み込み・OS</td></tr>
+</tbody></table></div>
+<div class="section"><div class="section-title">✅ 選ぶ理由 / ⚠ 選ばない理由</div><div class="card">
+<p><strong>選ぶ理由</strong>：大量リクエストを捌くAPIに最適。シングルバイナリでデプロイが楽。Rustほど難しくなく、Pythonより速い「ちょうどいい」言語。</p>
+<p><strong>選ばない理由</strong>：AIアプリのPoCフェーズでは選ばない。Pythonライブラリ（PyTorch等）のエコシステムに勝てない。ジェネリクスが弱く抽象的な設計が難しい場面も。</p>
+</div></div>
+<div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div><div class="qa-item">
+<div class="qa-q">Q.「APIサーバー、PythonからGoに移行する必要ありますか？」</div>
+<div class="qa-a">A.「現状のトラフィックが問題なければ不要です。ただしPythonのFastAPIで毎秒1万リクエスト超になってきたら、GoへのAPIゲートウェイ移行を検討するタイミングです」</div>
+</div>
+<div class="qa-item">
+<div class="qa-q">Q.「GoとRustどちらを選びますか？」</div>
+<div class="qa-a">A.「ほとんどのWebサービス・API用途ではGoで十分です。ゲームエンジン・組み込みデバイス・WebAssemblyが必要な場合にRustを選びます」</div>
+</div></div>
+  <div class="footer">
+    <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var tip=document.createElement('div');tip.id='term-tooltip';document.body.appendChild(tip);
+  var cur=null;
+  function show(t){
+    var p=t.querySelector('.term-popup');if(!p)return;
+    tip.textContent=p.textContent;tip.style.display='block';tip.classList.remove('below');
+    var r=t.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;
+    var left=r.left+r.width/2-tw/2;
+    left=Math.max(8,Math.min(left,window.innerWidth-tw-8));
+    var top=r.top-th-10;
+    if(top<8){top=r.bottom+10;tip.classList.add('below');}
+    tip.style.left=left+'px';tip.style.top=top+'px';cur=t;
+  }
+  function hide(){tip.style.display='none';cur=null;}
+  document.querySelectorAll('.term').forEach(function(t){
+    t.setAttribute('tabindex','0');
+    t.addEventListener('mouseenter',function(){show(t);});
+    t.addEventListener('mouseleave',hide);
+    t.addEventListener('focus',function(){show(t);});
+    t.addEventListener('blur',hide);
+    t.addEventListener('click',function(e){e.stopPropagation();if(cur===t)hide();else show(t);});
+  });
+  document.addEventListener('click',hide);
+  window.addEventListener('scroll',function(){if(cur)show(cur);},{passive:true});
+})();
+(function(){
+  var s=localStorage.getItem('tg_theme');
+  if(s==='light')document.body.classList.add('light');
+  var b=document.querySelector('.theme-toggle');
+  if(b){
+    b.addEventListener('click',function(){
+      document.body.classList.toggle('light');
+      var l=document.body.classList.contains('light');
+      b.textContent=l?'☀️':'🌙';
+      localStorage.setItem('tg_theme',l?'light':'dark');
+    });
+    b.textContent=document.body.classList.contains('light')?'☀️':'🌙';
+  }
+})();
+</script>
+</body>
+</html>
