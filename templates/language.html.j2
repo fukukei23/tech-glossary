@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ lang.name }} — テクニカルアーキテクト語彙帳</title>
+<meta name="description" content="{{ lang.name }}の用途・選定理由・トレードオフを解説">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<button class="theme-toggle">🌙</button>
+<div class="container">
+  <a class="back-link" href="../index.html">← 語彙帳トップに戻る</a>
+  <div class="lang-header">
+    <div class="lang-icon">{{ lang.icon }}</div>
+    <h1>{{ lang.name }}</h1>
+    <p class="lang-tagline">{{ lang.tagline }}</p>
+    <div class="tag-row">
+      {% for tag in lang.tags.fit_for %}<span class="tag tag-good">✅ {{ tag }}</span>{% endfor %}
+      {% for tag in lang.tags.avoid_for %}<span class="tag tag-bad">⚠ {{ tag }}</span>{% endfor %}
+    </div>
+  </div>
+
+  <div class="section"><div class="section-title">📌 一言で言うと</div><div class="card">
+    <p>{{ lang.summary.quote }}</p>
+    {{ lang.summary.body_md | safe }}
+  </div></div>
+
+  <div class="section"><div class="section-title">🎯 得意な用途</div><div class="card">
+    {% for uc in lang.use_cases %}
+    <p><strong>{{ uc.title }}</strong>：{{ uc.desc }}</p>
+    {% endfor %}
+  </div></div>
+
+  <div class="section"><div class="section-title">⚖️ 他言語との比較</div><table class="compare-table">
+    <thead><tr><th>観点</th>{% for h in lang.compare.headers %}<th>{{ h }}</th>{% endfor %}</tr></thead>
+    <tbody>
+    {% for row in lang.compare.rows %}
+      <tr><td>{{ row.axis }}</td>
+      {% for val in row['values'] %}
+        {% set mark = row['marks'][loop.index0] if row['marks'] else '' %}
+        <td class="{{ mark }}">{{ val }}</td>
+      {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+
+  <div class="section"><div class="section-title">✅ 選ぶ理由 / ⚠ 選ばない理由</div><div class="card">
+    <p><strong>選ぶ理由</strong>：{{ lang.pros_cons.choose }}</p>
+    {% if lang.pros_cons.avoid %}<p><strong>選ばない理由</strong>：{{ lang.pros_cons.avoid }}</p>{% endif %}
+  </div></div>
+
+  <div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div>
+    {% for item in lang.qa %}
+    <div class="qa-item">
+      <div class="qa-q">Q.{{ item.q }}</div>
+      <div class="qa-a">A.{{ item.a }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="footer">
+    <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
+  </div>
+</div>
+<script src="../assets/tooltip.js"></script>
+<script src="../assets/theme.js"></script>
+</body>
+</html>
