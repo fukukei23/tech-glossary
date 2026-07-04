@@ -13,7 +13,9 @@ BUILD_DIR = ROOT / "01_languages"
 INDEX_DIR = ROOT  # index.html はルート
 
 LANGUAGES = ["typescript", "go", "rust", "sql", "python"]
-_md = mistune.create_markdown(escape=False)
+# escape=True: YAML内の生HTMLをエスケープ（XSS対策）。**太字**等のMarkdown変換は維持される
+# ため apply_tooltips の <strong>用語</strong> 置換も機能する
+_md = mistune.create_markdown(escape=True)
 
 
 def apply_tooltips(html: str, terms: list) -> str:
