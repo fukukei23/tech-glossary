@@ -1,0 +1,59 @@
+id: typescript
+name: TypeScript
+icon: "🔷"
+tagline: "JavaScriptに型を追加。フロント/バックエンド両対応"
+tags:
+  fit_for: ["フロントエンド", "サーバーサイド", "型安全"]
+  avoid_for: ["設定が複雑", "ビルドが必要"]
+
+summary:
+  quote: "JavaScriptの信頼できる版。Webの実質標準語"
+  body: |
+    Microsoftが開発。JavaScriptに**静的型付け**を加えたスーパーセット。
+    フロントエンド（React/Next.js）からバックエンド（Node.js）、
+    **MCPサーバー**まで同じ言語で書ける。
+
+use_cases:
+  - title: "Webフロントエンド"
+    desc: "React / Next.js との組み合わせが業界標準。型安全なUIコンポーネントを構築できる。"
+  - title: "Node.jsサーバー"
+    desc: "Express / Fastify / NestJS などでAPIサーバーやBFFを構築。フロントと言語を統一できるメリットが大きい。"
+  - title: "MCPサーバー・CLIツール"
+    desc: "Claude Code の拡張（MCPサーバー）の公式SDKがTypeScript製。AIツール開発の主力言語になりつつある。"
+  - title: "フルスタック開発"
+    desc: "Next.js App Router でフロント・バック・DB操作をすべてTypeScriptで統一する「T3スタック」が人気。"
+
+compare:
+  headers: [TypeScript, Python, Go]
+  rows:
+    - axis: "フロントエンド対応"
+      values: ["得意（唯一の選択肢）", "非対応", "非対応"]
+      marks: ["good", "bad", "bad"]
+    - axis: "型安全性"
+      values: ["強い", "型ヒント（任意）", "強い"]
+      marks: ["good", "", "good"]
+    - axis: "AI/MLライブラリ"
+      values: ["少ない", "圧倒的に豊富", "ほぼなし"]
+      marks: ["", "good", "bad"]
+    - axis: "設定の複雑さ"
+      values: ["tsconfig等が必要", "シンプル", "シンプル"]
+      marks: ["bad", "good", "good"]
+    - axis: "向いている場面"
+      values: ["Webアプリ・フルスタック", "AI・データ・PoC", "高トラフィックAPI"]
+      marks: ["", "", ""]
+
+pros_cons:
+  choose: "フロントとバックを同じ言語で書けるためチームの認知コストが下がる。型エラーでバグを事前検出。Webサービス開発では現実的に最有力。"
+  avoid: "小さなスクリプトや自動化ツールにはオーバーキル。AIモデル推論など計算集約タスクはPythonの方が圧倒的にライブラリが充実。"
+
+qa:
+  - q: "JavaScriptじゃなくTypeScriptを使う理由は？"
+    a: "型定義によりIDEの補完が効き、実行前にバグを検出できます。チームが大きくなるほど恩恵が増します。現在のWebプロジェクトでTypeScriptを使わない理由の方が少ないです"
+  - q: "Next.jsとExpressどちらを選びますか？"
+    a: "フロント込みのWebサービスならNext.js（App Router）で統一するのが今の主流です。APIだけ提供するマイクロサービスにはExpressやFastifyが軽量で適しています"
+
+terms:
+  - word: "静的型付け"
+    def: "コードを実行する前にデータの型を確認する仕組み。バグを事前に検出できる"
+  - word: "MCPサーバー"
+    def: "Model Context Protocol サーバー。ClaudeなどのAIにツールや外部機能を提供する仕組み"
