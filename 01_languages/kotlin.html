@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kotlin — テクニカルアーキテクト語彙帳</title>
+<meta name="description" content="Kotlinの用途・選定理由・トレードオフを解説">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" integrity="sha384-oaMLBGEzBOJx3UHwac0cVndtX5fxGQIfnAeFZ35RTgqPcYlbprH9o9PUV/F8Le07" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
+</head>
+<body>
+<button class="theme-toggle">🌙</button>
+<div class="container">
+  <a class="back-link" href="../index.html">← 語彙帳トップに戻る</a>
+  <div class="lang-header">
+    <div class="lang-icon">🟣</div>
+    <h1>Kotlin</h1>
+    <p class="lang-tagline">Javaの後継・Android公式言語・モダン簡潔・null安全・Coroutines</p>
+    <div class="tag-row">
+      <span class="tag tag-good">✅ Androidアプリ（現行公式）</span><span class="tag tag-good">✅ サーバーサイド（Ktor / Spring Boot）</span><span class="tag tag-good">✅ Kotlin Multiplatform（iOS / JS / Desktop 共有コード）</span><span class="tag tag-good">✅ Null安全性が重要な業務システム</span><span class="tag tag-good">✅ モダンJVM（Java 資産活用）</span>
+      <span class="tag tag-bad">⚠ ビルド速度が最重要（Gradle 設定の重さが課題）</span><span class="tag tag-bad">⚠ 現メンバーが Java も Kotlin も読めない</span><span class="tag tag-bad">⚠ レガシー JVM 環境（古い Android・Java 6 など）で動かす必要がある場合</span>
+    </div>
+  </div>
+
+  <div class="section"><div class="section-title">📌 一言で言うと</div><div class="card">
+    <p>15年動いたモダンJVM。Javaの冗長さを解消し、Android公式となった</p>
+    <p><strong>Kotlin</strong> は <strong>2011年</strong> に <strong>JetBrains</strong>（IntelliJ IDEA の開発元）が公開した静的型付け言語で、JVM・Android・JS・Native（LLVM）のマルチプラットフォーム対応が最大の特徴。<strong>Android</strong> は <strong>2017年</strong>のGoogle I/O で「Kotlin 公式言語」化、<strong>2019年</strong>に「<strong>Kotlin-first</strong>」を宣言し、Google が Android 開発で Kotlin を推奨する立場が公式化している。
+言語設計は <strong>Java の上位互換</strong> を意図し、<code>val</code>/<code>var</code>・<strong>Null安全</strong>（<code>String?</code> vs <code>String</code>）・<span class="term">data class<span class="term-popup">`data class User(val name: String)` と書くと **equals / hashCode / toString / copy / componentN が自動生成**されるクラス。DTO・ボイラープレート削減に絶大な効果</span></span>・<strong>拡張関数</strong>・<span class="term">Coroutines<span class="term-popup">Kotlin 標準の**軽量スレッド**機構。`suspend fun` による中断・`launch`/`async` による起動・構造化並行性で OS スレッドを占有せず数万単位の並行処理を実現</span></span>（軽量スレッド）・<strong>when式</strong>・<span class="term">sealed class<span class="term-popup">継承階層を**同ファイル内に限定**する abstract クラス。when 式と組み合わせると**網羅性チェック**が効き、Android の UI State 等の有限状態モデルで多用される</span></span> などを導入して Java の冗長さを解消した。<strong>Java 資産（ライブラリ・JVM ツール）は全てそのまま呼べる</strong>ため、Spring Boot・Hibernate 等を Kotlin から活用する事例が急増している。
+2024年に <strong>Kotlin 2.0</strong> がリリースされ、<span class="term">K2 コンパイラ<span class="term-popup">Kotlin 2.0 で**デフォルト安定化**した新しいコンパイラフロントエンド。コンパイル速度・IDE 性能が大幅向上。言語機能の統一的な解析基盤</span></span> が安定版に到達してコンパイル速度・IDE 性能が大幅向上した。<strong>Compose Multiplatform</strong> で Desktop・iOS の UI も Kotlin で書けるようになり、サーバーサイド・モバイル・デスクトップの<strong>言語統一</strong>が現実的な選択肢になりつつある。</p>
+
+  </div></div>
+
+  <div class="section"><div class="section-title">🎯 得意な用途</div><div class="card">
+    
+    <p><strong>Androidアプリ（現行公式）</strong>：Google 公式推奨の Android 開発言語。**Jetpack Compose**（宣言的 UI）・**Coroutines**（非同期）・**ViewModel/LiveData** 等を Kotlin で書くのが標準。Android 開発新規プロジェクトのデファクト。</p>
+    
+    <p><strong>サーバーサイド（Ktor / Spring Boot）</strong>：**Ktor**（JetBrains 製・軽量 Web フレームワーク）または **Spring Boot**（Java 資産をそのまま活用）で REST API・マイクロサービスを Kotlin で実装。**Coroutines** で非同期処理が直感的に書ける。</p>
+    
+    <p><strong>Kotlin Multiplatform（iOS / JS / Desktop 共有コード）</strong>：**KMP** で iOS・Android・Web（JVM/JS）・Desktop の**共通ロジック**を Kotlin 単一コードで共有。UI は各プラットフォームネイティブ、共通処理（API・データ層）は Kotlin で書いて工数削減。</p>
+    
+    <p><strong>CLI / ツール（Kotlin Script）</strong>：`kotlinc -script` で **Kotlin Script**（`.kts`）を実行可能。Gradle の `build.gradle.kts` も Kotlin DSL で書かれ、ビルドスクリプト・運用ツール・データ処理スクリプトとしても活用。</p>
+    
+    <p><strong>data class を多用する業務システム</strong>：DTO・値オブジェクトを `data class` で**自動生成**（equals/hashCode/toString/copy）。JSON シリアライズは **kotlinx.serialization** で簡潔。Java と比べてボイラープレートが激減する。</p>
+    
+  </div></div>
+
+  <div class="section"><div class="section-title">⚖️ 他言語との比較</div><table class="compare-table">
+    <thead><tr><th>観点</th><th>Kotlin</th><th>Java</th><th>Scala</th></tr></thead>
+    <tbody>
+    
+      <tr><td>言語の歴史</td>
+      
+        
+        <td class="">15年(2011-)・JetBrains製・Java後継</td>
+      
+        
+        <td class="">31年(1995-)・JVMの原点</td>
+      
+        
+        <td class="">22年(2004-)・関数型JVM</td>
+      
+      </tr>
+    
+      <tr><td>Java 互換・相互運用</td>
+      
+        
+        <td class="good">完全（Java ライブラリを直接呼べる・混在可能）</td>
+      
+        
+        <td class="good">完全（基準）</td>
+      
+        
+        <td class="good">完全（Java 資産活用可）</td>
+      
+      </tr>
+    
+      <tr><td>Null安全（コンパイル時検出）</td>
+      
+        
+        <td class="good">あり（`String?` vs `String` で型で区別）</td>
+      
+        
+        <td class="bad">なし（NullPointerException の温床）</td>
+      
+        
+        <td class="good">Scala 3 で改善（Option 型中心）</td>
+      
+      </tr>
+    
+      <tr><td>Android 対応</td>
+      
+        
+        <td class="good">対応（現行公式・Kotlin-first）</td>
+      
+        
+        <td class="">対応（既存資産は依然主流）</td>
+      
+        
+        <td class="bad">非対応（実質）</td>
+      
+      </tr>
+    
+      <tr><td>学習コスト</td>
+      
+        
+        <td class="good">中（Java 経験者は習得しやすい）</td>
+      
+        
+        <td class="">高（記法冗長・25年蓄積の概念）</td>
+      
+        
+        <td class="bad">高（関数型・ implicit・型理論が難しい）</td>
+      
+      </tr>
+    
+      <tr><td>関数型プログラミング</td>
+      
+        
+        <td class="good">対応（不変 val・高階関数・関数参照）</td>
+      
+        
+        <td class="">限定的（Stream API・ラムダ）</td>
+      
+        
+        <td class="good">対応（本流・For 内包表記・モナド指向）</td>
+      
+      </tr>
+    
+      <tr><td>Coroutines（非同期）</td>
+      
+        
+        <td class="good">**言語標準**（`suspend fun`・構造化並行性）</td>
+      
+        
+        <td class="">限定的（CompletableFuture・Virtual Threads）</td>
+      
+        
+        <td class="bad">非標準（ライブラリ依存）</td>
+      
+      </tr>
+    
+      <tr><td>向いている場面</td>
+      
+        
+        <td class="good">Android・モダンJVM・KMP・サーバーサイド新規</td>
+      
+        
+        <td class="good">大規模基幹・既存資産保守・JVM資産</td>
+      
+        
+        <td class="">ビッグデータ（Spark）・DSL・関数型重視</td>
+      
+      </tr>
+    
+    </tbody>
+  </table></div>
+
+  <div class="section"><div class="section-title">✅ 選ぶ理由 / ⚠ 選ばない理由</div><div class="card">
+    <p><strong>選ぶ理由</strong>：<p><strong>Java の上位互換</strong>として設計され、既存の Java ライブラリ・フレームワーク（Spring・Hibernate 等）を<strong>そのまま呼べる</strong>。<strong>Null安全</strong>（コンパイル時に NullPointerException を検出）・<strong>data class</strong>（equals/hashCode/toString 自動生成）・<strong>拡張関数</strong>（既存クラスの拡張）・<strong>Coroutines</strong>（軽量スレッド・構造化並行性）・<strong>when式</strong>（スマートキャスト付きのパターンマッチ）など、モダン言語機能を<strong>後付けなし</strong>で備えている。<strong>Android の現行公式言語</strong>（Kotlin-first）で、Jetpack Compose・KMP（iOS/Desktop 共有）と組み合わせれば<strong>モバイル・サーバー・デスクトップを単一言語で統一</strong>できる。<strong>K2 コンパイラ</strong>（Kotlin 2.0）でビルド速度も改善済み。</p>
+</p>
+    <p><strong>選ばない理由</strong>：<p><strong>ビルドツール Gradle の重さ</strong>が依然課題（特に Android プロジェクトで初回ビルドが数分）。<strong>学習コストは中</strong>だが、Java に無い概念（拡張関数・スコープ関数・sealed class・inline reified 等）が複数あり、<strong>Java も Kotlin も読めないメンバーには導入コスト</strong>がかかる。<strong>Kotlin 固有機能（拡張関数・演算子オーバーロード・DSL）を多用</strong>すると Java 側から見ると<strong>読みづらく</strong>なる（相互運用時の注意）。<strong>コンパイル時間が Java より長い</strong>ケースがあり、大規模プロジェクトの CI 高速化では課題。</p>
+</p>
+  </div></div>
+
+  <div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Kotlin と Java はどちらを使うべきですか？</div>
+      <div class="qa-a">A.**新規 Android プロジェクトは Kotlin 一択**（Google 公式推奨・Kotlin-first）。**新規サーバーサイド**では Kotlin（Ktor）と Java（Spring Boot）どちらも有力で、**Java 資産が多い組織**は Kotlin から段階導入か Spring Boot + Java 継続。**既存 Java システム**は無理に Kotlin に書き換えず、**新機能のみ Kotlin で書く**混在アプローチが現実的。両者は**完全相互運用可能**（同一 JVM・同一クラスローダー）で、片方からの呼び出しに制約はない。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Kotlin の Coroutines とは何ですか？</div>
+      <div class="qa-a">A.**軽量スレッド**の仕組みで、`suspend fun` で中断可能な関数を定義し、`launch` / `async` / `runBlocking` で起動。OS スレッドを**占有せず**、数千〜数万の Coroutine を**少数のスレッドで並行実行**できる。**構造化並行性**（Structured Concurrency）でキャンセル・例外伝播が自動管理され、Android・サーバーサイド両方で非同期処理の標準。Java の `Thread`・`CompletableFuture` より**遥かに簡潔**に書ける。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Null安全とは何ですか？何の役に立ちますか？</div>
+      <div class="qa-a">A.型で **Null を許容するか否か** を区別する仕組み。`String` は **非 Null**（null 代入でコンパイルエラー）、`String?` は **Nullable**（null 代入可）。**NullPointerException をコンパイル時に検出**でき、Java の実行時クラッシュの最大原因を排除できる。**`?.`（セーフコール）**・**`?:`（エルビス演算子）**・**`!!`（非Null表明）** などで安全にアクセス。Android の `findViewById` 戻り値等を扱う際に特に威力を発揮。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.data class のメリットは何ですか？</div>
+      <div class="qa-a">A.`data class User(val name: String, val age: Int)` と書くと、**equals / hashCode / toString / copy / componentN（分解宣言）** が**自動生成**される。DTO・値オブジェクト・ボイラープレート削減に絶大な効果。Java で 50行以上必要なコードが Kotlin では **1行**で済む。**`kotlinx.serialization` と組み合わせ**れば JSON シリアライズも `@Serializable` 1行で可能。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Kotlin Multiplatform（KMP）は実用的ですか？</div>
+      <div class="qa-a">A.**共通ロジック共有**（API クライアント・データ層・ドメイン層）は **実用的・本番採用も増加中**。**UI 共有**は **Compose Multiplatform** で iOS・Android・Desktop の宣言的 UI を単一 Kotlin コードで書ける（iOS は 2024年にベータ卒業・本番運用例あり）。ただし**プラットフォーム固有 API アクセス**は `expect/actual` 宣言が必要で、**プラットフォーム毎の差異**（ファイルシステム・センサー等）の吸収は設計が必要。個人開発・中規模アプリでは特に有効。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Kotlin 2.0 の K2 コンパイラは何が変わりましたか？</div>
+      <div class="qa-a">A.**K2 コンパイラ**は Kotlin 2.0 で**デフォルト安定化**した新しいコンパイラフロントエンド。**コンパイル速度が大幅向上**（大規模プロジェクトで 2倍速くなる例も）・**IDE のインデックス生成が高速化**・**言語機能の統一的な解析基盤**（将来の機能拡張が容易）。Kotlin 1.9 以前から移行する場合、稀に**非互換**があり**公式移行ガイド**（https://kotlinlang.org/docs/k2-compiler-migration-guide.html）の確認が必要。Android 開発では **Gradle の Kotlin プラグイン**を最新版に更新するだけで利用可能。</div>
+    </div>
+    
+  </div>
+
+  
+  <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
+    <p><strong>パッケージマネージャ</strong>：Gradle（標準・Kotlin DSL `build.gradle.kts` または Groovy DSL `build.gradle`）</p>
+    
+    <p><strong>主要フレームワーク</strong>：</p>
+    <ul>
+      
+      <li><strong>Ktor</strong> — JetBrains 製の軽量 Web フレームワーク。**Coroutine ネイティブ**・HTTP サーバー / クライアント双方・プラグイン式。マイクロサービス・API サーバーに最適</li>
+      
+      <li><strong>Spring Boot</strong> — Java 最大のエンタープライズフレームワークを Kotlin から活用。**Spring WebFlux / Coroutines 統合**で Kotlin らしい書き方が可能。既存 Java 資産をそのまま流用可</li>
+      
+      <li><strong>Android Jetpack Compose</strong> — Android 公式の**宣言的 UI フレームワーク**。Kotlin で記述・State 駆動・Material 3 対応。2024年現在 Android 新規 UI のデファクト</li>
+      
+      <li><strong>Compose Multiplatform</strong> — JetBrains 製。**Kotlin で iOS / Android / Desktop の UI を共有**。2024年に iOS ベータ卒業・本番運用例あり</li>
+      
+      <li><strong>Exposed</strong> — JetBrains 製の軽量 **DAO フレームワーク**。型安全な SQL DSL と DAO の両方をサポート。Spring Boot / Ktor と組み合わせて業務アプリに</li>
+      
+      <li><strong>Micronaut for Kotlin</strong> — コンパイル時 DI で**起動が高速**な JVM フレームワーク。GraalVM ネイティブ対応。Kotlin サポートが公式提供</li>
+      
+    </ul>
+    
+    
+    <p><strong>主要ライブラリ</strong>：</p>
+    <ul>
+      
+      <li><strong>Kotlin Coroutines（kotlinx.coroutines）</strong> — **言語標準の非同期処理**。`suspend fun`・`launch` / `async`・`Flow`（コールドストリーム）・構造化並行性。Android・サーバーサイド両方のデファクト</li>
+      
+      <li><strong>kotlinx.serialization</strong> — Kotlin 公式の**多形式シリアライズ**（JSON / ProtoBuf / CBOR 等）。`@Serializable` 1行で data class をシリアライズ。Ktor と統合</li>
+      
+      <li><strong>Koin / Kodein</strong> — **軽量 DI フレームワーク**。Koin は Kotlin DSL ベース・ランタイム解決、Kodein は型安全。Spring の DI より学習コストが低い</li>
+      
+      <li><strong>Arrow</strong> — **関数型プログラミング**ライブラリ。Either / Option / Validated 等の代数的データ型・Effect モナド。Scala の Cats 相当</li>
+      
+      <li><strong>OkHttp / Ktor Client</strong> — Kotlin 用 HTTP クライアント。Ktor Client は Coroutines 統合・マルチプラットフォーム対応（KMP で iOS / JS / Native 共通）</li>
+      
+      <li><strong>AndroidX</strong> — Android 公式拡張ライブラリ群。Activity / Fragment / Lifecycle / Room（ORM）/ DataStore 等。Kotlin 拡張関数付き</li>
+      
+    </ul>
+    
+    
+    <p><strong>ランタイム</strong>：</p>
+    <ul>
+      
+      <li><strong>JVM（メインターゲット）</strong> — Java バイトコードにコンパイルされ、**OpenJDK / Oracle JDK / GraalVM** 等で実行。Java ライブラリ・JVM ツールが全て利用可能</li>
+      
+      <li><strong>Kotlin/Native</strong> — **LLVM ベースのネイティブコンパイラ**。iOS・macOS・watchOS・tvOS・Linux・Windows・WebAssembly（WASM）をターゲット。KMP の iOS / Desktop ターゲットで利用</li>
+      
+      <li><strong>Kotlin/JS</strong> — JavaScript にコンパイル。**ブラウザ / Node.js** で実行可能。React 統合（`kotlin-wrappers`）で Kotlin/React 開発も可能</li>
+      
+      <li><strong>Kotlin Multiplatform（KMP）</strong> — 共通コード（commonMain）から JVM / Native / JS をターゲット。`expect/actual` で**プラットフォーム固有実装**を宣言。2024年以降は** Google の推奨構成**</li>
+      
+      <li><strong>GraalVM ネイティブイメージ</strong> — Kotlin を **Ahead-of-Time コンパイル**してネイティブバイナリ化。起動数十 ms・メモリ大幅削減。Ktor + Micronaut で実現</li>
+      
+    </ul>
+    
+  </div></div>
+  
+
+  
+  <div class="section"><div class="section-title">💻 コード例</div>
+    
+    <div class="card">
+      <p><strong>Hello World（fun main）</strong></p>
+      <pre><code class="language-kotlin">// Kotlin 1.3 以降は main もクラス不要・fun のみ
+fun main() {
+    println(&#34;Hello, Kotlin!&#34;)
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>data class（equals/hashCode/toString 自動生成）</strong></p>
+      <pre><code class="language-kotlin">// data class 宣言だけで equals/hashCode/toString/copy/componentN が自動生成
+data class User(
+    val id: Long,
+    val name: String,
+    val email: String,
+)
+
+val alice = User(1, &#34;Alice&#34;, &#34;alice@example.com&#34;)
+val bob   = alice.copy(name = &#34;Bob&#34;)             // 一部だけ変更してコピー
+val (id, name, _) = bob                          // 分解宣言（destructuring）
+println(bob)    // User(id=1, name=Bob, email=alice@example.com)
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>Coroutines（suspend fun + launch/async）</strong></p>
+      <pre><code class="language-kotlin">import kotlinx.coroutines.*
+
+// suspend fun = 中断可能な関数（Coroutine 内で呼ぶ）
+suspend fun fetchUser(id: Long): String {
+    delay(100)  // 非ブロッキング待機（OS スレッドを占有しない）
+    return &#34;User-$id&#34;
+}
+
+fun main() = runBlocking {  // main も Coroutine として動かす
+    // launch: 結果を返さない並行処理
+    val job = launch {
+        val name = fetchUser(42)
+        println(&#34;got: $name&#34;)
+    }
+    // async: 結果を返す並行処理（await で取り出す）
+    val deferred = async { fetchUser(99) }
+    println(&#34;parallel: ${deferred.await()}&#34;)
+    job.join()
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>Null安全（`String?` vs `String`）</strong></p>
+      <pre><code class="language-kotlin">fun greet(name: String?): String {  // String? = null 許容
+    // ?. （セーフコール）: null なら全体も null
+    // ?: （エルビス演算子）: null なら右辺を返す
+    return &#34;Hello, ${name?.uppercase() ?: &#34;World&#34;}!&#34;
+}
+
+fun main() {
+    println(greet(&#34;Kotlin&#34;))     // Hello, KOTLIN!
+    println(greet(null))         // Hello, World!
+
+    // val s: String = null      // ← コンパイルエラー（String は非 null）
+    // val s: String? = null     // ← OK（String? は null 許容）
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>Extension function（既存クラスの拡張）</strong></p>
+      <pre><code class="language-kotlin">// String に isEmailValid() を後付け（既存クラスを変更せずに拡張）
+fun String.isEmailValid(): Boolean =
+    this.contains(&#34;@&#34;) &amp;&amp; this.contains(&#34;.&#34;)
+
+// List&lt;Int&gt; に第二要素取得拡張
+fun &lt;T&gt; List&lt;T&gt;.secondOrNull(): T? = if (size &gt;= 2) this[1] else null
+
+fun main() {
+    println(&#34;alice@example.com&#34;.isEmailValid())   // true
+    println(&#34;alice.example.com&#34;.isEmailValid())   // false
+    println(listOf(1, 2, 3).secondOrNull())       // 2
+}
+</code></pre>
+    </div>
+    
+  </div>
+  
+
+  
+  <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
+    <p><strong>初級</strong>（目安: 〜1-2週間（Java 経験者は更に短縮））</p>
+    <ul><li><strong>基本文法（val/var・関数・制御構文）</strong> — val（不変）/ var（可変）・`fun` 関数定義・if / when / for / while・println・main</li><li><strong>when 式（Java の switch 強化版）</strong> — **スマートキャスト**付きのパターンマッチ。値マッチ・範囲マッチ・型マッチ。**式として**値を返せる</li><li><strong>Null安全（String? vs String）の基礎</strong> — `?.`（セーフコール）・`?:`（エルビス演算子）・`!!`（非 Null 表明）・**コンパイル時検出**される NPE 防止</li><li><strong>クラスと data class</strong> — class・コンストラクタ（`class User(val name: String)`）・**data class** で equals/hashCode/toString 自動生成</li></ul>
+    <p><strong>中級</strong>（目安: 〜1-2ヶ月）</p>
+    <ul><li><strong>拡張関数・スコープ関数</strong> — `fun String.isEmailValid()` で既存クラスを拡張。`let` / `apply` / `also` / `run` / `with` の使い分け</li><li><strong>コレクション API（listOf / map / filter）</strong> — `listOf` / `mapOf`・`map` / `filter` / `forEach`・**不変コレクション**中心の API 設計</li><li><strong>ラムダ・高階関数・関数参照</strong> — `{ x -&gt; x * 2 }` ラムダ式・`::function` 関数参照・メソッドチェーン</li><li><strong>sealed class / object / companion object</strong> — sealed class で**限定された継承階層**・object 式でシングルトン・companion object で static 風メンバ</li><li><strong>kotlinx.serialization で JSON</strong> — `@Serializable` で data class をシリアライズ・Json.encodeToString / decodeFromString</li></ul>
+    <p><strong>上級</strong>（目安: 〜2-4ヶ月）</p>
+    <ul><li><strong>Coroutines / Flow</strong> — `suspend fun`・`launch` / `async` / `runBlocking`・**構造化並行性**・`Flow`（コールドストリーム）・例外処理</li><li><strong>Inline / Reified / DSL 構築</strong> — `inline fun` のゼロコスト・**`reified` 型パラメータ**で実行時型情報を保持・**型安全 DSL** の構築</li><li><strong>Kotlin Multiplatform（KMP）</strong> — commonMain / androidMain / iosMain の階層・`expect / actual` 宣言・Compose Multiplatform</li><li><strong>サーバーサイド実践（Ktor + Coroutines）</strong> — Ktor ルーティング・ContentNegotiation（kotlinx.serialization）・認証・テスト・監視（Micrometer）</li><li><strong>Java との相互運用と移行</strong> — Java から Kotlin を呼ぶ / Kotlin から Java を呼ぶ際の注意・SAM 変換・プラットフォーム型・段階的移行戦略</li></ul>
+  </div></div>
+  
+
+  <div class="footer">
+    <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
+  </div>
+</div>
+<script src="../assets/tooltip.js"></script>
+<script src="../assets/theme.js"></script>
+<script>if (window.hljs) { hljs.highlightAll(); }</script>
+</body>
+</html>

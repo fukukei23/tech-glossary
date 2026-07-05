@@ -348,6 +348,25 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
       </div>
     </div>
     
+    <div class="acc-item" data-key="lang-kotlin">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🟣 Kotlin</div>
+        <div class="acc-summary">Javaの後継・Android公式言語・モダン簡潔・null安全・Coroutines</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>一言で言うと</strong>：「15年動いたモダンJVM。Javaの冗長さを解消し、Android公式となった」</p>
+        <div class="tag-row">
+          <span class="tag tag-good">✅ Androidアプリ（現行公式）</span><span class="tag tag-good">✅ サーバーサイド（Ktor / Spring Boot）</span><span class="tag tag-good">✅ Kotlin Multiplatform（iOS / JS / Desktop 共有コード）</span><span class="tag tag-good">✅ Null安全性が重要な業務システム</span><span class="tag tag-good">✅ モダンJVM（Java 資産活用）</span>
+          <span class="tag tag-bad">⚠ ビルド速度が最重要（Gradle 設定の重さが課題）</span><span class="tag tag-bad">⚠ 現メンバーが Java も Kotlin も読めない</span><span class="tag tag-bad">⚠ レガシー JVM 環境（古い Android・Java 6 など）で動かす必要がある場合</span>
+        </div>
+        <p><strong>得意な用途</strong>：Androidアプリ（現行公式）・サーバーサイド（Ktor / Spring Boot）・Kotlin Multiplatform（iOS / JS / Desktop 共有コード）・CLI / ツール（Kotlin Script）・data class を多用する業務システム</p>
+        <p><strong>選ぶ理由</strong>：**Java の上位互換**として設計され、既存の Java ライブラリ・フレームワーク（Spring・Hibernate 等）を**そのまま呼べる**。**Null安全**（コンパイル時に NullPointerException を検出）・**data class**（equals/hashCode/toString 自動生成）・**拡張関数**（既存クラスの拡張）・**Coroutines**（軽量スレッド・構造化並行性）・**when式**（スマートキャスト付きのパターンマッチ）など、モダン言語機能を**後付けなし**で備えている。**Android の現行公式言語**（Kotlin-first）で、Jetpack Compose・KMP（iOS/Desktop 共有）と組み合わせれば**モバイル・サーバー・デスクトップを単一言語で統一**できる。**K2 コンパイラ**（Kotlin 2.0）でビルド速度も改善済み。</p>
+        <p><strong>選ばない理由</strong>：**ビルドツール Gradle の重さ**が依然課題（特に Android プロジェクトで初回ビルドが数分）。**学習コストは中**だが、Java に無い概念（拡張関数・スコープ関数・sealed class・inline reified 等）が複数あり、**Java も Kotlin も読めないメンバーには導入コスト**がかかる。**Kotlin 固有機能（拡張関数・演算子オーバーロード・DSL）を多用**すると Java 側から見ると**読みづらく**なる（相互運用時の注意）。**コンパイル時間が Java より長い**ケースがあり、大規模プロジェクトの CI 高速化では課題。</p>
+        <a class="more-link" href="01_languages/kotlin.html">さらに詳しく →</a>
+      </div>
+    </div>
+    
   </div>
 
 
