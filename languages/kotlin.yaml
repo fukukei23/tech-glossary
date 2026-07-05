@@ -216,7 +216,7 @@ learning_roadmap:
   advanced_period: "目安: 〜2-4ヶ月"
   advanced:
     - topic: "Coroutines / Flow"
-      desc: "`suspend fun`・`launch` / `async` / `runBlocking`・**構造化並行性**・`Flow`（コールドストリーム）・例外処理"
+      desc: "`suspend fun`・`launch` / `async` / `runBlocking`・**構造化並行性**・`Flow`（コールドストリーム）・例外処理・**`withContext(Dispatchers.IO)` でスレッド切替**（IO バウンド処理は Dispatchers.IO、UI は Dispatchers Main で実行）"
     - topic: "Inline / Reified / DSL 構築"
       desc: "`inline fun` のゼロコスト・**`reified` 型パラメータ**で実行時型情報を保持・**型安全 DSL** の構築"
     - topic: "Kotlin Multiplatform（KMP）"
@@ -231,6 +231,8 @@ terms:
     def: "型システムで **null 許容（`String?`）と非 null（`String`）を区別**する仕組み。NullPointerException をコンパイル時に検出できる Kotlin の代表的機能"
   - word: "Coroutines"
     def: "Kotlin 標準の**軽量スレッド**機構。`suspend fun` による中断・`launch`/`async` による起動・構造化並行性で OS スレッドを占有せず数万単位の並行処理を実現"
+  - word: "Dispatchers"
+    def: "Coroutine のスレッド実行コンテキスト。**Dispatchers.Main**（UI メインスレッド・Android/Swing）・**Dispatchers.IO**（I/O 待ち・最大64スレッド）・**Dispatchers.Default**（CPU バウンド処理・CPU コア数）。`withContext(Dispatchers.IO)` で実行スレッドを切り替える"
   - word: "data class"
     def: "`data class User(val name: String)` と書くと **equals / hashCode / toString / copy / componentN が自動生成**されるクラス。DTO・ボイラープレート削減に絶大な効果"
   - word: "拡張関数（Extension Function）"

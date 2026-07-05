@@ -12,9 +12,9 @@ tags:
     - "起動が遅い（コンテナと微妙）"
 
 summary:
-  quote: "25年動いた王道の言語。Write Once, Run Anywhere の原典"
+  quote: "1995年生まれ・30年超動いた王道の言語。Write Once, Run Anywhere の原典"
   body: |
-    1995年 Sun Microsystems で James Gosling らが公開したオブジェクト指向言語。**JVM**（Java仮想マシン）上で動き、ソースを一度コンパイルすればバイトコードがあらゆるプラットフォームで走る「**Write Once, Run Anywhere**」を理念とする。
+    **1995年**に **Sun Microsystems**（後に **Oracle** が買収）で **James Gosling** らが公開したオブジェクト指向言語。**JVM**（Java仮想マシン）上で動き、ソースを一度コンパイルすればバイトコードがあらゆるプラットフォームで走る「**Write Once, Run Anywhere**」を理念とする。
     **Spring Framework** がデファクトスタンダードとなった2000年代以降は、銀行・証券・保険・官公庁の**ミッションクリティカル**領域で事実上の標準。かつては **Android** の公式言語だったが、2017年に **Kotlin** にメインの座を譲った（既存Android資産は今も大半がJava）。
     現在も **6ヶ月ごとのリリースサイクル**で進化を続け、**Virtual Threads**（Java 21）・**GraalVM ネイティブイメージ**などクラウド時代への対応も進んでいる。
 
@@ -24,7 +24,7 @@ use_cases:
   - title: "Androidアプリ（既存資産）"
     desc: "2017年まで Google 公式言語。Kotlin への移行が進む中でも、数百万の既存Androidアプリ・ライブラリは今もJava製。"
   - title: "大規模基幹システム"
-    desc: "販売管理・在庫管理・ERP・勘定系など長期保守前提の業務系システムに強く、25年スケールで動く実績がある。"
+    desc: "販売管理・在庫管理・ERP・勘定系など長期保守前提の業務系システムに強く、1995年から30年超スケールで動く実績がある。"
   - title: "ビッグデータ・分散処理"
     desc: "Hadoop / Spark / Kafka / Flink といった JVM 系ビッグデータツールの事実上の開発言語。JVMエコシステムの恩恵を直接受けられる。"
   - title: "クラウドネイティブ（Quarkus / Micronaut）"
@@ -34,7 +34,7 @@ compare:
   headers: [Java, Kotlin, C#]
   rows:
     - axis: "言語の歴史"
-      values: ["31年(1995-)・JVMの原点", "15年(2011-)・JetBrains製・Java後継", "26年(2000-)・MS主力・.NET"]
+      values: ["30年超(1995-)・JVMの原点", "15年(2011-)・JetBrains製・Java後継", "26年(2000-)・MS主力・.NET"]
       marks: ["", "", ""]
     - axis: "型システム"
       values: ["強い静的型", "強い静的型・null安全", "強い静的型"]
@@ -49,7 +49,7 @@ compare:
       values: ["高（記法冗長・ボイラープレート多）", "中（簡潔・Javaより書きやすい）", "中（C系で馴染みやすい）"]
       marks: ["bad", "good", ""]
     - axis: "エコシステム規模"
-      values: ["最大（Maven Central・25年蓄積）", "Java資産を全て流用可", "巨大（NuGet・MS支援）"]
+      values: ["最大（Maven Central・30年蓄積）", "Java資産を全て流用可", "巨大（NuGet・MS支援）"]
       marks: ["good", "good", "good"]
     - axis: "向いている場面"
       values: ["大規模基幹・既存資産保守・JVM資産", "新規Android・モダンJVM", "Windows/Microsoft環境・ゲーム（Unity）"]
@@ -63,7 +63,7 @@ qa:
   - q: "JavaとJVMは何が違いますか？"
     a: "Javaはソースコード（.java）で、JVMはそれを実行する仮想マシンです。**JVM上は Scala / Kotlin / Clojure / Groovy 等 多言語が動く**ため、Java資産を別言語から活用することもできます。"
   - q: "Javaはもう古い言語なのではないですか？"
-    a: "登場から31年ですが、**大規模基幹・Android・ビッグデータ**領域で現役です。**6ヶ月毎のメジャーリリース**で進化しており（Java 21でVirtual Threads、Java 25/26も継続）、レガシーとは一味違います。新規プロジェクトでもSpring Boot・Quarkus なら十分にモダンです。"
+    a: "**1995年登場・30年超の実績**がありますが、**大規模基幹・Android・ビッグデータ**領域で現役です。**6ヶ月毎のメジャーリリース**で進化しており（Java 21でVirtual Threads、Java 25/26も継続）、レガシーとは一味違います。新規プロジェクトでもSpring Boot・Quarkus なら十分にモダンです。"
   - q: "Spring と Jakarta EE の違いは？"
     a: "**Spring**（Spring Boot含む）は Pivotal 社（現 VMware/Broadcom）製で事実上の標準・DI/AOP中心。**Jakarta EE**（旧 Java EE）は Eclipse Foundation 仕様のベンダー中立API群。大規模業務アプリでは Spring、標準準拠・特定ベンダー依存回避なら Jakarta EE という棲み分け。"
   - q: "Javaのリリースモデルが分かりません（Java 8 と 21、どちらを使えば？）"

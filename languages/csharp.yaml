@@ -14,7 +14,7 @@ tags:
 summary:
   quote: "26年進化するMicrosoft主力言語。.NET・Unity・Azureを縦断"
   body: |
-    2000年に **Anders Hejlsberg**（Delphi/Turbo Pascal の作者）が Microsoft で公開したオブジェクト指向言語。**ECMA-335**（Common Language Infrastructure）に準拠し、**JIT コンパイル**で動く **.NET** プラットフォームの主力言語として設計された。**Visual Studio** と **.NET Framework** の組み合わせで Windows デスクトップ開発の標準となり、2014年の **.NET Core** 公開以降は **クロスプラットフォーム対応・OSS化** が急速に進んだ。
+    2000年に **Anders Hejlsberg**（Delphi/Turbo Pascal の作者）が Microsoft で公開したオブジェクト指向言語。**ECMA-335**（Common Language Infrastructure）に準拠し、**JIT コンパイル**で動く **.NET** プラットフォームの主力言語として設計された。**Visual Studio** と **.NET Framework**（Windows 専用・レガシー）の組み合わせで Windows デスクトップ開発の標準となり、2014年の **.NET Core**（クロスプラットフォーム・OSS）公開以降は対応プラットフォームとOSS化が急速に進み、**2020年の .NET 5 で両者を統合**して単一の .NET に統一された（**偶数番号が LTS・奇数番号が STS**）。
     現在（2026年）は **.NET 8 LTS / .NET 9 / .NET 10** 世代で **C# 14** が最新。**Nullable Reference Types**（null安全）・**async/await**（非同期）・**LINQ**（コレクション関数型操作）・**record 型**（イミュータブルデータ）・**Source Generator** など、Java や Kotlin と並ぶ近代的な機能を備える。
     用途は **ASP.NET Core**（Web API）・**Unity**（ゲーム・世界で最も使われているゲームエンジン）・**.NET MAUI**（モバイル/デスクトップ）・**Azure 連携**（クラウド）と極めて広く、Microsoft エコシステムの中心。
 
