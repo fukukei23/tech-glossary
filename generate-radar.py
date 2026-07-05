@@ -63,13 +63,43 @@ def _card_svg(lang: dict) -> str:
     )
 
 
+def _load_spec() -> dict:
+    """YAML読込。バリデーション付きで空構造を返すと import や build 全体が止まるので明示的に例外。"""
+    path = ROOT / "radar-spec.yaml"
+    if not path.exists():
+        raise FileNotFoundError(f"radar-spec.yaml が見つかりません: {path}")
+    try:
+        with open(path, encoding="utf-8") as f:
+            spec = yaml.safe_load(f)
+    except yaml.YAMLError as e:
+        raise RuntimeError(f"radar-spec.yaml のパースに失敗: {e}") from e
+    if not isinstance(spec, dict) or "languages" not in spec:
+        raise ValueError("radar-spec.yaml に 'languages:' キーが必要です")
+    return spec
+
+
+def _validate_lang(lang: dict, idx: int) -> dict:
+    """個別言語の必須キーを .get() でデフォルト補完（labels 欠如・ratings 長さ不一致）"""
+    ratings = lang.get("ratings", [1] * 6)
+    if not isinstance(ratings, list) or len(ratings) != 6:
+        raise ValueError(f"languages[{idx}].ratings は長さ6のリストが必要（{len(ratings)} given）")
+    return {
+        "id": lang.get("id", f"unknown-{idx}"),
+        "name": lang.get("name", f"Unknown-{idx}"),
+        "icon": lang.get("icon", "📊"),
+        "color": lang.get("color", "#888888"),
+        "ratings": ratings,
+        "label": lang.get("label", ""),
+    }
+
+
 def main() -> int:
-    with open(ROOT / "radar-spec.yaml", encoding="utf-8") as f:
-        spec = yaml.safe_load(f)
-    out = "\n".join(_card_svg(lang) for lang in spec["languages"])
+    spec = _load_spec()
+    langs = [_validate_lang(lang, i) for i, lang in enumerate(spec["languages"])]
+    out = "\n".join(_card_svg(lang) for lang in langs)
     out_path = ROOT / "templates" / "_radar_cards.html"
     out_path.write_text(out, encoding="utf-8")
-    print(f"完了: {len(spec['languages'])}言語 → {out_path}")
+    print(f"完了: {len(langs)}言語 → {out_path}")
     return 0
 
 
