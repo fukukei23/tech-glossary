@@ -73,27 +73,50 @@ ecosystem:
       desc: "組込・軽量"
 
 code_examples:
-  - title: "基本SELECT"
+  - title: "基本SELECT + WHERE"
     code: |
-      SELECT name, created_at FROM users WHERE active = true;
-  - title: "JOIN"
+      SELECT name, created_at FROM users WHERE active = true ORDER BY created_at DESC;
+  - title: "JOIN（結合）"
     code: |
       SELECT u.name, o.total
-      FROM users u JOIN orders o ON u.id = o.user_id;
+      FROM users u
+      JOIN orders o ON u.id = o.user_id
+      WHERE o.total > 1000;
+  - title: "集計（GROUP BY + HAVING）"
+    code: |
+      SELECT user_id, COUNT(*) AS cnt, SUM(total) AS sum
+      FROM orders GROUP BY user_id HAVING COUNT(*) > 5;
+  - title: "ウィンドウ関数（ランキング）"
+    code: |
+      SELECT name, total,
+        ROW_NUMBER() OVER (ORDER BY total DESC) AS rank
+      FROM orders;
 
 learning_roadmap:
   beginner_period: "目安: 〜2週間"
   beginner:
-    - "SELECT/INSERT/UPDATE/DELETE 基本文法"
-    - "WHERE / ORDER BY / GROUP BY"
+    - topic: "CRUD基本文法"
+      desc: "SELECT/INSERT/UPDATE/DELETE・リテラル・演算子"
+    - topic: "フィルタ・ソート・集計"
+      desc: "WHERE / ORDER BY / GROUP BY / 集計関数"
+    - topic: "テーブル設計の基礎"
+      desc: "正規化・主キー・外部キー・インデックスの存在"
   intermediate_period: "目安: 〜1-2ヶ月"
   intermediate:
-    - "JOIN（INNER/LEFT/RIGHT）と集合演算"
-    - "インデックスと実行計画（EXPLAIN）"
+    - topic: "JOIN と集合演算"
+      desc: "INNER/LEFT/RIGHT/FULL JOIN・UNION/INTERSECT/EXCEPT"
+    - topic: "インデックスと実行計画"
+      desc: "EXPLAIN・B-Tree・複合インデックス・カーディナリティ"
+    - topic: "トランザクション基本"
+      desc: "BEGIN/COMMIT/ROLLBACK・ACID・ロック"
   advanced_period: "目安: 〜3-6ヶ月"
   advanced:
-    - "ウィンドウ関数・CTE（WITH）"
-    - "トランザクション分離レベル・ロック"
+    - topic: "ウィンドウ関数・CTE（WITH）"
+      desc: "ROW_NUMBER/LAG/LEAD・再帰CTE・分析クエリ"
+    - topic: "トランザクション分離レベル"
+      desc: "READ COMMITTED/REPEATABLE READ/SERIALIZABLE・ファントム/ダーティリード"
+    - topic: "パフォチューーン・分散"
+      desc: "パーティショニング・マテリアライズドビュー・Read Replica・pgvector（AI/RAG）"
 
 terms:
   - word: "リレーショナルDB"
