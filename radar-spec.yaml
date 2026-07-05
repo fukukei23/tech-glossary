@@ -1,0 +1,57 @@
+# レーダーチャート6軸評価(1-5)・軸順序: [実行速度, AI&ML, 学習容易さ, 型安全性, フロント対応, スケーラビリティ]
+# 色は既存 index.html.j2 の polygon stroke 色を踏襲（既存4言語）+ 新5言語は識別しやすい色
+languages:
+  - id: python
+    name: Python
+    icon: "🐍"
+    color: "#7c3aed"
+    ratings: [2, 5, 5, 2, 1, 3]   # Task2実測
+    label: "速度▲ AI◎ 学習◎"
+  - id: typescript
+    name: TypeScript
+    icon: "🔷"
+    color: "#06b6d4"
+    ratings: [3, 2, 3, 5, 5, 3]   # Task2実測
+    label: "フロント◎ 型安全◎"
+  - id: go
+    name: Go
+    icon: "🔵"
+    color: "#10b981"
+    ratings: [5, 1, 4, 4, 1, 5]   # Task2実測
+    label: "速度◎ インフラ◎"
+  - id: rust
+    name: Rust
+    icon: "🦀"
+    color: "#f59e0b"
+    ratings: [5, 1, 1, 5, 2, 4]   # Task2実測
+    label: "速度◎ 安全◎ 学習▲"
+  - id: sql
+    name: SQL
+    icon: "🗄️"
+    color: "#3b82f6"
+    ratings: [3, 3, 4, 3, 1, 4]
+    label: "データ◎"
+  - id: java
+    name: Java
+    icon: "☕"
+    color: "#ef4444"
+    ratings: [4, 2, 3, 4, 1, 5]
+    label: "スケール◎ エンタープライズ◎"
+  - id: csharp
+    name: "C#"
+    icon: "🎯"
+    color: "#9333ea"
+    ratings: [4, 2, 3, 5, 2, 5]
+    label: ".NET◎ Unity◎"
+  - id: bash
+    name: Bash
+    icon: "🐚"
+    color: "#22c55e"
+    ratings: [3, 1, 3, 1, 1, 2]
+    label: "運用自動化◎"
+  - id: kotlin
+    name: Kotlin
+    icon: "🟣"
+    color: "#a855f7"
+    ratings: [4, 2, 4, 5, 2, 5]
+    label: "Android◎ モダン◎"
