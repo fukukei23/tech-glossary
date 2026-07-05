@@ -55,13 +55,25 @@ ecosystem:
   package_manager: "go mod（標準）"
   frameworks:
     - name: "Gin"
-      desc: "軽量HTTP Webフレームワーク"
+      desc: "軽量HTTP Webフレームワーク・API向け"
     - name: "Echo"
-      desc: "高性能HTTPフレームワーク"
+      desc: "高性能HTTPフレームワーク・ミドルウェア豊富"
+    - name: "chi"
+      desc: "軽量ルーター・標準ライブラリ重視"
+    - name: "Fiber"
+      desc: "Express風API・fasthttpベース・高速"
   major_libs:
-    - "gRPC-Go（RPCフレームワーク）"
-    - "gorm（ORM）"
-  runtimes: ["Go（単一バイナリ・ランタイム不要）"]
+    - name: "gRPC-Go"
+      desc: "RPCフレームワーク・Protocol Buffers・マイクロサービス"
+    - name: "gorm"
+      desc: "ORM・マイグレーション・クエリビルダー"
+    - name: "cobra"
+      desc: "CLIフレームワーク・サブコマンド・フラグ"
+    - name: "viper"
+      desc: "設定管理・複数形式（YAML/ENV/flag）"
+  runtimes:
+    - name: "Go"
+      desc: "単一バイナリ・ランタイム不要・クロスコンパイル"
 
 code_examples:
   - title: "Hello World"
@@ -69,23 +81,42 @@ code_examples:
       package main
       import "fmt"
       func main() { fmt.Println("Hello") }
-  - title: "goroutine"
+  - title: "goroutine と channel"
     code: |
-      go func() { fmt.Println("async") }()
+      ch := make(chan int)
+      go func() { ch <- 42 }()
+      fmt.Println(<-ch)
+  - title: "context によるキャンセル伝播"
+    code: |
+      ctx, cancel := context.WithCancel(context.Background())
+      defer cancel()
+      select { case <-ctx.Done(): return }
 
 learning_roadmap:
   beginner_period: "目安: 〜2週間"
   beginner:
-    - "基本文法・構造体・インターフェース"
-    - "go mod によるパッケージ管理"
+    - topic: "基本文法・構造体・インターフェース"
+      desc: "ポインタの理解・struct・interface の暗黙実装"
+    - topic: "go mod によるパッケージ管理"
+      desc: "go.mod / go.sum・モジュールミラーリング"
+    - topic: "エラーハンドリング"
+      desc: "error 型・if err != nil・errors.Is/As"
   intermediate_period: "目安: 〜1-2ヶ月"
   intermediate:
-    - "goroutine と channel（並行処理）"
-    - "標準ライブラリ（net/http, database/sql）"
+    - topic: "goroutine と channel（並行処理）"
+      desc: "CSPモデル・select・sync パッケージ・race detector"
+    - topic: "context パッケージ"
+      desc: "キャンセル/タイムアウト伝播・value 受け渡し・実務必須"
+    - topic: "標準ライブラリ"
+      desc: "net/http・database/sql・encoding/json・testing"
   advanced_period: "目安: 〜3-6ヶ月"
   advanced:
-    - "コンテキスト（context）による制御"
-    - "ジェネリクス（Go 1.18+）"
+    - topic: "ジェネリクス（Go 1.18+）"
+      desc: "型パラメータ・制約・型推論"
+    - topic: "パフォーマンス最適化"
+      desc: "pprof・ベンチマーク・アロケーション削減・sync.Pool"
+    - topic: "分散システム"
+      desc: "gRPC・サービスメッシュ・オブザーバビリティ"
 
 terms:
   - word: "静的型付け"

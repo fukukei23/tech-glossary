@@ -142,9 +142,13 @@
     <p><strong>主要フレームワーク</strong>：</p>
     <ul>
       
-      <li><strong>Gin</strong> — 軽量HTTP Webフレームワーク</li>
+      <li><strong>Gin</strong> — 軽量HTTP Webフレームワーク・API向け</li>
       
-      <li><strong>Echo</strong> — 高性能HTTPフレームワーク</li>
+      <li><strong>Echo</strong> — 高性能HTTPフレームワーク・ミドルウェア豊富</li>
+      
+      <li><strong>chi</strong> — 軽量ルーター・標準ライブラリ重視</li>
+      
+      <li><strong>Fiber</strong> — Express風API・fasthttpベース・高速</li>
       
     </ul>
     
@@ -152,9 +156,13 @@
     <p><strong>主要ライブラリ</strong>：</p>
     <ul>
       
-      <li>gRPC-Go（RPCフレームワーク）</li>
+      <li><strong>gRPC-Go</strong> — RPCフレームワーク・Protocol Buffers・マイクロサービス</li>
       
-      <li>gorm（ORM）</li>
+      <li><strong>gorm</strong> — ORM・マイグレーション・クエリビルダー</li>
+      
+      <li><strong>cobra</strong> — CLIフレームワーク・サブコマンド・フラグ</li>
+      
+      <li><strong>viper</strong> — 設定管理・複数形式（YAML/ENV/flag）</li>
       
     </ul>
     
@@ -162,7 +170,7 @@
     <p><strong>ランタイム</strong>：</p>
     <ul>
       
-      <li>Go（単一バイナリ・ランタイム不要）</li>
+      <li><strong>Go</strong> — 単一バイナリ・ランタイム不要・クロスコンパイル</li>
       
     </ul>
     
@@ -181,8 +189,18 @@ func main() { fmt.Println(&#34;Hello&#34;) }
     </div>
     
     <div class="card">
-      <p><strong>goroutine</strong></p>
-      <pre><code class="language-go">go func() { fmt.Println(&#34;async&#34;) }()
+      <p><strong>goroutine と channel</strong></p>
+      <pre><code class="language-go">ch := make(chan int)
+go func() { ch &lt;- 42 }()
+fmt.Println(&lt;-ch)
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>context によるキャンセル伝播</strong></p>
+      <pre><code class="language-go">ctx, cancel := context.WithCancel(context.Background())
+defer cancel()
+select { case &lt;-ctx.Done(): return }
 </code></pre>
     </div>
     
@@ -192,11 +210,11 @@ func main() { fmt.Println(&#34;Hello&#34;) }
   
   <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
     <p><strong>初級</strong>（目安: 〜2週間）</p>
-    <ul><li>基本文法・構造体・インターフェース</li><li>go mod によるパッケージ管理</li></ul>
+    <ul><li><strong>基本文法・構造体・インターフェース</strong> — ポインタの理解・struct・interface の暗黙実装</li><li><strong>go mod によるパッケージ管理</strong> — go.mod / go.sum・モジュールミラーリング</li><li><strong>エラーハンドリング</strong> — error 型・if err != nil・errors.Is/As</li></ul>
     <p><strong>中級</strong>（目安: 〜1-2ヶ月）</p>
-    <ul><li>goroutine と channel（並行処理）</li><li>標準ライブラリ（net/http, database/sql）</li></ul>
+    <ul><li><strong>goroutine と channel（並行処理）</strong> — CSPモデル・select・sync パッケージ・race detector</li><li><strong>context パッケージ</strong> — キャンセル/タイムアウト伝播・value 受け渡し・実務必須</li><li><strong>標準ライブラリ</strong> — net/http・database/sql・encoding/json・testing</li></ul>
     <p><strong>上級</strong>（目安: 〜3-6ヶ月）</p>
-    <ul><li>コンテキスト（context）による制御</li><li>ジェネリクス（Go 1.18+）</li></ul>
+    <ul><li><strong>ジェネリクス（Go 1.18+）</strong> — 型パラメータ・制約・型推論</li><li><strong>パフォーマンス最適化</strong> — pprof・ベンチマーク・アロケーション削減・sync.Pool</li><li><strong>分散システム</strong> — gRPC・サービスメッシュ・オブザーバビリティ</li></ul>
   </div></div>
   
 
