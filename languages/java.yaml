@@ -1,0 +1,194 @@
+id: java
+name: Java
+icon: "☕"
+tagline: "エンタープライズ不動の王者。JVM・Spring・Android"
+tags:
+  fit_for:
+    - "大規模基幹システム"
+    - "Androidアプリ"
+    - "ミッションクリティカル"
+  avoid_for:
+    - "軽量スクリプトには過剰"
+    - "起動が遅い（コンテナと微妙）"
+
+summary:
+  quote: "25年動いた王道の言語。Write Once, Run Anywhere の原典"
+  body: |
+    1995年 Sun Microsystems で James Gosling らが公開したオブジェクト指向言語。**JVM**（Java仮想マシン）上で動き、ソースを一度コンパイルすればバイトコードがあらゆるプラットフォームで走る「**Write Once, Run Anywhere**」を理念とする。
+    **Spring Framework** がデファクトスタンダードとなった2000年代以降は、銀行・証券・保険・官公庁の**ミッションクリティカル**領域で事実上の標準。かつては **Android** の公式言語だったが、2017年に **Kotlin** にメインの座を譲った（既存Android資産は今も大半がJava）。
+    現在も **6ヶ月ごとのリリースサイクル**で進化を続け、**Virtual Threads**（Java 21）・**GraalVM ネイティブイメージ**などクラウド時代への対応も進んでいる。
+
+use_cases:
+  - title: "エンタープライズWeb（Spring Boot）"
+    desc: "Spring Framework が事実上の標準で、銀行・官公庁の大規模Webサービス・マイクロサービスに使用される。組み込みTomcatで即起動。"
+  - title: "Androidアプリ（既存資産）"
+    desc: "2017年まで Google 公式言語。Kotlin への移行が進む中でも、数百万の既存Androidアプリ・ライブラリは今もJava製。"
+  - title: "大規模基幹システム"
+    desc: "販売管理・在庫管理・ERP・勘定系など長期保守前提の業務系システムに強く、25年スケールで動く実績がある。"
+  - title: "ビッグデータ・分散処理"
+    desc: "Hadoop / Spark / Kafka / Flink といった JVM 系ビッグデータツールの事実上の開発言語。JVMエコシステムの恩恵を直接受けられる。"
+  - title: "クラウドネイティブ（Quarkus / Micronaut）"
+    desc: "Quarkus 等の Kubernetes Native Framework で **GraalVM ネイティブビルド** すれば起動は数10ms・メモリも大幅削減。クラウド時代に再注目。"
+
+compare:
+  headers: [Java, Kotlin, C#]
+  rows:
+    - axis: "言語の歴史"
+      values: ["31年(1995-)・JVMの原点", "15年(2011-)・JetBrains製・Java後継", "26年(2000-)・MS主力・.NET"]
+      marks: ["", "", ""]
+    - axis: "型システム"
+      values: ["強い静的型", "強い静的型・null安全", "強い静的型"]
+      marks: ["good", "good", "good"]
+    - axis: "Android対応"
+      values: ["対応（既存資産は依然主流）", "対応（現行公式・推奨）", "非対応（Xamarin/MAUIで代替）"]
+      marks: ["", "good", "bad"]
+    - axis: "実行速度・起動"
+      values: ["中（JIT最適化で高速化・起動は遅め）", "中（同JVM・起動は遅め）", "中（.NET CLR・NativeAOT対応）"]
+      marks: ["", "", ""]
+    - axis: "学習コスト"
+      values: ["高（記法冗長・ボイラープレート多）", "中（簡潔・Javaより書きやすい）", "中（C系で馴染みやすい）"]
+      marks: ["bad", "good", ""]
+    - axis: "エコシステム規模"
+      values: ["最大（Maven Central・25年蓄積）", "Java資産を全て流用可", "巨大（NuGet・MS支援）"]
+      marks: ["good", "good", "good"]
+    - axis: "向いている場面"
+      values: ["大規模基幹・既存資産保守・JVM資産", "新規Android・モダンJVM", "Windows/Microsoft環境・ゲーム（Unity）"]
+      marks: ["", "", ""]
+
+pros_cons:
+  choose: "エコシステムが完成しすぎており、ライブラリ・フレームワーク・情報・人材が豊富。**大規模基幹・ミッションクリティカル**は依然としてJava一択。JVM上で動く**Scala/Kotlin/Clojure** など他言語への布石にもなり、新技術（Virtual Threads・GraalVM）も継続投入されている。"
+  avoid: "記法が冗長（getter/setter・例外チェック・型宣言）でコード量が多い。**学習コストが高く、軽量スクリプトには過剰**。起動が比較的遅い（GraalVM ネイティブビルドで改善可）。コンテナとの相性でCold Start に課題が出る場面もある。"
+
+qa:
+  - q: "JavaとJVMは何が違いますか？"
+    a: "Javaはソースコード（.java）で、JVMはそれを実行する仮想マシンです。**JVM上は Scala / Kotlin / Clojure / Groovy 等 多言語が動く**ため、Java資産を別言語から活用することもできます。"
+  - q: "Javaはもう古い言語なのではないですか？"
+    a: "登場から31年ですが、**大規模基幹・Android・ビッグデータ**領域で現役です。**6ヶ月毎のメジャーリリース**で進化しており（Java 21でVirtual Threads、Java 25/26も継続）、レガシーとは一味違います。新規プロジェクトでもSpring Boot・Quarkus なら十分にモダンです。"
+  - q: "Spring と Jakarta EE の違いは？"
+    a: "**Spring**（Spring Boot含む）は Pivotal 社（現 VMware/Broadcom）製で事実上の標準・DI/AOP中心。**Jakarta EE**（旧 Java EE）は Eclipse Foundation 仕様のベンダー中立API群。大規模業務アプリでは Spring、標準準拠・特定ベンダー依存回避なら Jakarta EE という棲み分け。"
+  - q: "Javaのリリースモデルが分かりません（Java 8 と 21、どちらを使えば？）"
+    a: "**LTS（長期サポート）**を選ぶのが基本です。現在主流は Java 17 / 21（共に LTS・数年サポート）。新規プロジェクトは **Java 21 LTS**（Virtual Threads・Pattern Matching 等の最新機能入り）を推奨。Java 8 もまだ多くの既存システムで現役。"
+  - q: "GraalVM ネイティブイメージとは何ですか？"
+    a: "Java を Ahead-of-Time コンパイルして **ネイティブバイナリ**に変換する仕組み。**起動が数十ms**、メモリ使用量も大幅削減でき、コンテナ・サーバーレス・CLIで有利。Quarkus・Micronaut・Spring Boot 3 が対応。"
+
+ecosystem:
+  package_manager: "Gradle / Maven（標準）"
+  frameworks:
+    - name: "Spring Boot"
+      desc: "エンタープライズ標準の Spring フレームワーク簡略版。DI/AOP・組み込みTomcat・自動設定で即起動（Spring Boot 4.x が現行）"
+    - name: "Spring Framework"
+      desc: "DI/AOP/トランザクション管理・Spring Boot の親。コア機能は Spring Framework が提供"
+    - name: "Jakarta EE（旧 Java EE）"
+      desc: "Eclipse Foundation 仕様のベンダー中立API群・Servlet/JPA/EJB等。Jakarta EE 11 が現行"
+    - name: "Quarkus"
+      desc: "Kubernetes Native Java・GraalVM 対応で起動超高速・コンテナ最適化（Red Hat 製）"
+    - name: "Micronaut"
+      desc: "コンパイル時DI で起動高速・GraalVM ネイティブ対応・AWS Lambda で評価高"
+    - name: "Helidon"
+      desc: "Oracle 製の軽量クラウドネイティブフレームワーク・MicroProfile 準拠"
+  major_libs:
+    - name: "Hibernate / JPA"
+      desc: "ORM・標準仕様 JPA・実装の代表格 Hibernate"
+    - name: "JUnit 5"
+      desc: "単体テストフレームワークの業界標準・Platform/ Jupiter/ Vintage 構成"
+    - name: "Lombok"
+      desc: "ボイラープレート削減（getter/setter 等をアノテーションで自動生成）"
+    - name: "Jackson"
+      desc: "JSONライブラリ・Spring Boot のデフォルト（ObjectMapper）"
+    - name: "Apache Commons"
+      desc: "汎用ユーティリティ群（Lang / Collections / IO 等）"
+    - name: "SLF4J / Logback"
+      desc: "ロギングファサード（SLF4J）と実装（Logback）・Spring のデフォルト"
+    - name: "Maven Surefire / JUnit 5"
+      desc: "テストランナー・Gradle/Maven と組み合わせてCIでテスト実行"
+  runtimes:
+    - name: "OpenJDK"
+      desc: "OSS・本番の事実上の標準。Adoptium Temurin / Amazon Corretto / Microsoft Build of OpenJDK 等"
+    - name: "Oracle JDK"
+      desc: "商用サポート版・有償ライセンス・本番Oracle製品との互換性保証"
+    - name: "GraalVM"
+      desc: "ネイティブコンパイル対応・超高速起動・メモリ削減。クラウドNative・サーバーレス向き"
+    - name: "Azul Zulu / Amazon Corretto"
+      desc: "OpenJDK 互換の商用サポート付きディストリビューション・本番採用例多"
+
+code_examples:
+  - title: "Hello World"
+    code: |
+      public class Main {
+          public static void main(String[] args) {
+              System.out.println("Hello, Java!");
+          }
+      }
+  - title: "クラスと継承（@Override）"
+    code: |
+      public class Animal {
+          String name;
+          void speak() { System.out.println("..."); }
+      }
+      public class Dog extends Animal {
+          @Override void speak() { System.out.println("Bark!"); }
+      }
+  - title: "Stream API（関数型コレクション操作）"
+    code: |
+      List<String> names = users.stream()
+          .filter(User::isActive)
+          .map(User::getName)
+          .sorted()
+          .collect(Collectors.toList());
+  - title: "Optional（null安全な値の取扱い）"
+    code: |
+      Optional<User> user = findUser(id);
+      String name = user.map(User::getName).orElse("anonymous");
+  - title: "Record（イミュータブルなデータクラス・Java 16+）"
+    code: |
+      public record Point(int x, int y) {}
+      Point p = new Point(1, 2);
+      int x = p.x();  // accessor はメソッド
+
+learning_roadmap:
+  beginner_period: "目安: 〜2-3週間"
+  beginner:
+    - topic: "基本文法（変数・制御構文・メソッド）"
+      desc: "int/String/配列・if/for/while・メソッド定義・main"
+    - topic: "クラスとオブジェクト指向"
+      desc: "class・フィールド・コンストラクタ・アクセス修飾子・this"
+    - topic: "継承・インターフェース・抽象クラス"
+      desc: "extends・implements・abstract・ポリモーフィズム"
+    - topic: "ビルドツール基礎"
+      desc: "Gradle/Maven の build.gradle / pom.xml・依存解決・タスク実行"
+  intermediate_period: "目安: 〜1-3ヶ月"
+  intermediate:
+    - topic: "コレクションフレームワーク"
+      desc: "List/Set/Map・ArrayList/HashMap・Generics（型パラメータ）"
+    - topic: "例外処理"
+      desc: "try-catch-finally・checked/unchecked・throws・try-with-resources"
+    - topic: "ラムダ式と Stream API"
+      desc: "関数型インターフェース・map/filter/reduce・Optional"
+    - topic: "JUnit 5 + Maven/Gradle でのテスト"
+      desc: "@Test・assertEquals・テストランナー・CI での実行"
+  advanced_period: "目安: 〜3-6ヶ月"
+  advanced:
+    - topic: "JVM チューニング"
+      desc: "ヒープ・GC（ZGC/G1/Parallel）・JIT・jconsole / VisualVM"
+    - topic: "並行処理（Thread / Executor / Virtual Threads）"
+      desc: "Thread・ExecutorService・CompletableFuture・**Java 21 の Virtual Threads** で Million connections"
+    - topic: "Spring Boot 実践"
+      desc: "DIコンテナ・AOP・トランザクション・Spring Security・REST API（Spring Web）"
+    - topic: "GraalVM ネイティブイメージ"
+      desc: "Ahead-of-Time コンパイル・ビルド設定・起動時間の実測・メモリ削減"
+
+terms:
+  - word: "JVM"
+    def: "Java仮想マシン。Javaバイトコードを実行する。Write Once, Run Anywhere を実現する基盤。Scala/Kotlin/Clojure等多言語のホスト"
+  - word: "Spring Framework"
+    def: "Java最大のDI/AOPフレームワーク。Spring Boot で簡略化され事実上のエンタープライズ標準"
+  - word: "Bytecode"
+    def: "Javaコンパイラが生成する中間コード（.class）。JVM が解釈実行し、必要に応じて JITコンパイルでネイティブ化"
+  - word: "Maven Central"
+    def: "Java/JVM系OSSライブラリの公式リポジトリ。Gradle/Maven のデフォルト依存解決先"
+  - word: "GraalVM"
+    def: "Oracle 製の高性能 JDK + 多言語実行環境。AOT コンパイルでネイティブバイナリを作れ、起動を超高速化できる"
+  - word: "Write Once, Run Anywhere"
+    def: "Java の標語。一度コンパイルしたバイトコードが OS/CPU を問わず動作する理念を意味する"
+  - word: "ミッションクリティカル"
+    def: "障害が許されない重要システム（銀行・証券・インフラ等）。長期保守・信頼性・24時間稼働が要件。Javaが選ばれてきた領域"

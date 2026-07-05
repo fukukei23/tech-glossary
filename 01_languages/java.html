@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java — テクニカルアーキテクト語彙帳</title>
+<meta name="description" content="Javaの用途・選定理由・トレードオフを解説">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" integrity="sha384-oaMLBGEzBOJx3UHwac0cVndtX5fxGQIfnAeFZ35RTgqPcYlbprH9o9PUV/F8Le07" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
+</head>
+<body>
+<button class="theme-toggle">🌙</button>
+<div class="container">
+  <a class="back-link" href="../index.html">← 語彙帳トップに戻る</a>
+  <div class="lang-header">
+    <div class="lang-icon">☕</div>
+    <h1>Java</h1>
+    <p class="lang-tagline">エンタープライズ不動の王者。JVM・Spring・Android</p>
+    <div class="tag-row">
+      <span class="tag tag-good">✅ 大規模基幹システム</span><span class="tag tag-good">✅ Androidアプリ</span><span class="tag tag-good">✅ ミッションクリティカル</span>
+      <span class="tag tag-bad">⚠ 軽量スクリプトには過剰</span><span class="tag tag-bad">⚠ 起動が遅い（コンテナと微妙）</span>
+    </div>
+  </div>
+
+  <div class="section"><div class="section-title">📌 一言で言うと</div><div class="card">
+    <p>25年動いた王道の言語。Write Once, Run Anywhere の原典</p>
+    <p>1995年 Sun Microsystems で James Gosling らが公開したオブジェクト指向言語。<span class="term">JVM<span class="term-popup">Java仮想マシン。Javaバイトコードを実行する。Write Once, Run Anywhere を実現する基盤。Scala/Kotlin/Clojure等多言語のホスト</span></span>（Java仮想マシン）上で動き、ソースを一度コンパイルすればバイトコードがあらゆるプラットフォームで走る「<span class="term">Write Once, Run Anywhere<span class="term-popup">Java の標語。一度コンパイルしたバイトコードが OS/CPU を問わず動作する理念を意味する</span></span>」を理念とする。
+<span class="term">Spring Framework<span class="term-popup">Java最大のDI/AOPフレームワーク。Spring Boot で簡略化され事実上のエンタープライズ標準</span></span> がデファクトスタンダードとなった2000年代以降は、銀行・証券・保険・官公庁の<span class="term">ミッションクリティカル<span class="term-popup">障害が許されない重要システム（銀行・証券・インフラ等）。長期保守・信頼性・24時間稼働が要件。Javaが選ばれてきた領域</span></span>領域で事実上の標準。かつては <strong>Android</strong> の公式言語だったが、2017年に <strong>Kotlin</strong> にメインの座を譲った（既存Android資産は今も大半がJava）。
+現在も <strong>6ヶ月ごとのリリースサイクル</strong>で進化を続け、<strong>Virtual Threads</strong>（Java 21）・<strong>GraalVM ネイティブイメージ</strong>などクラウド時代への対応も進んでいる。</p>
+
+  </div></div>
+
+  <div class="section"><div class="section-title">🎯 得意な用途</div><div class="card">
+    
+    <p><strong>エンタープライズWeb（Spring Boot）</strong>：Spring Framework が事実上の標準で、銀行・官公庁の大規模Webサービス・マイクロサービスに使用される。組み込みTomcatで即起動。</p>
+    
+    <p><strong>Androidアプリ（既存資産）</strong>：2017年まで Google 公式言語。Kotlin への移行が進む中でも、数百万の既存Androidアプリ・ライブラリは今もJava製。</p>
+    
+    <p><strong>大規模基幹システム</strong>：販売管理・在庫管理・ERP・勘定系など長期保守前提の業務系システムに強く、25年スケールで動く実績がある。</p>
+    
+    <p><strong>ビッグデータ・分散処理</strong>：Hadoop / Spark / Kafka / Flink といった JVM 系ビッグデータツールの事実上の開発言語。JVMエコシステムの恩恵を直接受けられる。</p>
+    
+    <p><strong>クラウドネイティブ（Quarkus / Micronaut）</strong>：Quarkus 等の Kubernetes Native Framework で **GraalVM ネイティブビルド** すれば起動は数10ms・メモリも大幅削減。クラウド時代に再注目。</p>
+    
+  </div></div>
+
+  <div class="section"><div class="section-title">⚖️ 他言語との比較</div><table class="compare-table">
+    <thead><tr><th>観点</th><th>Java</th><th>Kotlin</th><th>C#</th></tr></thead>
+    <tbody>
+    
+      <tr><td>言語の歴史</td>
+      
+        
+        <td class="">31年(1995-)・JVMの原点</td>
+      
+        
+        <td class="">15年(2011-)・JetBrains製・Java後継</td>
+      
+        
+        <td class="">26年(2000-)・MS主力・.NET</td>
+      
+      </tr>
+    
+      <tr><td>型システム</td>
+      
+        
+        <td class="good">強い静的型</td>
+      
+        
+        <td class="good">強い静的型・null安全</td>
+      
+        
+        <td class="good">強い静的型</td>
+      
+      </tr>
+    
+      <tr><td>Android対応</td>
+      
+        
+        <td class="">対応（既存資産は依然主流）</td>
+      
+        
+        <td class="good">対応（現行公式・推奨）</td>
+      
+        
+        <td class="bad">非対応（Xamarin/MAUIで代替）</td>
+      
+      </tr>
+    
+      <tr><td>実行速度・起動</td>
+      
+        
+        <td class="">中（JIT最適化で高速化・起動は遅め）</td>
+      
+        
+        <td class="">中（同JVM・起動は遅め）</td>
+      
+        
+        <td class="">中（.NET CLR・NativeAOT対応）</td>
+      
+      </tr>
+    
+      <tr><td>学習コスト</td>
+      
+        
+        <td class="bad">高（記法冗長・ボイラープレート多）</td>
+      
+        
+        <td class="good">中（簡潔・Javaより書きやすい）</td>
+      
+        
+        <td class="">中（C系で馴染みやすい）</td>
+      
+      </tr>
+    
+      <tr><td>エコシステム規模</td>
+      
+        
+        <td class="good">最大（Maven Central・25年蓄積）</td>
+      
+        
+        <td class="good">Java資産を全て流用可</td>
+      
+        
+        <td class="good">巨大（NuGet・MS支援）</td>
+      
+      </tr>
+    
+      <tr><td>向いている場面</td>
+      
+        
+        <td class="">大規模基幹・既存資産保守・JVM資産</td>
+      
+        
+        <td class="">新規Android・モダンJVM</td>
+      
+        
+        <td class="">Windows/Microsoft環境・ゲーム（Unity）</td>
+      
+      </tr>
+    
+    </tbody>
+  </table></div>
+
+  <div class="section"><div class="section-title">✅ 選ぶ理由 / ⚠ 選ばない理由</div><div class="card">
+    <p><strong>選ぶ理由</strong>：<p>エコシステムが完成しすぎており、ライブラリ・フレームワーク・情報・人材が豊富。<strong>大規模基幹・ミッションクリティカル</strong>は依然としてJava一択。JVM上で動く<strong>Scala/Kotlin/Clojure</strong> など他言語への布石にもなり、新技術（Virtual Threads・GraalVM）も継続投入されている。</p>
+</p>
+    <p><strong>選ばない理由</strong>：<p>記法が冗長（getter/setter・例外チェック・型宣言）でコード量が多い。<strong>学習コストが高く、軽量スクリプトには過剰</strong>。起動が比較的遅い（GraalVM ネイティブビルドで改善可）。コンテナとの相性でCold Start に課題が出る場面もある。</p>
+</p>
+  </div></div>
+
+  <div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.JavaとJVMは何が違いますか？</div>
+      <div class="qa-a">A.Javaはソースコード（.java）で、JVMはそれを実行する仮想マシンです。**JVM上は Scala / Kotlin / Clojure / Groovy 等 多言語が動く**ため、Java資産を別言語から活用することもできます。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Javaはもう古い言語なのではないですか？</div>
+      <div class="qa-a">A.登場から31年ですが、**大規模基幹・Android・ビッグデータ**領域で現役です。**6ヶ月毎のメジャーリリース**で進化しており（Java 21でVirtual Threads、Java 25/26も継続）、レガシーとは一味違います。新規プロジェクトでもSpring Boot・Quarkus なら十分にモダンです。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Spring と Jakarta EE の違いは？</div>
+      <div class="qa-a">A.**Spring**（Spring Boot含む）は Pivotal 社（現 VMware/Broadcom）製で事実上の標準・DI/AOP中心。**Jakarta EE**（旧 Java EE）は Eclipse Foundation 仕様のベンダー中立API群。大規模業務アプリでは Spring、標準準拠・特定ベンダー依存回避なら Jakarta EE という棲み分け。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Javaのリリースモデルが分かりません（Java 8 と 21、どちらを使えば？）</div>
+      <div class="qa-a">A.**LTS（長期サポート）**を選ぶのが基本です。現在主流は Java 17 / 21（共に LTS・数年サポート）。新規プロジェクトは **Java 21 LTS**（Virtual Threads・Pattern Matching 等の最新機能入り）を推奨。Java 8 もまだ多くの既存システムで現役。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.GraalVM ネイティブイメージとは何ですか？</div>
+      <div class="qa-a">A.Java を Ahead-of-Time コンパイルして **ネイティブバイナリ**に変換する仕組み。**起動が数十ms**、メモリ使用量も大幅削減でき、コンテナ・サーバーレス・CLIで有利。Quarkus・Micronaut・Spring Boot 3 が対応。</div>
+    </div>
+    
+  </div>
+
+  
+  <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
+    <p><strong>パッケージマネージャ</strong>：Gradle / Maven（標準）</p>
+    
+    <p><strong>主要フレームワーク</strong>：</p>
+    <ul>
+      
+      <li><strong>Spring Boot</strong> — エンタープライズ標準の Spring フレームワーク簡略版。DI/AOP・組み込みTomcat・自動設定で即起動（Spring Boot 4.x が現行）</li>
+      
+      <li><strong>Spring Framework</strong> — DI/AOP/トランザクション管理・Spring Boot の親。コア機能は Spring Framework が提供</li>
+      
+      <li><strong>Jakarta EE（旧 Java EE）</strong> — Eclipse Foundation 仕様のベンダー中立API群・Servlet/JPA/EJB等。Jakarta EE 11 が現行</li>
+      
+      <li><strong>Quarkus</strong> — Kubernetes Native Java・GraalVM 対応で起動超高速・コンテナ最適化（Red Hat 製）</li>
+      
+      <li><strong>Micronaut</strong> — コンパイル時DI で起動高速・GraalVM ネイティブ対応・AWS Lambda で評価高</li>
+      
+      <li><strong>Helidon</strong> — Oracle 製の軽量クラウドネイティブフレームワーク・MicroProfile 準拠</li>
+      
+    </ul>
+    
+    
+    <p><strong>主要ライブラリ</strong>：</p>
+    <ul>
+      
+      <li><strong>Hibernate / JPA</strong> — ORM・標準仕様 JPA・実装の代表格 Hibernate</li>
+      
+      <li><strong>JUnit 5</strong> — 単体テストフレームワークの業界標準・Platform/ Jupiter/ Vintage 構成</li>
+      
+      <li><strong>Lombok</strong> — ボイラープレート削減（getter/setter 等をアノテーションで自動生成）</li>
+      
+      <li><strong>Jackson</strong> — JSONライブラリ・Spring Boot のデフォルト（ObjectMapper）</li>
+      
+      <li><strong>Apache Commons</strong> — 汎用ユーティリティ群（Lang / Collections / IO 等）</li>
+      
+      <li><strong>SLF4J / Logback</strong> — ロギングファサード（SLF4J）と実装（Logback）・Spring のデフォルト</li>
+      
+      <li><strong>Maven Surefire / JUnit 5</strong> — テストランナー・Gradle/Maven と組み合わせてCIでテスト実行</li>
+      
+    </ul>
+    
+    
+    <p><strong>ランタイム</strong>：</p>
+    <ul>
+      
+      <li><strong>OpenJDK</strong> — OSS・本番の事実上の標準。Adoptium Temurin / Amazon Corretto / Microsoft Build of OpenJDK 等</li>
+      
+      <li><strong>Oracle JDK</strong> — 商用サポート版・有償ライセンス・本番Oracle製品との互換性保証</li>
+      
+      <li><strong>GraalVM</strong> — ネイティブコンパイル対応・超高速起動・メモリ削減。クラウドNative・サーバーレス向き</li>
+      
+      <li><strong>Azul Zulu / Amazon Corretto</strong> — OpenJDK 互換の商用サポート付きディストリビューション・本番採用例多</li>
+      
+    </ul>
+    
+  </div></div>
+  
+
+  
+  <div class="section"><div class="section-title">💻 コード例</div>
+    
+    <div class="card">
+      <p><strong>Hello World</strong></p>
+      <pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        System.out.println(&#34;Hello, Java!&#34;);
+    }
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>クラスと継承（@Override）</strong></p>
+      <pre><code class="language-java">public class Animal {
+    String name;
+    void speak() { System.out.println(&#34;...&#34;); }
+}
+public class Dog extends Animal {
+    @Override void speak() { System.out.println(&#34;Bark!&#34;); }
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>Stream API（関数型コレクション操作）</strong></p>
+      <pre><code class="language-java">List&lt;String&gt; names = users.stream()
+    .filter(User::isActive)
+    .map(User::getName)
+    .sorted()
+    .collect(Collectors.toList());
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>Optional（null安全な値の取扱い）</strong></p>
+      <pre><code class="language-java">Optional&lt;User&gt; user = findUser(id);
+String name = user.map(User::getName).orElse(&#34;anonymous&#34;);
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>Record（イミュータブルなデータクラス・Java 16+）</strong></p>
+      <pre><code class="language-java">public record Point(int x, int y) {}
+Point p = new Point(1, 2);
+int x = p.x();  // accessor はメソッド
+</code></pre>
+    </div>
+    
+  </div>
+  
+
+  
+  <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
+    <p><strong>初級</strong>（目安: 〜2-3週間）</p>
+    <ul><li><strong>基本文法（変数・制御構文・メソッド）</strong> — int/String/配列・if/for/while・メソッド定義・main</li><li><strong>クラスとオブジェクト指向</strong> — class・フィールド・コンストラクタ・アクセス修飾子・this</li><li><strong>継承・インターフェース・抽象クラス</strong> — extends・implements・abstract・ポリモーフィズム</li><li><strong>ビルドツール基礎</strong> — Gradle/Maven の build.gradle / pom.xml・依存解決・タスク実行</li></ul>
+    <p><strong>中級</strong>（目安: 〜1-3ヶ月）</p>
+    <ul><li><strong>コレクションフレームワーク</strong> — List/Set/Map・ArrayList/HashMap・Generics（型パラメータ）</li><li><strong>例外処理</strong> — try-catch-finally・checked/unchecked・throws・try-with-resources</li><li><strong>ラムダ式と Stream API</strong> — 関数型インターフェース・map/filter/reduce・Optional</li><li><strong>JUnit 5 + Maven/Gradle でのテスト</strong> — @Test・assertEquals・テストランナー・CI での実行</li></ul>
+    <p><strong>上級</strong>（目安: 〜3-6ヶ月）</p>
+    <ul><li><strong>JVM チューニング</strong> — ヒープ・GC（ZGC/G1/Parallel）・JIT・jconsole / VisualVM</li><li><strong>並行処理（Thread / Executor / Virtual Threads）</strong> — Thread・ExecutorService・CompletableFuture・**Java 21 の Virtual Threads** で Million connections</li><li><strong>Spring Boot 実践</strong> — DIコンテナ・AOP・トランザクション・Spring Security・REST API（Spring Web）</li><li><strong>GraalVM ネイティブイメージ</strong> — Ahead-of-Time コンパイル・ビルド設定・起動時間の実測・メモリ削減</li></ul>
+  </div></div>
+  
+
+  <div class="footer">
+    <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
+  </div>
+</div>
+<script src="../assets/tooltip.js"></script>
+<script src="../assets/theme.js"></script>
+<script>if (window.hljs) { hljs.highlightAll(); }</script>
+</body>
+</html>
