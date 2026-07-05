@@ -74,10 +74,20 @@
     </ul>
     {% endif %}
     {% if lang.ecosystem.major_libs %}
-    <p><strong>主要ライブラリ</strong>：{{ lang.ecosystem.major_libs | join(' / ') }}</p>
+    <p><strong>主要ライブラリ</strong>：</p>
+    <ul>
+      {% for lib in lang.ecosystem.major_libs %}
+      <li>{% if lib is mapping %}<strong>{{ lib.name }}</strong> — {{ lib.desc }}{% else %}{{ lib }}{% endif %}</li>
+      {% endfor %}
+    </ul>
     {% endif %}
     {% if lang.ecosystem.runtimes %}
-    <p><strong>ランタイム</strong>：{{ lang.ecosystem.runtimes | join(' / ') }}</p>
+    <p><strong>ランタイム</strong>：</p>
+    <ul>
+      {% for rt in lang.ecosystem.runtimes %}
+      <li>{% if rt is mapping %}<strong>{{ rt.name }}</strong> — {{ rt.desc }}{% else %}{{ rt }}{% endif %}</li>
+      {% endfor %}
+    </ul>
     {% endif %}
   </div></div>
   {% endif %}

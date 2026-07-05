@@ -99,6 +99,13 @@ def test_ecosystem_structure_when_present(lang):
     assert "package_manager" in eco, f"{lang}.yaml ecosystem に package_manager がない"
     for fw in eco.get("frameworks", []):
         assert "name" in fw and "desc" in fw, f"{lang}.yaml ecosystem.frameworks に name/desc が必要"
+    # major_libs/runtimes も name+desc 構造を推奨（文字列も許容・後方互換）
+    for lib in eco.get("major_libs", []):
+        if isinstance(lib, dict):
+            assert "name" in lib and "desc" in lib, f"{lang}.yaml ecosystem.major_libs dictには name/desc が必要"
+    for rt in eco.get("runtimes", []):
+        if isinstance(rt, dict):
+            assert "name" in rt and "desc" in rt, f"{lang}.yaml ecosystem.runtimes dictには name/desc が必要"
 
 
 @pytest.mark.parametrize("lang", EXPECTED_LANGS)
