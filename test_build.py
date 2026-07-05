@@ -4,7 +4,7 @@ import yaml
 from pathlib import Path
 
 LANG_DIR = Path(__file__).parent / "languages"
-EXPECTED_LANGS = ["typescript", "go", "rust", "sql", "python"]
+EXPECTED_LANGS = ["typescript", "go", "rust", "sql", "python", "java", "csharp", "bash", "kotlin"]
 REQUIRED_FIELDS = ["id", "name", "icon", "tagline", "tags", "summary",
                    "use_cases", "compare", "pros_cons", "qa"]
 
