@@ -59,8 +59,8 @@ ecosystem:
     - name: "Echo"
       desc: "高性能HTTPフレームワーク"
   major_libs:
-    - "goroutine（並行処理・標準）"
-    - "gRPC-Go"
+    - "gRPC-Go（RPCフレームワーク）"
+    - "gorm（ORM）"
   runtimes: ["Go（単一バイナリ・ランタイム不要）"]
 
 code_examples:
