@@ -54,14 +54,24 @@ qa:
 ecosystem:
   package_manager: "cargo（標準）"
   frameworks:
-    - name: "Actix-web"
-      desc: "高性能Webフレームワーク"
     - name: "Axum"
-      desc: "モジュラーWebフレームワーク（Tokio系）"
+      desc: "モジュラーWebフレームワーク・Tokio系・現行主流"
+    - name: "Actix-web"
+      desc: "高性能Webフレームワーク・アクターモデル・実績あり"
+    - name: "Rocket"
+      desc: "使いやすさ重視・マクロ豊富"
   major_libs:
-    - "Tokio（非同期ランタイム）"
-    - "Serde（シリアライズ）"
-  runtimes: ["Rust（単一バイナリ・ランタイム不要）"]
+    - name: "Tokio"
+      desc: "非同期ランタイム・デファクト・async-std 対抗"
+    - name: "Serde"
+      desc: "シリアライズ/デシリアライズ・ derive・JSON/TOML/YAML"
+    - name: "Rayon"
+      desc: "データ並列ライブラリ・イテレータの並列化"
+    - name: "sqlx"
+      desc: "非同期Rust SQL・コンパイル時クエリ検証"
+  runtimes:
+    - name: "Rust"
+      desc: "単一バイナリ・ランタイム不要・GCなし"
 
 code_examples:
   - title: "Hello World"
@@ -70,22 +80,46 @@ code_examples:
   - title: "所有権と借用"
     code: |
       let s = String::from("hi");
-      let r = &s;
+      let r = &s;           // 借用（不変参照）
       println!("{}", r);
+  - title: "Result と ? 演算子"
+    code: |
+      fn read(path: &str) -> Result<String, io::Error> {
+          let s = std::fs::read_to_string(path)?;
+          Ok(s)
+      }
+  - title: "非同期（async/await + Tokio）"
+    code: |
+      #[tokio::main]
+      async fn main() {
+          let data = reqwest::get("https://...").await?.text().await?;
+      }
 
 learning_roadmap:
-  beginner_period: "目安: 〜1ヶ月"
+  beginner_period: "目安: 〜2-3ヶ月"
   beginner:
-    - "基本文法・所有権システム"
-    - "cargo によるパッケージ管理"
-  intermediate_period: "目安: 〜2-3ヶ月"
+    - topic: "基本文法"
+      desc: "変数の不変性・match・enum・コレクション"
+    - topic: "所有権システム（最重要）"
+      desc: "ムーブ・借用・ライフタイムの基本・コンパイラと対話"
+    - topic: "cargo と標準ライブラリ"
+      desc: "ビルド・テスト・docs.rs・Result/Option"
+  intermediate_period: "目安: 〜3-6ヶ月"
   intermediate:
-    - "ライフタイム・借用チェッカー"
-    - "トレイト・ジェネリクス"
+    - topic: "ライフタイム・借用チェッカー"
+      desc: "明示的ライフタイム・構造体のライフタイム・戦略"
+    - topic: "トレイト・ジェネリクス"
+      desc: "trait・impl・境界・動的ディスパッチ（dyn）"
+    - topic: "Send/Sync（スレッド安全性）"
+      desc: "マーカートレイト・Arc/Mutex・並行安全性の証明"
   advanced_period: "目安: 〜6ヶ月+"
   advanced:
-    - "非同期（async/await + Tokio）"
-    - "unsafe と FFI"
+    - topic: "非同期（async/await + Tokio）"
+      desc: "Future・ピン留め・ランタイム・select!"
+    - topic: "マクロ（macro_rules! / proc-macro）"
+      desc: "宣言的マクロ・属性マクロ・derive"
+    - topic: "unsafe と FFI"
+      desc: "生ポインタ・外部C連携・不変条件の手動維持"
 
 terms:
   - word: "所有権システム"

@@ -142,9 +142,11 @@
     <p><strong>主要フレームワーク</strong>：</p>
     <ul>
       
-      <li><strong>Actix-web</strong> — 高性能Webフレームワーク</li>
+      <li><strong>Axum</strong> — モジュラーWebフレームワーク・Tokio系・現行主流</li>
       
-      <li><strong>Axum</strong> — モジュラーWebフレームワーク（Tokio系）</li>
+      <li><strong>Actix-web</strong> — 高性能Webフレームワーク・アクターモデル・実績あり</li>
+      
+      <li><strong>Rocket</strong> — 使いやすさ重視・マクロ豊富</li>
       
     </ul>
     
@@ -152,9 +154,13 @@
     <p><strong>主要ライブラリ</strong>：</p>
     <ul>
       
-      <li>Tokio（非同期ランタイム）</li>
+      <li><strong>Tokio</strong> — 非同期ランタイム・デファクト・async-std 対抗</li>
       
-      <li>Serde（シリアライズ）</li>
+      <li><strong>Serde</strong> — シリアライズ/デシリアライズ・ derive・JSON/TOML/YAML</li>
+      
+      <li><strong>Rayon</strong> — データ並列ライブラリ・イテレータの並列化</li>
+      
+      <li><strong>sqlx</strong> — 非同期Rust SQL・コンパイル時クエリ検証</li>
       
     </ul>
     
@@ -162,7 +168,7 @@
     <p><strong>ランタイム</strong>：</p>
     <ul>
       
-      <li>Rust（単一バイナリ・ランタイム不要）</li>
+      <li><strong>Rust</strong> — 単一バイナリ・ランタイム不要・GCなし</li>
       
     </ul>
     
@@ -181,8 +187,26 @@
     <div class="card">
       <p><strong>所有権と借用</strong></p>
       <pre><code class="language-rust">let s = String::from(&#34;hi&#34;);
-let r = &amp;s;
+let r = &amp;s;           // 借用（不変参照）
 println!(&#34;{}&#34;, r);
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>Result と ? 演算子</strong></p>
+      <pre><code class="language-rust">fn read(path: &amp;str) -&gt; Result&lt;String, io::Error&gt; {
+    let s = std::fs::read_to_string(path)?;
+    Ok(s)
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>非同期（async/await + Tokio）</strong></p>
+      <pre><code class="language-rust">#[tokio::main]
+async fn main() {
+    let data = reqwest::get(&#34;https://...&#34;).await?.text().await?;
+}
 </code></pre>
     </div>
     
@@ -191,12 +215,12 @@ println!(&#34;{}&#34;, r);
 
   
   <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
-    <p><strong>初級</strong>（目安: 〜1ヶ月）</p>
-    <ul><li>基本文法・所有権システム</li><li>cargo によるパッケージ管理</li></ul>
-    <p><strong>中級</strong>（目安: 〜2-3ヶ月）</p>
-    <ul><li>ライフタイム・借用チェッカー</li><li>トレイト・ジェネリクス</li></ul>
+    <p><strong>初級</strong>（目安: 〜2-3ヶ月）</p>
+    <ul><li><strong>基本文法</strong> — 変数の不変性・match・enum・コレクション</li><li><strong>所有権システム（最重要）</strong> — ムーブ・借用・ライフタイムの基本・コンパイラと対話</li><li><strong>cargo と標準ライブラリ</strong> — ビルド・テスト・docs.rs・Result/Option</li></ul>
+    <p><strong>中級</strong>（目安: 〜3-6ヶ月）</p>
+    <ul><li><strong>ライフタイム・借用チェッカー</strong> — 明示的ライフタイム・構造体のライフタイム・戦略</li><li><strong>トレイト・ジェネリクス</strong> — trait・impl・境界・動的ディスパッチ（dyn）</li><li><strong>Send/Sync（スレッド安全性）</strong> — マーカートレイト・Arc/Mutex・並行安全性の証明</li></ul>
     <p><strong>上級</strong>（目安: 〜6ヶ月+）</p>
-    <ul><li>非同期（async/await + Tokio）</li><li>unsafe と FFI</li></ul>
+    <ul><li><strong>非同期（async/await + Tokio）</strong> — Future・ピン留め・ランタイム・select!</li><li><strong>マクロ（macro_rules! / proc-macro）</strong> — 宣言的マクロ・属性マクロ・derive</li><li><strong>unsafe と FFI</strong> — 生ポインタ・外部C連携・不変条件の手動維持</li></ul>
   </div></div>
   
 
