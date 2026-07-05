@@ -138,14 +138,18 @@
 
   
   <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
-    <p><strong>パッケージマネージャ</strong>：npm / pnpm / yarn</p>
+    <p><strong>パッケージマネージャ</strong>：npm / pnpm（推奨） / yarn (Berry)</p>
     
     <p><strong>主要フレームワーク</strong>：</p>
     <ul>
       
-      <li><strong>Next.js</strong> — フルスタックWebフレームワーク・App Router</li>
+      <li><strong>Next.js</strong> — フルスタックWebフレームワーク・App Router・SSR/SSG・Vercel製</li>
       
-      <li><strong>React</strong> — UIライブラリ・デファクト</li>
+      <li><strong>React</strong> — UIライブラリ・デファクト・JSX仮想DOM</li>
+      
+      <li><strong>NestJS</strong> — エンタープライズ向けNodeフレームワーク・DI・Angular影響</li>
+      
+      <li><strong>Remix</strong> — Web標準重視のフルスタック・nested routing</li>
       
     </ul>
     
@@ -153,9 +157,13 @@
     <p><strong>主要ライブラリ</strong>：</p>
     <ul>
       
-      <li>Prisma（ORM）</li>
+      <li><strong>Prisma</strong> — 型安全ORM・マイグレーション付き・DBスキーマから型生成</li>
       
-      <li>Zod（スキーマバリデーション）</li>
+      <li><strong>Zod</strong> — TypeScriptファーストのスキーマバリデーション・実行時型検査</li>
+      
+      <li><strong>tRPC</strong> — エンドツーエンド型安全API・クライアント自動型生成</li>
+      
+      <li><strong>Vitest</strong> — Viteベースのテストランナー・Jest互換・ESネイティブ</li>
       
     </ul>
     
@@ -163,11 +171,11 @@
     <p><strong>ランタイム</strong>：</p>
     <ul>
       
-      <li>Node.js</li>
+      <li><strong>Node.js</strong> — 本番標準・LTS運用</li>
       
-      <li>Bun</li>
+      <li><strong>Bun</strong> — 高速・ネイティブTS実行・npm互換</li>
       
-      <li>Deno</li>
+      <li><strong>Deno</strong> — セキュア・TSネイティブ・Web標準準拠</li>
       
     </ul>
     
@@ -193,17 +201,32 @@ console.log(greeting);
 </code></pre>
     </div>
     
+    <div class="card">
+      <p><strong>ジェネリクス（型の再利用）</strong></p>
+      <pre><code class="language-typescript">function first&lt;T&gt;(arr: T[]): T | undefined {
+  return arr[0];
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>ユーティリティ型（Partial）</strong></p>
+      <pre><code class="language-typescript">type UserUpdate = Partial&lt;User&gt;;  // 全フィールド任意に
+function updateUser(id: number, patch: UserUpdate) { ... }
+</code></pre>
+    </div>
+    
   </div>
   
 
   
   <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
     <p><strong>初級</strong>（目安: 〜2週間）</p>
-    <ul><li>TypeScriptの型システム基本（primitives, union, intersection）</li><li>tsconfig.json の主要オプション（strict, target, module）</li></ul>
+    <ul><li><strong>型システム基本</strong> — primitives / union / intersection・type alias vs interface</li><li><strong>tsconfig.json</strong> — strict / target / module・noImplicitAny の意味</li><li><strong>VSCode + TS 開発環境</strong> — tsserver・インレイヒント・quick fix</li></ul>
     <p><strong>中級</strong>（目安: 〜1-2ヶ月）</p>
-    <ul><li>ジェネリクス・ユーティリティ型（Partial, Pick, Omit）</li><li>型推論の限界と型アサーション</li></ul>
+    <ul><li><strong>ジェネリクス・ユーティリティ型</strong> — Partial/Pick/Omit/Record・型の再利用</li><li><strong>strict モード完全理解</strong> — noUncheckedIndexedAccess・exactOptionalPropertyTypes 等</li><li><strong>型推論の限界と型アサーション</strong> — as の用法と乱用避ける・Type Guards</li></ul>
     <p><strong>上級</strong>（目安: 〜3-6ヶ月）</p>
-    <ul><li>Conditional Types / Mapped Types</li><li>Template Literal Types</li></ul>
+    <ul><li><strong>Conditional Types</strong> — T extends U ? X : Y・infer・分配的</li><li><strong>Mapped Types / Template Literal Types</strong> — { [K in keyof T]: ... }・型レベル文字列操作</li><li><strong>型レベルプログラミング</strong> — ts-toolbelt・type-fest・再帰型</li></ul>
   </div></div>
   
 

@@ -53,16 +53,32 @@ qa:
     a: "フロント込みのWebサービスならNext.js（App Router）で統一するのが今の主流です。APIだけ提供するマイクロサービスにはExpressやFastifyが軽量で適しています"
 
 ecosystem:
-  package_manager: "npm / pnpm / yarn"
+  package_manager: "npm / pnpm（推奨） / yarn (Berry)"
   frameworks:
     - name: "Next.js"
-      desc: "フルスタックWebフレームワーク・App Router"
+      desc: "フルスタックWebフレームワーク・App Router・SSR/SSG・Vercel製"
     - name: "React"
-      desc: "UIライブラリ・デファクト"
+      desc: "UIライブラリ・デファクト・JSX仮想DOM"
+    - name: "NestJS"
+      desc: "エンタープライズ向けNodeフレームワーク・DI・Angular影響"
+    - name: "Remix"
+      desc: "Web標準重視のフルスタック・nested routing"
   major_libs:
-    - "Prisma（ORM）"
-    - "Zod（スキーマバリデーション）"
-  runtimes: ["Node.js", "Bun", "Deno"]
+    - name: "Prisma"
+      desc: "型安全ORM・マイグレーション付き・DBスキーマから型生成"
+    - name: "Zod"
+      desc: "TypeScriptファーストのスキーマバリデーション・実行時型検査"
+    - name: "tRPC"
+      desc: "エンドツーエンド型安全API・クライアント自動型生成"
+    - name: "Vitest"
+      desc: "Viteベースのテストランナー・Jest互換・ESネイティブ"
+  runtimes:
+    - name: "Node.js"
+      desc: "本番標準・LTS運用"
+    - name: "Bun"
+      desc: "高速・ネイティブTS実行・npm互換"
+    - name: "Deno"
+      desc: "セキュア・TSネイティブ・Web標準準拠"
 
 code_examples:
   - title: "Hello World + 型"
@@ -75,20 +91,41 @@ code_examples:
         const res = await fetch(`/api/users/${id}`);
         return res.json();
       }
+  - title: "ジェネリクス（型の再利用）"
+    code: |
+      function first<T>(arr: T[]): T | undefined {
+        return arr[0];
+      }
+  - title: "ユーティリティ型（Partial）"
+    code: |
+      type UserUpdate = Partial<User>;  // 全フィールド任意に
+      function updateUser(id: number, patch: UserUpdate) { ... }
 
 learning_roadmap:
   beginner_period: "目安: 〜2週間"
   beginner:
-    - "TypeScriptの型システム基本（primitives, union, intersection）"
-    - "tsconfig.json の主要オプション（strict, target, module）"
+    - topic: "型システム基本"
+      desc: "primitives / union / intersection・type alias vs interface"
+    - topic: "tsconfig.json"
+      desc: "strict / target / module・noImplicitAny の意味"
+    - topic: "VSCode + TS 開発環境"
+      desc: "tsserver・インレイヒント・quick fix"
   intermediate_period: "目安: 〜1-2ヶ月"
   intermediate:
-    - "ジェネリクス・ユーティリティ型（Partial, Pick, Omit）"
-    - "型推論の限界と型アサーション"
+    - topic: "ジェネリクス・ユーティリティ型"
+      desc: "Partial/Pick/Omit/Record・型の再利用"
+    - topic: "strict モード完全理解"
+      desc: "noUncheckedIndexedAccess・exactOptionalPropertyTypes 等"
+    - topic: "型推論の限界と型アサーション"
+      desc: "as の用法と乱用避ける・Type Guards"
   advanced_period: "目安: 〜3-6ヶ月"
   advanced:
-    - "Conditional Types / Mapped Types"
-    - "Template Literal Types"
+    - topic: "Conditional Types"
+      desc: "T extends U ? X : Y・infer・分配的"
+    - topic: "Mapped Types / Template Literal Types"
+      desc: "{ [K in keyof T]: ... }・型レベル文字列操作"
+    - topic: "型レベルプログラミング"
+      desc: "ts-toolbelt・type-fest・再帰型"
 
 terms:
   - word: "静的型付け"
