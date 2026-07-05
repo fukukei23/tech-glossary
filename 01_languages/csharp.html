@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C# — テクニカルアーキテクト語彙帳</title>
+<meta name="description" content="C#の用途・選定理由・トレードオフを解説">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" integrity="sha384-oaMLBGEzBOJx3UHwac0cVndtX5fxGQIfnAeFZ35RTgqPcYlbprH9o9PUV/F8Le07" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
+</head>
+<body>
+<button class="theme-toggle">🌙</button>
+<div class="container">
+  <a class="back-link" href="../index.html">← 語彙帳トップに戻る</a>
+  <div class="lang-header">
+    <div class="lang-icon">💎</div>
+    <h1>C#</h1>
+    <p class="lang-tagline">Microsoft主力言語。.NET・Unity・Azure</p>
+    <div class="tag-row">
+      <span class="tag tag-good">✅ Web API（ASP.NET Core）</span><span class="tag tag-good">✅ ゲーム開発（Unity）</span><span class="tag tag-good">✅ Microsoft/Azure環境</span>
+      <span class="tag tag-bad">⚠ 超軽量スクリプトには過剰</span><span class="tag tag-bad">⚠ .NET Framework（Windowsのみ）は新規非推奨</span>
+    </div>
+  </div>
+
+  <div class="section"><div class="section-title">📌 一言で言うと</div><div class="card">
+    <p>26年進化するMicrosoft主力言語。.NET・Unity・Azureを縦断</p>
+    <p>2000年に <strong>Anders Hejlsberg</strong>（Delphi/Turbo Pascal の作者）が Microsoft で公開したオブジェクト指向言語。<strong>ECMA-335</strong>（Common Language Infrastructure）に準拠し、<strong>JIT コンパイル</strong>で動く <span class="term">.NET<span class="term-popup">Microsoft のアプリケーションプラットフォーム。CLR（共通言語ランタイム）+ 標準ライブラリ群。現行は .NET 8 LTS。.NET Framework（Windows のみ）は廃止予定</span></span> プラットフォームの主力言語として設計された。<strong>Visual Studio</strong> と <strong>.NET Framework</strong> の組み合わせで Windows デスクトップ開発の標準となり、2014年の <strong>.NET Core</strong> 公開以降は <strong>クロスプラットフォーム対応・OSS化</strong> が急速に進んだ。
+現在（2026年）は <strong>.NET 8 LTS / .NET 9 / .NET 10</strong> 世代で <strong>C# 14</strong> が最新。<span class="term">Nullable Reference Types<span class="term-popup">C# 8 で導入された null 安全機能。string（非 null）と string?（null 許容）を型システムで区別し、コンパイル時に警告</span></span>（null安全）・<strong>async/await</strong>（非同期）・<span class="term">LINQ<span class="term-popup">Language Integrated Query。C# 言語に統合されたクエリ構文。コレクション・DB・XML を統一的な記法で扱える（Select/Where/OrderBy）</span></span>（コレクション関数型操作）・<strong>record 型</strong>（イミュータブルデータ）・<strong>Source Generator</strong> など、Java や Kotlin と並ぶ近代的な機能を備える。
+用途は <strong>ASP.NET Core</strong>（Web API）・<strong>Unity</strong>（ゲーム・世界で最も使われているゲームエンジン）・<strong>.NET MAUI</strong>（モバイル/デスクトップ）・<strong>Azure 連携</strong>（クラウド）と極めて広く、Microsoft エコシステムの中心。</p>
+
+  </div></div>
+
+  <div class="section"><div class="section-title">🎯 得意な用途</div><div class="card">
+    
+    <p><strong>Web API（ASP.NET Core）</strong>：ASP.NET Core は高パフォーマンスなクロスプラットフォーム Web フレームワーク。Microsoft の docs で『最速の .NET Web フレームワーク』とされ、**Minimal API**・**gRPC**・**SignalR** まで一通り揃う。</p>
+    
+    <p><strong>ゲーム開発（Unity）</strong>：Unity は C# を公式スクリプト言語として採用。世界シェア最大級のゲームエンジンで、スマホ・インディー・VR/AR まで C# で開発される。**Unity 6** が現行（2025年公開）。</p>
+    
+    <p><strong>クラウド / Azure 連携</strong>：Azure SDK for .NET・**Aspire**（クラウドネイティブアプリスタック）・Azure Functions・Cosmos DB 等、Microsoft Azure サービス群のファーストクラス言語。</p>
+    
+    <p><strong>デスクトップ・モバイル（.NET MAUI）</strong>：.NET MAUI で Windows / macOS / iOS / Android を単一コードでターゲティング。レガシーでは WPF / WinForms も現役。</p>
+    
+    <p><strong>CLI / Worker Service / IoT</strong>：.NET は **Ahead-of-Time コンパイル（NativeAOT）** 対応で、シングルバイナリの CLI や Linux Worker Service を高速起動できる。ML.NET で機械学習も .NET 完結。</p>
+    
+  </div></div>
+
+  <div class="section"><div class="section-title">⚖️ 他言語との比較</div><table class="compare-table">
+    <thead><tr><th>観点</th><th>C#</th><th>Java</th><th>TypeScript</th></tr></thead>
+    <tbody>
+    
+      <tr><td>言語の歴史</td>
+      
+        
+        <td class="">26年(2000-)・MS主力</td>
+      
+        
+        <td class="">31年(1995-)・JVMの原点</td>
+      
+        
+        <td class="">13年(2012-)・JS拡張・MS製</td>
+      
+      </tr>
+    
+      <tr><td>型システム</td>
+      
+        
+        <td class="good">強い静的型・null安全（NRT）</td>
+      
+        
+        <td class="good">強い静的型・null安全（@NotNull等）</td>
+      
+        
+        <td class="bad">構造的型・any/unknown</td>
+      
+      </tr>
+    
+      <tr><td>クロスプラットフォーム</td>
+      
+        
+        <td class="good">.NET 8+で完全対応（Win/macOS/Linux）</td>
+      
+        
+        <td class="good">JVMで完全対応</td>
+      
+        
+        <td class="good">ブラウザ+Node.js/Deno/Bun</td>
+      
+      </tr>
+    
+      <tr><td>ゲーム開発</td>
+      
+        
+        <td class="good">Unity公式・世界最大シェア</td>
+      
+        
+        <td class="bad">非対応（libGDX等は代替）</td>
+      
+        
+        <td class="bad">非対応（Phaser等は代替）</td>
+      
+      </tr>
+    
+      <tr><td>エコシステム規模</td>
+      
+        
+        <td class="good">巨大（NuGet・MS支援）</td>
+      
+        
+        <td class="good">最大（Maven Central・25年蓄積）</td>
+      
+        
+        <td class="good">巨大（npm）</td>
+      
+      </tr>
+    
+      <tr><td>Web フレームワーク</td>
+      
+        
+        <td class="good">ASP.NET Core（高パフォーマンス）</td>
+      
+        
+        <td class="good">Spring Boot（業界標準）</td>
+      
+        
+        <td class="good">Next.js / Express 等</td>
+      
+      </tr>
+    
+      <tr><td>向いている場面</td>
+      
+        
+        <td class="">Microsoft/Azure環境・Unity・Web API</td>
+      
+        
+        <td class="">大規模基幹・Android（既存）</td>
+      
+        
+        <td class="">Webフロント・フルスタック</td>
+      
+      </tr>
+    
+    </tbody>
+  </table></div>
+
+  <div class="section"><div class="section-title">✅ 選ぶ理由 / ⚠ 選ばない理由</div><div class="card">
+    <p><strong>選ぶ理由</strong>：<p><strong>Microsoft エコシステム（.NET・Azure・Visual Studio・Unity）との統合度が最強クラス</strong>。ASP.NET Core は TechEmpower ベンチマークで常に最上位。<strong>Nullable Reference Types</strong> による null 安全性・<strong>async/await</strong> の言語サポート・<strong>LINQ</strong> の表現力・<strong>record 型</strong> の簡潔さはモダンな書き心地を実現。Unity 公式・Azure ファーストクラス採用・NativeAOT で起動高速。Visual Studio のデバッグ体験は業界屈指。</p>
+</p>
+    <p><strong>選ばない理由</strong>：<p><strong>Microsoft エコシステム外</strong>では .NET の恩恵が薄く、Linux サーバ運用は依然 Java/Go/Rust に劣る場面も。<strong>.NET Framework（Windows のみ）は廃止予定</strong>で新規採用不可、<strong>.NET 8 以降</strong>を選ぶ必要。Mono は歴史あるが .NET 主流への移行が推奨。学習コストは中程度（Java/C++ 経験者には馴染みやすい）。</p>
+</p>
+  </div></div>
+
+  <div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.C# と .NET の違いは何ですか？</div>
+      <div class="qa-a">A.**C# は言語**、**.NET は実行プラットフォーム（CLR + ライブラリ群）** です。.NET 上で動く言語は C# の他に **F#**（関数型）・**VB.NET**（レガシー）等があります。.NET の現在の主流実装は **.NET 8 LTS / .NET 9 / .NET 10**（.NET Core 系）。.NET Framework は Windows のみの旧実装で現在 **廃止予定（out of support）**。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.ASP.NET Core と ASP.NET（Framework）の違いは？</div>
+      <div class="qa-a">A.**ASP.NET Core** は **.NET Core 系（.NET 8+）** で動くクロスプラットフォーム・OSS の現行フレームワーク。**ASP.NET Framework**（旧）は **.NET Framework** 上で動く Windows 専用で、新規開発は非推奨です。新規プロジェクトは必ず ASP.NET Core を選んでください。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Unity で C# を使う時の注意点は？</div>
+      <div class="qa-a">A.Unity は独自バージョンの C#（Unity 6 では **C# 9** 相当）を採用しており、最新機能（records・init-only 等）はすぐには使えません。Unity 標準ライブラリは .NET Standard 2.1 プロファイルで、.NET 標準 API の一部は利用不可。**async/await・LINQ は使える**ので基本機能は揃います。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q..NET のバージョンはどれを選べばいいですか？</div>
+      <div class="qa-a">A.新規プロジェクトは **.NET 8 LTS**（長期サポート・2026年11月までサポート）または最新 LTS を選んでください。**.NET 9 / 10** は STS（短期サポート）で 18ヶ月サポート。**.NET Framework（4.x）は新規開発不可**。Microsoft のリリースポリシーは毎年11月に新バージョンが公開され、偶数番号が LTS・奇数番号が STS。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.NativeAOT とは何ですか？</div>
+      <div class="qa-a">A.**.NET 9 で正式サポート**された **Ahead-of-Time コンパイル**。ビルド時にネイティブバイナリを生成し、**.NET アプリ起動を数十ms** に短縮・メモリ使用量を大幅に削減できる。CLI・サーバーレス・コンテナ・Worker Service で有利。EF Core や ASP.NET Core の一部は NativeAOT 対応済み。</div>
+    </div>
+    
+  </div>
+
+  
+  <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
+    <p><strong>パッケージマネージャ</strong>：NuGet（.NET の公式パッケージマネージャ・公式 registry は nuget.org）</p>
+    
+    <p><strong>主要フレームワーク</strong>：</p>
+    <ul>
+      
+      <li><strong>ASP.NET Core</strong> — Microsoft公式の高パフォーマンス Web フレームワーク。**Minimal API**・MVC・Razor Pages・gRPC・SignalR を内蔵（.NET 8+ で現行）</li>
+      
+      <li><strong>.NET MAUI</strong> — マルチプラットフォーム UI フレームワーク。Windows / macOS / iOS / Android を単一コードでターゲティング（Xamarin.Forms の後継）</li>
+      
+      <li><strong>Blazor</strong> — C# で **SPA・インタラクティブ Web UI** を書くフレームワーク。**Blazor United**（SSR + インタラクティブ統合）が現行</li>
+      
+      <li><strong>Unity</strong> — 世界シェア最大級のゲームエンジン。**C# を公式スクリプト言語**として採用。2D/3D・VR/AR・モバイル・コンソール対応</li>
+      
+      <li><strong>WPF / WinForms</strong> — Windows デスクトップアプリの伝統的フレームワーク。レガシー Windows アプリ保守では現役（.NET 8 で Windows 専用継続）</li>
+      
+      <li><strong>Entity Framework Core</strong> — Microsoft公式 ORM。LINQ で DB クエリを書け、Code First / Database First 両対応（EF Core 9 が現行）</li>
+      
+    </ul>
+    
+    
+    <p><strong>主要ライブラリ</strong>：</p>
+    <ul>
+      
+      <li><strong>xUnit / NUnit / MSTest</strong> — .NET 公式・第三者製の単体テストフレームワーク。**xUnit** がモダン・.NET チーム推奨。NUnit はレガシー資産に豊富</li>
+      
+      <li><strong>MediatR</strong> — **CQRS / Mediator パターン**のデファクトライブラリ。ASP.NET Core のクリーンアーキテクチャで頻出</li>
+      
+      <li><strong>Serilog / NLog</strong> — 構造化ロギングライブラリ。**Serilog** が .NET 8+ で人気、sink 拡張で ElasticSearch / Seq / コンソールに出力</li>
+      
+      <li><strong>AutoMapper</strong> — オブジェクトマッピングライブラリ。DTO ⇔ EntityModel の変換を簡略化</li>
+      
+      <li><strong>FluentValidation</strong> — 流れるようなインターフェースでバリデーションルールを定義。ASP.NET Core と組み合わせて入力検証</li>
+      
+      <li><strong>Polly</strong> — **レジリエンス（リトライ・サーキットブレーカー・タイムアウト）**ライブラリ。HTTP 呼び出しの堅牢化に必須</li>
+      
+    </ul>
+    
+    
+    <p><strong>ランタイム</strong>：</p>
+    <ul>
+      
+      <li><strong>.NET 8 LTS</strong> — 現行 LTS。**2023年11月公開・2026年11月までサポート**。本番新規プロジェクトの第一推奨</li>
+      
+      <li><strong>.NET 9 / .NET 10</strong> — 現行 STS。.NET 9 は **2024年11月公開・2026年5月までサポート**。.NET 10 は **2025年11月公開**（LTS に昇格予定）</li>
+      
+      <li><strong>.NET Framework 4.x</strong> — Windows のみの旧実装。**新規開発不可・廃止予定**。既存資産の保守目的のみ</li>
+      
+      <li><strong>Mono</strong> — クロスプラットフォームの旧ランタイム。**Unity が内部利用**。Xamarin モバイルも Mono ベースだったが .NET 8 + MAUI に統合</li>
+      
+    </ul>
+    
+  </div></div>
+  
+
+  
+  <div class="section"><div class="section-title">💻 コード例</div>
+    
+    <div class="card">
+      <p><strong>Hello World（クラス + Main）</strong></p>
+      <pre><code class="language-csharp">using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine(&#34;Hello, C#!&#34;);
+    }
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>async/await（非同期処理）</strong></p>
+      <pre><code class="language-csharp">using System.Net.Http;
+using System.Threading.Tasks;
+
+async Task&lt;string&gt; FetchAsync(string url)
+{
+    using var client = new HttpClient();
+    string body = await client.GetStringAsync(url);
+    return body;
+}
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>LINQ（コレクション関数型操作）</strong></p>
+      <pre><code class="language-csharp">using System.Linq;
+
+var topScorers = users
+    .Where(u =&gt; u.IsActive)
+    .OrderByDescending(u =&gt; u.Score)
+    .Take(10)
+    .Select(u =&gt; u.Name)
+    .ToList();
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>record 型（イミュータブルデータ・C# 9+）</strong></p>
+      <pre><code class="language-csharp">public record Point(int X, int Y);
+public record User(string Name, int Age);
+
+var p = new Point(1, 2);
+var p2 = p with { X = 3 };  // with 式で非破壊更新
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>インターフェース + DI（ASP.NET Core風）</strong></p>
+      <pre><code class="language-csharp">public interface IUserRepository
+{
+    Task&lt;User?&gt; GetByIdAsync(int id);
+}
+
+public class UserService(IUserRepository repo)
+{
+    public async Task&lt;string&gt; GetNameAsync(int id)
+    {
+        var user = await repo.GetByIdAsync(id);
+        return user?.Name ?? &#34;anonymous&#34;;
+    }
+}
+
+// Program.cs（DI 登録）
+builder.Services.AddScoped&lt;IUserRepository, UserRepository&gt;();
+</code></pre>
+    </div>
+    
+  </div>
+  
+
+  
+  <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
+    <p><strong>初級</strong>（目安: 〜2-3週間）</p>
+    <ul><li><strong>基本文法（変数・制御構文・メソッド）</strong> — int/string/配列・if/for/while・メソッド定義・Main</li><li><strong>クラスとオブジェクト指向</strong> — class・フィールド・コンストラクタ・アクセス修飾子（public/private）・this</li><li><strong>プロパティ・自動実装プロパティ</strong> — get/set・自動実装・init-only・records 入門</li><li><strong>ビルドツール基礎</strong> — dotnet CLI（dotnet new / build / run）・.csproj・NuGet パッケージ参照</li></ul>
+    <p><strong>中級</strong>（目安: 〜1-3ヶ月）</p>
+    <ul><li><strong>コレクションと Generics</strong> — List&lt;T&gt; / Dictionary&lt;TKey, TValue&gt; / IEnumerable&lt;T&gt;・LINQ 基礎</li><li><strong>例外処理</strong> — try-catch-finally・throw・カスタム例外・using ステートメント</li><li><strong>async/await と Task</strong> — Task・async・await・ConfigureAwait・HttpClient の使い方</li><li><strong>Nullable Reference Types（NRT）</strong> — ? 演算子・! 演算子・null 安全性・null forgiving 演算子</li></ul>
+    <p><strong>上級</strong>（目安: 〜3-6ヶ月）</p>
+    <ul><li><strong>ASP.NET Core 実践</strong> — DI コンテナ・ミドルウェア・Minimal API・EF Core・Authorization</li><li><strong>async best practices（Stephen Cleary）</strong> — ConfigureAwait・ValueTask・キャンセル・並列制御・async void の罠</li><li><strong>Source Generators</strong> — コンパイル時コード生成・Roslyn・partial class・自動実装</li><li><strong>.NET internals</strong> — CLR・GC（ワークステーション/サーバー）・JIT・Tiered Compilation・NativeAOT</li></ul>
+  </div></div>
+  
+
+  <div class="footer">
+    <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
+  </div>
+</div>
+<script src="../assets/tooltip.js"></script>
+<script src="../assets/theme.js"></script>
+<script>if (window.hljs) { hljs.highlightAll(); }</script>
+</body>
+</html>
