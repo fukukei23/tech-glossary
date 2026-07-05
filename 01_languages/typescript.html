@@ -134,6 +134,61 @@
     
   </div>
 
+  
+  <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
+    <p><strong>パッケージマネージャ</strong>：npm / pnpm / yarn</p>
+    
+    <p><strong>主要フレームワーク</strong>：</p>
+    <ul>
+      
+      <li><strong>Next.js</strong> — フルスタックWebフレームワーク・App Router</li>
+      
+      <li><strong>React</strong> — UIライブラリ・デファクト</li>
+      
+    </ul>
+    
+    
+    <p><strong>主要ライブラリ</strong>：Prisma（ORM） / Zod（スキーマバリデーション）</p>
+    
+    
+    <p><strong>ランタイム</strong>：Node.js / Bun / Deno</p>
+    
+  </div></div>
+  
+
+  
+  <div class="section"><div class="section-title">💻 コード例</div>
+    
+    <div class="card">
+      <p><strong>Hello World + 型</strong></p>
+      <pre><code>const greeting: string = &#34;Hello&#34;;
+console.log(greeting);
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>async/await と型</strong></p>
+      <pre><code>async function fetchUser(id: number): Promise&lt;User&gt; {
+  const res = await fetch(`/api/users/${id}`);
+  return res.json();
+}
+</code></pre>
+    </div>
+    
+  </div>
+  
+
+  
+  <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
+    <p><strong>初級</strong>（目安: 〜2週間）</p>
+    <ul><li>TypeScriptの型システム基本（primitives, union, intersection）</li><li>tsconfig.json の主要オプション（strict, target, module）</li></ul>
+    <p><strong>中級</strong>（目安: 〜1-2ヶ月）</p>
+    <ul><li>ジェネリクス・ユーティリティ型（Partial, Pick, Omit）</li><li>型推論の限界と型アサーション</li></ul>
+    <p><strong>上級</strong>（目安: 〜3-6ヶ月）</p>
+    <ul><li>Conditional Types / Mapped Types</li><li>Template Literal Types</li></ul>
+  </div></div>
+  
+
   <div class="footer">
     <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
   </div>

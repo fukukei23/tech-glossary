@@ -133,6 +133,59 @@
     
   </div>
 
+  
+  <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
+    <p><strong>パッケージマネージャ</strong>：cargo（標準）</p>
+    
+    <p><strong>主要フレームワーク</strong>：</p>
+    <ul>
+      
+      <li><strong>Actix-web</strong> — 高性能Webフレームワーク</li>
+      
+      <li><strong>Axum</strong> — モジュラーWebフレームワーク（Tokio系）</li>
+      
+    </ul>
+    
+    
+    <p><strong>主要ライブラリ</strong>：Tokio（非同期ランタイム） / Serde（シリアライズ）</p>
+    
+    
+    <p><strong>ランタイム</strong>：Rust（単一バイナリ・ランタイム不要）</p>
+    
+  </div></div>
+  
+
+  
+  <div class="section"><div class="section-title">💻 コード例</div>
+    
+    <div class="card">
+      <p><strong>Hello World</strong></p>
+      <pre><code>fn main() { println!(&#34;Hello&#34;); }
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>所有権と借用</strong></p>
+      <pre><code>let s = String::from(&#34;hi&#34;);
+let r = &amp;s;
+println!(&#34;{}&#34;, r);
+</code></pre>
+    </div>
+    
+  </div>
+  
+
+  
+  <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
+    <p><strong>初級</strong>（目安: 〜1ヶ月）</p>
+    <ul><li>基本文法・所有権システム</li><li>cargo によるパッケージ管理</li></ul>
+    <p><strong>中級</strong>（目安: 〜2-3ヶ月）</p>
+    <ul><li>ライフタイム・借用チェッカー</li><li>トレイト・ジェネリクス</li></ul>
+    <p><strong>上級</strong>（目安: 〜6ヶ月+）</p>
+    <ul><li>非同期（async/await + Tokio）</li><li>unsafe と FFI</li></ul>
+  </div></div>
+  
+
   <div class="footer">
     <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
   </div>

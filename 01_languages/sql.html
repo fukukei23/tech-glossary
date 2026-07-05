@@ -107,6 +107,58 @@ AIがSQLを自動生成するツールが増えているが、生成されたSQL
     
   </div>
 
+  
+  <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
+    <p><strong>パッケージマネージャ</strong>：—（言語仕様・各DBMSが実装）</p>
+    
+    <p><strong>主要フレームワーク</strong>：</p>
+    <ul>
+      
+      <li><strong>PostgreSQL</strong> — OSS RDBMS・拡張性高・pgvector等</li>
+      
+      <li><strong>MySQL</strong> — 普及RDBMS・Web系標準</li>
+      
+    </ul>
+    
+    
+    <p><strong>主要ライブラリ</strong>：pgvector（ベクトル検索） / pg_stat_statements（クエリ分析）</p>
+    
+    
+    <p><strong>ランタイム</strong>：PostgreSQL / MySQL / SQLite</p>
+    
+  </div></div>
+  
+
+  
+  <div class="section"><div class="section-title">💻 コード例</div>
+    
+    <div class="card">
+      <p><strong>基本SELECT</strong></p>
+      <pre><code>SELECT name, created_at FROM users WHERE active = true;
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>JOIN</strong></p>
+      <pre><code>SELECT u.name, o.total
+FROM users u JOIN orders o ON u.id = o.user_id;
+</code></pre>
+    </div>
+    
+  </div>
+  
+
+  
+  <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
+    <p><strong>初級</strong>（目安: 〜2週間）</p>
+    <ul><li>SELECT/INSERT/UPDATE/DELETE 基本文法</li><li>WHERE / ORDER BY / GROUP BY</li></ul>
+    <p><strong>中級</strong>（目安: 〜1-2ヶ月）</p>
+    <ul><li>JOIN（INNER/LEFT/RIGHT）と集合演算</li><li>インデックスと実行計画（EXPLAIN）</li></ul>
+    <p><strong>上級</strong>（目安: 〜3-6ヶ月）</p>
+    <ul><li>ウィンドウ関数・CTE（WITH）</li><li>トランザクション分離レベル・ロック</li></ul>
+  </div></div>
+  
+
   <div class="footer">
     <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
   </div>
