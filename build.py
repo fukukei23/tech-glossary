@@ -1,5 +1,6 @@
 """tech-glossary ビルドスクリプト: languages/*.yaml -> 01_languages/*.html + index.html"""
 import html as _html
+import subprocess
 import sys
 from pathlib import Path
 
@@ -65,6 +66,8 @@ def build_index(env: Environment, langs: list) -> None:
 
 
 def main() -> int:
+    # ビルド前にレーダーチャート断片を再生成（templates/_radar_cards.html を最新化）
+    subprocess.run([sys.executable, str(ROOT / "generate-radar.py")], check=True)
     env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)), autoescape=True)
     langs = []
     for name in LANGUAGES:
