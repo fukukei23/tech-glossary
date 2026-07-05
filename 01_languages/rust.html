@@ -6,6 +6,8 @@
 <title>Rust — テクニカルアーキテクト語彙帳</title>
 <meta name="description" content="Rustの用途・選定理由・トレードオフを解説">
 <link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" integrity="sha384-oaMLBGEzBOJx3UHwac0cVndtX5fxGQIfnAeFZ35RTgqPcYlbprH9o9PUV/F8Le07" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
 </head>
 <body>
 <button class="theme-toggle">🌙</button>
@@ -160,13 +162,13 @@
     
     <div class="card">
       <p><strong>Hello World</strong></p>
-      <pre><code>fn main() { println!(&#34;Hello&#34;); }
+      <pre><code class="language-rust">fn main() { println!(&#34;Hello&#34;); }
 </code></pre>
     </div>
     
     <div class="card">
       <p><strong>所有権と借用</strong></p>
-      <pre><code>let s = String::from(&#34;hi&#34;);
+      <pre><code class="language-rust">let s = String::from(&#34;hi&#34;);
 let r = &amp;s;
 println!(&#34;{}&#34;, r);
 </code></pre>
@@ -192,5 +194,6 @@ println!(&#34;{}&#34;, r);
 </div>
 <script src="../assets/tooltip.js"></script>
 <script src="../assets/theme.js"></script>
+<script>if (window.hljs) { hljs.highlightAll(); }</script>
 </body>
 </html>

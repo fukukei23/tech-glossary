@@ -6,6 +6,8 @@
 <title>SQL — テクニカルアーキテクト語彙帳</title>
 <meta name="description" content="SQLの用途・選定理由・トレードオフを解説">
 <link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" integrity="sha384-oaMLBGEzBOJx3UHwac0cVndtX5fxGQIfnAeFZ35RTgqPcYlbprH9o9PUV/F8Le07" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
 </head>
 <body>
 <button class="theme-toggle">🌙</button>
@@ -134,13 +136,13 @@ AIがSQLを自動生成するツールが増えているが、生成されたSQL
     
     <div class="card">
       <p><strong>基本SELECT</strong></p>
-      <pre><code>SELECT name, created_at FROM users WHERE active = true;
+      <pre><code class="language-sql">SELECT name, created_at FROM users WHERE active = true;
 </code></pre>
     </div>
     
     <div class="card">
       <p><strong>JOIN</strong></p>
-      <pre><code>SELECT u.name, o.total
+      <pre><code class="language-sql">SELECT u.name, o.total
 FROM users u JOIN orders o ON u.id = o.user_id;
 </code></pre>
     </div>
@@ -165,5 +167,6 @@ FROM users u JOIN orders o ON u.id = o.user_id;
 </div>
 <script src="../assets/tooltip.js"></script>
 <script src="../assets/theme.js"></script>
+<script>if (window.hljs) { hljs.highlightAll(); }</script>
 </body>
 </html>
