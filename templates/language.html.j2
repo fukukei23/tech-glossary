@@ -106,11 +106,11 @@
   {% if lang.learning_roadmap %}
   <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
     <p><strong>初級</strong>（{{ lang.learning_roadmap.beginner_period | default("目安: 〜2週間") }}）</p>
-    <ul>{% for item in lang.learning_roadmap.beginner %}<li>{{ item }}</li>{% endfor %}</ul>
+    <ul>{% for item in lang.learning_roadmap.beginner %}<li>{% if item is mapping %}<strong>{{ item.topic }}</strong>{% if item.desc %} — {{ item.desc }}{% endif %}{% else %}{{ item }}{% endif %}</li>{% endfor %}</ul>
     <p><strong>中級</strong>（{{ lang.learning_roadmap.intermediate_period | default("目安: 〜1-2ヶ月") }}）</p>
-    <ul>{% for item in lang.learning_roadmap.intermediate %}<li>{{ item }}</li>{% endfor %}</ul>
+    <ul>{% for item in lang.learning_roadmap.intermediate %}<li>{% if item is mapping %}<strong>{{ item.topic }}</strong>{% if item.desc %} — {{ item.desc }}{% endif %}{% else %}{{ item }}{% endif %}</li>{% endfor %}</ul>
     <p><strong>上級</strong>（{{ lang.learning_roadmap.advanced_period | default("目安: 〜3-6ヶ月") }}）</p>
-    <ul>{% for item in lang.learning_roadmap.advanced %}<li>{{ item }}</li>{% endfor %}</ul>
+    <ul>{% for item in lang.learning_roadmap.advanced %}<li>{% if item is mapping %}<strong>{{ item.topic }}</strong>{% if item.desc %} — {{ item.desc }}{% endif %}{% else %}{{ item }}{% endif %}</li>{% endfor %}</ul>
   </div></div>
   {% endif %}
 
