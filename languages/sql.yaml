@@ -49,16 +49,28 @@ qa:
     a: "データ間の関係が複雑でJOINが必要なら、RDBが有利です。NoSQLはスキーマが柔軟でスケールしやすい反面、複雑なクエリが書きにくい。用途に応じて使い分けます"
 
 ecosystem:
-  package_manager: "—（言語仕様・各DBMSが実装）"
+  package_manager: "—（SQLは言語仕様・各DBMSが実装）"
   frameworks:
     - name: "PostgreSQL"
-      desc: "OSS RDBMS・拡張性高・pgvector等"
+      desc: "OSS RDBMS・拡張性高・pgvector等・Web系で普及"
     - name: "MySQL"
-      desc: "普及RDBMS・Web系標準"
+      desc: "普及RDBMS・LAMPスタックの標準・Web系"
+    - name: "SQLite"
+      desc: "軽量組込RDBMS・モバイル/組み込み/プロトタイプ"
   major_libs:
-    - "pgvector（ベクトル検索）"
-    - "pg_stat_statements（クエリ分析）"
-  runtimes: ["PostgreSQL", "MySQL", "SQLite"]
+    - name: "pgvector"
+      desc: "PostgreSQL拡張・ベクトル検索（AI/RAG）"
+    - name: "pg_stat_statements"
+      desc: "クエリ統計・パフォチューーン必須"
+    - name: "dbt"
+      desc: "データ変換フレームワーク・SQLのモジュール化"
+  runtimes:
+    - name: "PostgreSQL"
+      desc: "OSS・本番向け"
+    - name: "MySQL"
+      desc: "OSS・Web系"
+    - name: "SQLite"
+      desc: "組込・軽量"
 
 code_examples:
   - title: "基本SELECT"

@@ -111,14 +111,16 @@ AIがSQLを自動生成するツールが増えているが、生成されたSQL
 
   
   <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
-    <p><strong>パッケージマネージャ</strong>：—（言語仕様・各DBMSが実装）</p>
+    <p><strong>パッケージマネージャ</strong>：—（SQLは言語仕様・各DBMSが実装）</p>
     
     <p><strong>主要フレームワーク</strong>：</p>
     <ul>
       
-      <li><strong>PostgreSQL</strong> — OSS RDBMS・拡張性高・pgvector等</li>
+      <li><strong>PostgreSQL</strong> — OSS RDBMS・拡張性高・pgvector等・Web系で普及</li>
       
-      <li><strong>MySQL</strong> — 普及RDBMS・Web系標準</li>
+      <li><strong>MySQL</strong> — 普及RDBMS・LAMPスタックの標準・Web系</li>
+      
+      <li><strong>SQLite</strong> — 軽量組込RDBMS・モバイル/組み込み/プロトタイプ</li>
       
     </ul>
     
@@ -126,9 +128,11 @@ AIがSQLを自動生成するツールが増えているが、生成されたSQL
     <p><strong>主要ライブラリ</strong>：</p>
     <ul>
       
-      <li>pgvector（ベクトル検索）</li>
+      <li><strong>pgvector</strong> — PostgreSQL拡張・ベクトル検索（AI/RAG）</li>
       
-      <li>pg_stat_statements（クエリ分析）</li>
+      <li><strong>pg_stat_statements</strong> — クエリ統計・パフォチューーン必須</li>
+      
+      <li><strong>dbt</strong> — データ変換フレームワーク・SQLのモジュール化</li>
       
     </ul>
     
@@ -136,11 +140,11 @@ AIがSQLを自動生成するツールが増えているが、生成されたSQL
     <p><strong>ランタイム</strong>：</p>
     <ul>
       
-      <li>PostgreSQL</li>
+      <li><strong>PostgreSQL</strong> — OSS・本番向け</li>
       
-      <li>MySQL</li>
+      <li><strong>MySQL</strong> — OSS・Web系</li>
       
-      <li>SQLite</li>
+      <li><strong>SQLite</strong> — 組込・軽量</li>
       
     </ul>
     
