@@ -137,14 +137,18 @@
 
   
   <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
-    <p><strong>パッケージマネージャ</strong>：pip / uv / poetry</p>
+    <p><strong>パッケージマネージャ</strong>：pip / uv（推奨・高速） / poetry</p>
     
     <p><strong>主要フレームワーク</strong>：</p>
     <ul>
       
-      <li><strong>FastAPI</strong> — モダンASGI Webフレームワーク・型ヒント活用</li>
+      <li><strong>FastAPI</strong> — モダンASGI Webフレームワーク・型ヒント活用・自動ドキュメント</li>
       
-      <li><strong>Django</strong> — フルスタックWebフレームワーク</li>
+      <li><strong>Django</strong> — フルスタックWebフレームワーク・admin/ORM 装備</li>
+      
+      <li><strong>Flask</strong> — 軽量マイクロフレームワーク・柔軟</li>
+      
+      <li><strong>Streamlit</strong> — データアプリ構築・MLデモ・少コード</li>
       
     </ul>
     
@@ -152,9 +156,13 @@
     <p><strong>主要ライブラリ</strong>：</p>
     <ul>
       
-      <li>NumPy / Pandas（データ分析）</li>
+      <li><strong>NumPy / Pandas</strong> — 数値計算 / データ分析・データサイエンス標準</li>
       
-      <li>PyTorch / TensorFlow（ML）</li>
+      <li><strong>PyTorch / TensorFlow</strong> — ディープラーニング・研究(PyTorch) / 本番(TF)</li>
+      
+      <li><strong>Pydantic</strong> — 型安全データモデル・FastAPI の基盤・バリデーション</li>
+      
+      <li><strong>SQLAlchemy</strong> — ORM・Python DB アクセスのデファクト</li>
       
     </ul>
     
@@ -162,9 +170,9 @@
     <p><strong>ランタイム</strong>：</p>
     <ul>
       
-      <li>CPython</li>
+      <li><strong>CPython</strong> — 標準実装・参照実装・本番向け</li>
       
-      <li>PyPy</li>
+      <li><strong>PyPy</strong> — JIT・高速・互換性 注意</li>
       
     </ul>
     
@@ -182,7 +190,26 @@
     
     <div class="card">
       <p><strong>リスト内包表記</strong></p>
-      <pre><code class="language-python">squares = [x**2 for x in range(10)]
+      <pre><code class="language-python">squares = [x**2 for x in range(10) if x % 2 == 0]
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>dataclass（型付きデータモデル）</strong></p>
+      <pre><code class="language-python">from dataclasses import dataclass
+@dataclass
+class User:
+    name: str
+    age: int = 0
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>async/await</strong></p>
+      <pre><code class="language-python">import asyncio
+async def fetch(): ...
+async def main():
+    await asyncio.gather(fetch(), fetch())
 </code></pre>
     </div>
     
@@ -192,11 +219,11 @@
   
   <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
     <p><strong>初級</strong>（目安: 〜2週間）</p>
-    <ul><li>基本文法・データ型（list/dict/tuple）</li><li>関数・制御構文</li></ul>
+    <ul><li><strong>基本文法・データ型</strong> — list/dict/tuple/set・ミュータビリティ・スライス</li><li><strong>関数・制御構文</strong> — def・位置/キーワード引数・デフォルト・内包表記</li><li><strong>クラスの基礎</strong> — class・self・__init__・インスタンス変数</li></ul>
     <p><strong>中級</strong>（目安: 〜1-2ヶ月）</p>
-    <ul><li>クラス・継承・dunder</li><li>pip / venv と標準ライブラリ</li></ul>
+    <ul><li><strong>クラス・継承・dunder</strong> — 継承・__repr__/__eq__・プロパティ・dataclass</li><li><strong>Pydantic と型ヒント</strong> — 型安全モデル・FastAPI 接続・バリデーション</li><li><strong>pip / venv と標準ライブラリ</strong> — 仮想環境・requirements・os/sys/collections</li></ul>
     <p><strong>上級</strong>（目安: 〜3-6ヶ月）</p>
-    <ul><li>デコレータ・ジェネレータ</li><li>async/await と asyncio</li></ul>
+    <ul><li><strong>デコレータ・ジェネレータ</strong> — @decorator・yield・遅延評価・functools</li><li><strong>async/await と asyncio</strong> — イベントループ・gather・FastAPI 非同期・aiohttp</li><li><strong>メタクラス・ディスクリプタ</strong> — type・__init_subclass__・ORM/Django 内部理解</li></ul>
   </div></div>
   
 
