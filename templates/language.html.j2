@@ -60,6 +60,48 @@
     {% endfor %}
   </div>
 
+  {% if lang.ecosystem %}
+  <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
+    <p><strong>パッケージマネージャ</strong>：{{ lang.ecosystem.package_manager }}</p>
+    {% if lang.ecosystem.frameworks %}
+    <p><strong>主要フレームワーク</strong>：</p>
+    <ul>
+      {% for fw in lang.ecosystem.frameworks %}
+      <li><strong>{{ fw.name }}</strong> — {{ fw.desc }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% if lang.ecosystem.major_libs %}
+    <p><strong>主要ライブラリ</strong>：{{ lang.ecosystem.major_libs | join(' / ') }}</p>
+    {% endif %}
+    {% if lang.ecosystem.runtimes %}
+    <p><strong>ランタイム</strong>：{{ lang.ecosystem.runtimes | join(' / ') }}</p>
+    {% endif %}
+  </div></div>
+  {% endif %}
+
+  {% if lang.code_examples %}
+  <div class="section"><div class="section-title">💻 コード例</div>
+    {% for ex in lang.code_examples %}
+    <div class="card">
+      <p><strong>{{ ex.title }}</strong></p>
+      <pre><code>{{ ex.code }}</code></pre>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if lang.learning_roadmap %}
+  <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
+    <p><strong>初級</strong>（{{ lang.learning_roadmap.beginner_period | default("目安: 〜2週間") }}）</p>
+    <ul>{% for item in lang.learning_roadmap.beginner %}<li>{{ item }}</li>{% endfor %}</ul>
+    <p><strong>中級</strong>（{{ lang.learning_roadmap.intermediate_period | default("目安: 〜1-2ヶ月") }}）</p>
+    <ul>{% for item in lang.learning_roadmap.intermediate %}<li>{{ item }}</li>{% endfor %}</ul>
+    <p><strong>上級</strong>（{{ lang.learning_roadmap.advanced_period | default("目安: 〜3-6ヶ月") }}）</p>
+    <ul>{% for item in lang.learning_roadmap.advanced %}<li>{{ item }}</li>{% endfor %}</ul>
+  </div></div>
+  {% endif %}
+
   <div class="footer">
     <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
   </div>
