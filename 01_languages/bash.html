@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bash — テクニカルアーキテクト語彙帳</title>
+<meta name="description" content="Bashの用途・選定理由・トレードオフを解説">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" integrity="sha384-oaMLBGEzBOJx3UHwac0cVndtX5fxGQIfnAeFZ35RTgqPcYlbprH9o9PUV/F8Le07" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
+</head>
+<body>
+<button class="theme-toggle">🌙</button>
+<div class="container">
+  <a class="back-link" href="../index.html">← 語彙帳トップに戻る</a>
+  <div class="lang-header">
+    <div class="lang-icon">🐚</div>
+    <h1>Bash</h1>
+    <p class="lang-tagline">Unix/Linuxの標準シェル。運用自動化・デプロイの必須言語</p>
+    <div class="tag-row">
+      <span class="tag tag-good">✅ サーバー運用自動化（systemd・cron）</span><span class="tag tag-good">✅ CI/CDパイプライン</span><span class="tag tag-good">✅ デプロイ・ビルドスクリプト</span><span class="tag tag-good">✅ テキスト処理パイプライン（grep/sed/awk）</span><span class="tag tag-good">✅ 開発環境セットアップ</span>
+      <span class="tag tag-bad">⚠ クロスプラットフォーム GUI アプリ</span><span class="tag tag-bad">⚠ 大規模アプリケーション本体（中規模以上が限界）</span><span class="tag tag-bad">⚠ Windows専用ロジック（PowerShell/Python推奨）</span>
+    </div>
+  </div>
+
+  <div class="section"><div class="section-title">📌 一言で言うと</div><div class="card">
+    <p>37年動いたUnix/Linuxの標準シェル。サーバー運用とデプロイの共通語</p>
+    <p><strong>Bash</strong>（Bourne Again SHell）は <strong>1989年</strong> に <strong>Brian Fox</strong> が <strong>GNU Project</strong> 向けに書いたシェルで、<code>/bin/sh</code> の代替として公開後、Linux の事実上の標準シェルとして広まった。<code>sh</code>（Bourne Shell）の後継に位置づけられ、POSIX シェル標準に<strong>ほぼ準拠</strong>しつつ、<strong>配列・プロセス置換・拡張テスト <code>[[ ]]</code></strong> などの独自拡張を持つ。
+現在（2026年時点）は <strong>GNU Bash 5.x</strong>（5.3 が最新安定版）が大半の Linux ディストリビューションと macOS の標準シェル。macOS は <strong>Catalina（10.15、2019年）以降</strong>デフォルトシェルが <strong>zsh</strong> に切り替わったが、Linux サーバー・コンテナ・CI ランナー・Docker イメージでは依然 <strong>Bash がデフォルト</strong>。
+用途は <strong>サーバー運用自動化</strong>（systemd ユニット・cron）・<strong>CI/CD</strong>（GitHub Actions / GitLab CI の <code>run:</code> ブロック）・<strong>デプロイスクリプト</strong>・<strong>ログ集計パイプライン</strong>（grep/awk/sed 連携）と、運用レイヤーの共通語として外せない。<strong><a href="https://www.shellcheck.net/">ShellCheck</a></strong> による静的解析が事実上の標準品質ゲート。</p>
+
+  </div></div>
+
+  <div class="section"><div class="section-title">🎯 得意な用途</div><div class="card">
+    
+    <p><strong>サーバー運用自動化（systemd・cron）</strong>：systemd の ExecStart や cron のジョブとして、定型的な保守・バックアップ・ログローテーションを Bash で書く。Linux サーバーの運用自動化は Bash から入る。</p>
+    
+    <p><strong>CI/CD パイプライン（Harness / GitHub Actions / GitLab CI）</strong>：GitHub Actions の `run:` ステップ・GitLab CI の `script:`・CircleCI のステップは実質 Bash ランナー。**テスト・ビルド・デプロイ**のオーケストレーションは Bash が事実上の共通語。</p>
+    
+    <p><strong>デプロイ・ビルドスクリプト</strong>：`./deploy.sh` 形式で `set -euo pipefail` を効かせた堅牢スクリプトがデファクト。Docker イメージビルド・DB マイグレーション・Feature Flag のトグル等に利用。</p>
+    
+    <p><strong>ログ集計・テキスト処理パイプライン</strong>：`grep | awk | sed | sort | uniq` のパイプラインは、ログのサマリ・アクセス集計・異常検知で今も最速・最短。`jq` を組み合わせれば JSON も同じ流儀で処理できる。</p>
+    
+    <p><strong>開発環境セットアップスクリプト</strong>：`bin/setup`・`Makefile` のシェル断片・`bootstrap.sh` 等、新しい開発者を最短で立ち上げるためのスクリプトも Bash。mise・asdf のようなバージョンマネージャも Bash で書かれている。</p>
+    
+  </div></div>
+
+  <div class="section"><div class="section-title">⚖️ 他言語との比較</div><table class="compare-table">
+    <thead><tr><th>観点</th><th>Bash</th><th>Python</th><th>Zsh</th></tr></thead>
+    <tbody>
+    
+      <tr><td>言語の歴史</td>
+      
+        
+        <td class="">37年(1989-)・GNU製・POSIX拡張</td>
+      
+        
+        <td class="">35年(1991-)・汎用スクリプト</td>
+      
+        
+        <td class="">35年(1990-)・Bash拡張・macOS標準</td>
+      
+      </tr>
+    
+      <tr><td>主な用途</td>
+      
+        
+        <td class="good">シェル操作・運用自動化・パイプライン</td>
+      
+        
+        <td class="">汎用スクリプト・データ処理・Web</td>
+      
+        
+        <td class="">対話シェル・補完強化・プラグイン</td>
+      
+      </tr>
+    
+      <tr><td>学習コスト</td>
+      
+        
+        <td class="">中（シェル展開・引用ルールが独特）</td>
+      
+        
+        <td class="">中（読みやすい・明示的）</td>
+      
+        
+        <td class="">中（Bash拡張＋独自機能）</td>
+      
+      </tr>
+    
+      <tr><td>クロスプラットフォーム</td>
+      
+        
+        <td class="">Unix/Linux中心・WSL/Git Bash経由Windows</td>
+      
+        
+        <td class="good">完全（Win/macOS/Linux）</td>
+      
+        
+        <td class="">Unix/macOS中心・WSL可</td>
+      
+      </tr>
+    
+      <tr><td>テキスト処理</td>
+      
+        
+        <td class="good">最速（grep/sed/awk 連携・fork前提）</td>
+      
+        
+        <td class="good">標準ライブラリ豊富（pandas等）</td>
+      
+        
+        <td class="good">Bash同様・zsh 補完が強力</td>
+      
+      </tr>
+    
+      <tr><td>Windows対応</td>
+      
+        
+        <td class="">WSL / Git Bash / MSYS 経由のみ</td>
+      
+        
+        <td class="good">完全対応（cpython・Win Wheels）</td>
+      
+        
+        <td class="">WSL / Git Bash 経由</td>
+      
+      </tr>
+    
+      <tr><td>システム統合（systemd/cron/CI）</td>
+      
+        
+        <td class="good">最強・テキストの lingua franca</td>
+      
+        
+        <td class="">外部呼び出しで可能</td>
+      
+        
+        <td class="good">Bash と同等</td>
+      
+      </tr>
+    
+      <tr><td>向いている場面</td>
+      
+        
+        <td class="">サーバー運用・CI/CD・テキストパイプライン</td>
+      
+        
+        <td class="">中規模スクリプト・データ処理・API連携</td>
+      
+        
+        <td class="">対話シェル・補完重視</td>
+      
+      </tr>
+    
+    </tbody>
+  </table></div>
+
+  <div class="section"><div class="section-title">✅ 選ぶ理由 / ⚠ 選ばない理由</div><div class="card">
+    <p><strong>選ぶ理由</strong>：<p><strong>Unix/Linux のデフォルトシェル</strong>で、サーバー運用・CI/CD・Docker・systemd の<strong>共通語</strong>として外せない。<strong>POSIX シェル標準にほぼ準拠</strong>しつつ、配列・<code>[[ ]]</code>・プロセス置換等の実用拡張も持つ。<strong>テキスト処理パイプライン</strong>（grep/awk/sed/jq）はパイプで簡潔に書け、ログ集計やアクセス解析では最速クラス。<code>set -euo pipefail</code> と <strong>ShellCheck</strong> で堅牢化も可能。<code>#!/usr/bin/env bash</code> のシバン1行で即スクリプト化できる学習コストの低さも強み。</p>
+</p>
+    <p><strong>選ばない理由</strong>：<p><strong>大規模アプリケーション本体には不向き</strong>（数百行を超えると保守が困難になり、Python/Go へ移行すべき）。<strong>シェル展開・単語分割・引用</strong>のルールが独特で、<code>$VAR</code> と <code>$VAR &quot;</code> の違いを誤ると<strong>セキュリティ脆弱性</strong>（コマンドインジェクション）に直結する。<strong>Windows サポートは WSL / Git Bash 経由のみ</strong>で、ネイティブ実行は不可。<strong>対話シェルとしての完成度は zsh / fish に劣る</strong>ため、補完・プロンプトを凝りたい用途には向かない。</p>
+</p>
+  </div></div>
+
+  <div class="section"><div class="section-title">💬 よくある会議での質問と答え方</div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Bash と sh・zsh の違いは？</div>
+      <div class="qa-a">A.**sh**（Bourne Shell）は POSIX 標準の元祖で、配列・`[[ ]]` など Bash の独自拡張がない。**Bash** は GNU が sh を拡張したもので、Linux の事実上のデフォルト。**zsh** は Bash の拡張に**補完・プラグイン（Oh My Zsh）**を加えたもので、**macOS Catalina 以降のデフォルトシェル**。スクリプトを書くならまず Bash、知っていれば zsh、移植性最優先なら sh という棲み分け。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Bash と PowerShell の違いは？</div>
+      <div class="qa-a">A.**Bash** は Unix 系・テキスト中心・戻り値は文字列ベース。**PowerShell** は Windows 起源・**.NET オブジェクト**をパイプラインで受け渡し。PowerShell は Windows 管理・Azure 連携で強く、Linux/macOS 向けオープンソース版（PowerShell Core / pwsh）も公開されている。CI の `run:` ブロックは **Bash がデフォルト**（GitHub Actions・GitLab CI 共に Linux ランナー）。Windows 中心なら PowerShell、Unix 系・クロスプラットフォームなら Bash が標準。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.set -euo pipefail とは何ですか？</div>
+      <div class="qa-a">A.シェルスクリプトを**堅牢化するための3つのフラグ**。`set -e` はコマンド失敗で即終了、`set -u` は未定義変数の参照でエラー、`set -o pipefail` はパイプラインの途中失敗を検出。**`#!/usr/bin/env bash` の直後に `set -euo pipefail`** を置くのがベストプラクティスで、これだけで本番事故の大半を防げる。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.ShellCheck はなぜ必要？</div>
+      <div class="qa-a">A.**bash/sh の静的解析ツール**（https://www.shellcheck.net/）。Word splitting・未定義変数・POSIX 違反・コマンドインジェクション候補を指摘してくれる。**GitHub Actions・CI・pre-commit** に組み込むのが事実上の標準で、Linux パッケージ・Homebrew・Docker イメージとして配布されている。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.Bash の配列の扱いで気をつけることは？</div>
+      <div class="qa-a">A.Bash の配列は **1次元・要素は文字列**。`arr=(a b c)` で生成し、`${arr[0]}` で参照、要素数は `${#arr[@]}`。**展開時は必ず `&#34;${arr[@]}&#34;` とダブルクォート**で囲む（クォートしないと単語分割で意図しない壊れ方をする）。連想配列（`declare -A`）は Bash 4+ で利用可能。</div>
+    </div>
+    
+    <div class="qa-item">
+      <div class="qa-q">Q.CI/CD で Bash を使うときの落とし穴は？</div>
+      <div class="qa-a">A.**`set -euo pipefail`** を必ず付ける（前述）。**`./configure | make` のようなパイプライン**は pipefail なしだと make の失敗を検出できない。**環境変数のクォート**を怠ると空白入りパスで死ぬ。**`rm -rf $VAR`** は絶対 NG（`rm -rf -- &#34;$VAR&#34;` か配列ごと回す）。**`curl | sh`** はダウンロード失敗時に壊れたスクリプトを実行するリスクがあるため、`curl -fsSL ... -o script.sh &amp;&amp; bash script.sh` のように明示的にダウンロード→実行に分離する。</div>
+    </div>
+    
+  </div>
+
+  
+  <div class="section"><div class="section-title">🌐 エコシステム</div><div class="card">
+    <p><strong>パッケージマネージャ</strong>：—（言語としてのパッケージマネージャは無い・OS distro 経由: apt/dnf/brew/pacman）</p>
+    
+    
+    <p><strong>主要ライブラリ</strong>：</p>
+    <ul>
+      
+      <li><strong>GNU coreutils</strong> — GNU プロジェクトの標準コマンド群。`ls`/`cat`/`cp`/`mv`/`rm`/`sort`/`uniq`/`wc`/`head`/`tail` 等。Bash スクリプトの中核</li>
+      
+      <li><strong>GNU grep</strong> — 高速なテキスト検索。`grep -E`（拡張正規表現）/`grep -r`（再帰）/ `-c`（カウント）等。ログ解析の定番</li>
+      
+      <li><strong>GNU sed</strong> — ストリームエディタ。`sed -i &#39;s/foo/bar/g&#39;`（インプレース置換）等、定型的テキスト変換に</li>
+      
+      <li><strong>GNU awk (gawk)</strong> — パターンスキャン＆処理言語。**列指向テキスト処理**・集計レポート生成・ワンライナー集計で最強クラス</li>
+      
+      <li><strong>findutils（find / xargs）</strong> — `find` で条件に合うファイルを列挙し、`xargs` で各ファイルにコマンドを適用。`find . -name &#39;*.log&#39; | xargs rm` 等</li>
+      
+      <li><strong>curl / wget</strong> — URL からのダウンロード。`curl -fsSL` が CI スクリプト定番（f=失敗で非0・s=サイレント・S=エラー表示・L=リダイレクト追従）</li>
+      
+      <li><strong>jq</strong> — JSON プロセッサ。`cat response.json | jq &#39;.items[] | .name&#39;` 等、API レスポンスの抽出・整形・変換で必須</li>
+      
+      <li><strong>ShellCheck</strong> — Bash/sh の静的解析ツール。word splitting・未定義変数・POSIX 違反を CI で検出。`shellcheck script.sh` で即実行</li>
+      
+    </ul>
+    
+    
+    <p><strong>ランタイム</strong>：</p>
+    <ul>
+      
+      <li><strong>GNU Bash</strong> — 公式実装。**Bash 5.3** が最新安定版（2024年公開）。大半の Linux ディストリビューションとレガシー macOS の標準シェル</li>
+      
+      <li><strong>dash</strong> — POSIX 互換・高速起動の軽量シェル。**Debian/Ubuntu の `/bin/sh` シンボリックリンク先**。systemd 起動スクリプト等で広く使われる</li>
+      
+      <li><strong>busybox ash</strong> — 組込み Linux・Alpine Linux で採用されている軽量シェル。最小限の POSIX シェル互換</li>
+      
+      <li><strong>zsh</strong> — macOS Catalina（10.15）以降のデフォルトシェル。Bash の拡張に強力な**タブ補完・プラグイン（Oh My Zsh）**・Glob 拡張を加えたもの</li>
+      
+    </ul>
+    
+  </div></div>
+  
+
+  
+  <div class="section"><div class="section-title">💻 コード例</div>
+    
+    <div class="card">
+      <p><strong>Hello World（echo + シバン）</strong></p>
+      <pre><code class="language-bash">#!/usr/bin/env bash
+# シバン（shebang）で bash を明示
+echo &#34;Hello, Bash!&#34;
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>変数展開（$VAR / ${VAR:-default}）</strong></p>
+      <pre><code class="language-bash">#!/usr/bin/env bash
+name=&#34;${1:-World}&#34;   # 第1引数が無ければ &#34;World&#34;
+user=&#34;$USER&#34;         # 環境変数の展開
+echo &#34;Hello, $name! (user=$user)&#34;
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>if / for ループ（パイプライン活用）</strong></p>
+      <pre><code class="language-bash">#!/usr/bin/env bash
+# 5xx のアクセスログだけ抽出して件数カウント
+for log in /var/log/nginx/*.log; do
+    if grep -q &#34; 5[0-9][0-9] &#34; &#34;$log&#34;; then
+        echo &#34;$log: $(grep -c &#39; 5[0-9][0-9] &#39; &#34;$log&#34;) errors&#34;
+    fi
+done
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>trap + set -euo pipefail（堅牢スクリプト）</strong></p>
+      <pre><code class="language-bash">#!/usr/bin/env bash
+set -euo pipefail   # エラー即終了・未定義変数エラー・パイプライン失敗検出
+
+cleanup() {
+    echo &#34;cleanup: removing $TMPDIR&#34; &gt;&amp;2
+    rm -rf -- &#34;$TMPDIR&#34;
+}
+trap cleanup EXIT    # 終了時（正常・エラー問わず）に必ず cleanup
+
+TMPDIR=&#34;$(mktemp -d)&#34;
+echo &#34;tempdir=$TMPDIR&#34;
+# ... 本処理 ...
+</code></pre>
+    </div>
+    
+    <div class="card">
+      <p><strong>関数定義 + main パターン</strong></p>
+      <pre><code class="language-bash">#!/usr/bin/env bash
+set -euo pipefail
+
+log() { printf &#39;[%s] %s\n&#39; &#34;$(date +%H:%M:%S)&#34; &#34;$*&#34;; }
+
+deploy() {
+    local env=&#34;$1&#34;
+    log &#34;deploying to $env&#34;
+    # ... rsync / kubectl / aws s3 sync ...
+}
+
+main() {
+    local target=&#34;${1:-staging}&#34;
+    deploy &#34;$target&#34;
+    log &#34;done&#34;
+}
+
+main &#34;$@&#34;
+</code></pre>
+    </div>
+    
+  </div>
+  
+
+  
+  <div class="section"><div class="section-title">📚 学習ロードマップ</div><div class="card">
+    <p><strong>初級</strong>（目安: 〜2-3日）</p>
+    <ul><li><strong>基本文法（変数・制御構文）</strong> — シェルの起動・シバン（`#!/usr/bin/env bash`）・変数（`$VAR`）・if/for/while・echo・read</li><li><strong>コマンド実行と終了ステータス</strong> — `$?`・`&amp;&amp;` / `||` / `;` の使い分け・コマンド置換 `$(cmd)`・バッククォート</li><li><strong>クォートと単語分割</strong> — **ダブルクォート `&#34;$VAR&#34;`** とシングルクォート `&#39;literal&#39;` の違い・**単語分割（word splitting）の罠**</li><li><strong>パイプとリダイレクト</strong> — `|` パイプ・`&gt;` `&gt;&gt;` リダイレクト・`&lt;` 入力・`/dev/null` の意味</li></ul>
+    <p><strong>中級</strong>（目安: 〜2-4週間）</p>
+    <ul><li><strong>シェル展開</strong> — ブレース展開 `{a,b,c}`・パス展開（glob）`*.log`・変数展開・算術展開 `$(())`</li><li><strong>grep / sed / awk</strong> — 3大テキスト処理コマンド。grep の `-E`/`-v`、sed の `s/foo/bar/g`、awk の `{print $1}`</li><li><strong>配列と for ループ</strong> — `arr=(a b c)`・`${arr[@]}`・`for x in &#34;${arr[@]}&#34;`（**必ずダブルクォート**）・連想配列 `declare -A`</li><li><strong>関数定義と引数処理</strong> — `foo() { ...; }`・`$1` `$@` `shift`・`local`・`return`</li><li><strong>ShellCheck での静的解析</strong> — CI に組み込み・`shellcheck -S warning script.sh`・警告の意味と修正方法</li></ul>
+    <p><strong>上級</strong>（目安: 〜1-3ヶ月）</p>
+    <ul><li><strong>堅牢化フラグ（set -euo pipefail）</strong> — エラー即終了・未定義変数検出・パイプライン失敗検出。trap / IFS 制御と組み合わせて**本番品質**へ</li><li><strong>サブシェル・プロセス置換</strong> — `(cd dir &amp;&amp; cmd)` で作業ディレクトリを一時変更・`&lt;(cmd)` `&lt; &lt;(cmd)` で擬似ファイル化</li><li><strong>ジョブ制御・シグナル</strong> — `&amp;` バックグラウンド・`wait`・`kill`・`trap` シグナルハンドラ・`jobs` / `fg` / `bg`</li><li><strong>移植性（POSIX / dash / busybox）</strong> — `#!/bin/sh` で書く場合の注意・Bash 拡張（`[[ ]]`・配列）を使わない書き方・Alpine での確認</li><li><strong>テスト技法（bats / shellspec）</strong> — シェルスクリプトの単体テストフレームワーク **bats** / **shellspec** で CI 品質を担保</li></ul>
+  </div></div>
+  
+
+  <div class="footer">
+    <p><a href="../index.html">← 語彙帳トップ</a> &middot; <a href="https://github.com/fukukei23">GitHub</a></p>
+  </div>
+</div>
+<script src="../assets/tooltip.js"></script>
+<script src="../assets/theme.js"></script>
+<script>if (window.hljs) { hljs.highlightAll(); }</script>
+</body>
+</html>

@@ -329,6 +329,25 @@ body.light { --bg:#f8f9fa; --bg-raised:#fff; --bg-deep:#f1f3f5; --fg:#2d2d3f; --
       </div>
     </div>
     
+    <div class="acc-item" data-key="lang-bash">
+      <div class="acc-header" onclick="toggle(this)">
+        <span class="acc-icon">▶</span>
+        <div class="acc-title">🐚 Bash</div>
+        <div class="acc-summary">Unix/Linuxの標準シェル。運用自動化・デプロイの必須言語</div>
+      </div>
+      <div class="acc-body">
+        <p><strong>一言で言うと</strong>：「37年動いたUnix/Linuxの標準シェル。サーバー運用とデプロイの共通語」</p>
+        <div class="tag-row">
+          <span class="tag tag-good">✅ サーバー運用自動化（systemd・cron）</span><span class="tag tag-good">✅ CI/CDパイプライン</span><span class="tag tag-good">✅ デプロイ・ビルドスクリプト</span><span class="tag tag-good">✅ テキスト処理パイプライン（grep/sed/awk）</span><span class="tag tag-good">✅ 開発環境セットアップ</span>
+          <span class="tag tag-bad">⚠ クロスプラットフォーム GUI アプリ</span><span class="tag tag-bad">⚠ 大規模アプリケーション本体（中規模以上が限界）</span><span class="tag tag-bad">⚠ Windows専用ロジック（PowerShell/Python推奨）</span>
+        </div>
+        <p><strong>得意な用途</strong>：サーバー運用自動化（systemd・cron）・CI/CD パイプライン（Harness / GitHub Actions / GitLab CI）・デプロイ・ビルドスクリプト・ログ集計・テキスト処理パイプライン・開発環境セットアップスクリプト</p>
+        <p><strong>選ぶ理由</strong>：**Unix/Linux のデフォルトシェル**で、サーバー運用・CI/CD・Docker・systemd の**共通語**として外せない。**POSIX シェル標準にほぼ準拠**しつつ、配列・`[[ ]]`・プロセス置換等の実用拡張も持つ。**テキスト処理パイプライン**（grep/awk/sed/jq）はパイプで簡潔に書け、ログ集計やアクセス解析では最速クラス。`set -euo pipefail` と **ShellCheck** で堅牢化も可能。`#!/usr/bin/env bash` のシバン1行で即スクリプト化できる学習コストの低さも強み。</p>
+        <p><strong>選ばない理由</strong>：**大規模アプリケーション本体には不向き**（数百行を超えると保守が困難になり、Python/Go へ移行すべき）。**シェル展開・単語分割・引用**のルールが独特で、`$VAR` と `$VAR &#34;` の違いを誤ると**セキュリティ脆弱性**（コマンドインジェクション）に直結する。**Windows サポートは WSL / Git Bash 経由のみ**で、ネイティブ実行は不可。**対話シェルとしての完成度は zsh / fish に劣る**ため、補完・プロンプトを凝りたい用途には向かない。</p>
+        <a class="more-link" href="01_languages/bash.html">さらに詳しく →</a>
+      </div>
+    </div>
+    
   </div>
 
 

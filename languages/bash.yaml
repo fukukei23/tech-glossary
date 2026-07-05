@@ -1,0 +1,219 @@
+id: bash
+name: Bash
+icon: "🐚"
+tagline: "Unix/Linuxの標準シェル。運用自動化・デプロイの必須言語"
+tags:
+  fit_for:
+    - "サーバー運用自動化（systemd・cron）"
+    - "CI/CDパイプライン"
+    - "デプロイ・ビルドスクリプト"
+    - "テキスト処理パイプライン（grep/sed/awk）"
+    - "開発環境セットアップ"
+  avoid_for:
+    - "クロスプラットフォーム GUI アプリ"
+    - "大規模アプリケーション本体（中規模以上が限界）"
+    - "Windows専用ロジック（PowerShell/Python推奨）"
+
+summary:
+  quote: "37年動いたUnix/Linuxの標準シェル。サーバー運用とデプロイの共通語"
+  body: |
+    **Bash**（Bourne Again SHell）は **1989年** に **Brian Fox** が **GNU Project** 向けに書いたシェルで、`/bin/sh` の代替として公開後、Linux の事実上の標準シェルとして広まった。`sh`（Bourne Shell）の後継に位置づけられ、POSIX シェル標準に**ほぼ準拠**しつつ、**配列・プロセス置換・拡張テスト `[[ ]]`** などの独自拡張を持つ。
+    現在（2026年時点）は **GNU Bash 5.x**（5.3 が最新安定版）が大半の Linux ディストリビューションと macOS の標準シェル。macOS は **Catalina（10.15、2019年）以降**デフォルトシェルが **zsh** に切り替わったが、Linux サーバー・コンテナ・CI ランナー・Docker イメージでは依然 **Bash がデフォルト**。
+    用途は **サーバー運用自動化**（systemd ユニット・cron）・**CI/CD**（GitHub Actions / GitLab CI の `run:` ブロック）・**デプロイスクリプト**・**ログ集計パイプライン**（grep/awk/sed 連携）と、運用レイヤーの共通語として外せない。**[ShellCheck](https://www.shellcheck.net/)** による静的解析が事実上の標準品質ゲート。
+
+use_cases:
+  - title: "サーバー運用自動化（systemd・cron）"
+    desc: "systemd の ExecStart や cron のジョブとして、定型的な保守・バックアップ・ログローテーションを Bash で書く。Linux サーバーの運用自動化は Bash から入る。"
+  - title: "CI/CD パイプライン（Harness / GitHub Actions / GitLab CI）"
+    desc: "GitHub Actions の `run:` ステップ・GitLab CI の `script:`・CircleCI のステップは実質 Bash ランナー。**テスト・ビルド・デプロイ**のオーケストレーションは Bash が事実上の共通語。"
+  - title: "デプロイ・ビルドスクリプト"
+    desc: "`./deploy.sh` 形式で `set -euo pipefail` を効かせた堅牢スクリプトがデファクト。Docker イメージビルド・DB マイグレーション・Feature Flag のトグル等に利用。"
+  - title: "ログ集計・テキスト処理パイプライン"
+    desc: "`grep | awk | sed | sort | uniq` のパイプラインは、ログのサマリ・アクセス集計・異常検知で今も最速・最短。`jq` を組み合わせれば JSON も同じ流儀で処理できる。"
+  - title: "開発環境セットアップスクリプト"
+    desc: "`bin/setup`・`Makefile` のシェル断片・`bootstrap.sh` 等、新しい開発者を最短で立ち上げるためのスクリプトも Bash。mise・asdf のようなバージョンマネージャも Bash で書かれている。"
+
+compare:
+  headers: ["Bash", "Python", "Zsh"]
+  rows:
+    - axis: "言語の歴史"
+      values: ["37年(1989-)・GNU製・POSIX拡張", "35年(1991-)・汎用スクリプト", "35年(1990-)・Bash拡張・macOS標準"]
+      marks: ["", "", ""]
+    - axis: "主な用途"
+      values: ["シェル操作・運用自動化・パイプライン", "汎用スクリプト・データ処理・Web", "対話シェル・補完強化・プラグイン"]
+      marks: ["good", "", ""]
+    - axis: "学習コスト"
+      values: ["中（シェル展開・引用ルールが独特）", "中（読みやすい・明示的）", "中（Bash拡張＋独自機能）"]
+      marks: ["", "", ""]
+    - axis: "クロスプラットフォーム"
+      values: ["Unix/Linux中心・WSL/Git Bash経由Windows", "完全（Win/macOS/Linux）", "Unix/macOS中心・WSL可"]
+      marks: ["", "good", ""]
+    - axis: "テキスト処理"
+      values: ["最速（grep/sed/awk 連携・fork前提）", "標準ライブラリ豊富（pandas等）", "Bash同様・zsh 補完が強力"]
+      marks: ["good", "good", "good"]
+    - axis: "Windows対応"
+      values: ["WSL / Git Bash / MSYS 経由のみ", "完全対応（cpython・Win Wheels）", "WSL / Git Bash 経由"]
+      marks: ["", "good", ""]
+    - axis: "システム統合（systemd/cron/CI）"
+      values: ["最強・テキストの lingua franca", "外部呼び出しで可能", "Bash と同等"]
+      marks: ["good", "", "good"]
+    - axis: "向いている場面"
+      values: ["サーバー運用・CI/CD・テキストパイプライン", "中規模スクリプト・データ処理・API連携", "対話シェル・補完重視"]
+      marks: ["", "", ""]
+
+pros_cons:
+  choose: "**Unix/Linux のデフォルトシェル**で、サーバー運用・CI/CD・Docker・systemd の**共通語**として外せない。**POSIX シェル標準にほぼ準拠**しつつ、配列・`[[ ]]`・プロセス置換等の実用拡張も持つ。**テキスト処理パイプライン**（grep/awk/sed/jq）はパイプで簡潔に書け、ログ集計やアクセス解析では最速クラス。`set -euo pipefail` と **ShellCheck** で堅牢化も可能。`#!/usr/bin/env bash` のシバン1行で即スクリプト化できる学習コストの低さも強み。"
+  avoid: "**大規模アプリケーション本体には不向き**（数百行を超えると保守が困難になり、Python/Go へ移行すべき）。**シェル展開・単語分割・引用**のルールが独特で、`$VAR` と `$VAR \"` の違いを誤ると**セキュリティ脆弱性**（コマンドインジェクション）に直結する。**Windows サポートは WSL / Git Bash 経由のみ**で、ネイティブ実行は不可。**対話シェルとしての完成度は zsh / fish に劣る**ため、補完・プロンプトを凝りたい用途には向かない。"
+
+qa:
+  - q: "Bash と sh・zsh の違いは？"
+    a: "**sh**（Bourne Shell）は POSIX 標準の元祖で、配列・`[[ ]]` など Bash の独自拡張がない。**Bash** は GNU が sh を拡張したもので、Linux の事実上のデフォルト。**zsh** は Bash の拡張に**補完・プラグイン（Oh My Zsh）**を加えたもので、**macOS Catalina 以降のデフォルトシェル**。スクリプトを書くならまず Bash、知っていれば zsh、移植性最優先なら sh という棲み分け。"
+  - q: "Bash と PowerShell の違いは？"
+    a: "**Bash** は Unix 系・テキスト中心・戻り値は文字列ベース。**PowerShell** は Windows 起源・**.NET オブジェクト**をパイプラインで受け渡し。PowerShell は Windows 管理・Azure 連携で強く、Linux/macOS 向けオープンソース版（PowerShell Core / pwsh）も公開されている。CI の `run:` ブロックは **Bash がデフォルト**（GitHub Actions・GitLab CI 共に Linux ランナー）。Windows 中心なら PowerShell、Unix 系・クロスプラットフォームなら Bash が標準。"
+  - q: "set -euo pipefail とは何ですか？"
+    a: "シェルスクリプトを**堅牢化するための3つのフラグ**。`set -e` はコマンド失敗で即終了、`set -u` は未定義変数の参照でエラー、`set -o pipefail` はパイプラインの途中失敗を検出。**`#!/usr/bin/env bash` の直後に `set -euo pipefail`** を置くのがベストプラクティスで、これだけで本番事故の大半を防げる。"
+  - q: "ShellCheck はなぜ必要？"
+    a: "**bash/sh の静的解析ツール**（https://www.shellcheck.net/）。Word splitting・未定義変数・POSIX 違反・コマンドインジェクション候補を指摘してくれる。**GitHub Actions・CI・pre-commit** に組み込むのが事実上の標準で、Linux パッケージ・Homebrew・Docker イメージとして配布されている。"
+  - q: "Bash の配列の扱いで気をつけることは？"
+    a: "Bash の配列は **1次元・要素は文字列**。`arr=(a b c)` で生成し、`${arr[0]}` で参照、要素数は `${#arr[@]}`。**展開時は必ず `\"${arr[@]}\"` とダブルクォート**で囲む（クォートしないと単語分割で意図しない壊れ方をする）。連想配列（`declare -A`）は Bash 4+ で利用可能。"
+  - q: "CI/CD で Bash を使うときの落とし穴は？"
+    a: "**`set -euo pipefail`** を必ず付ける（前述）。**`./configure | make` のようなパイプライン**は pipefail なしだと make の失敗を検出できない。**環境変数のクォート**を怠ると空白入りパスで死ぬ。**`rm -rf $VAR`** は絶対 NG（`rm -rf -- \"$VAR\"` か配列ごと回す）。**`curl | sh`** はダウンロード失敗時に壊れたスクリプトを実行するリスクがあるため、`curl -fsSL ... -o script.sh && bash script.sh` のように明示的にダウンロード→実行に分離する。"
+
+ecosystem:
+  package_manager: "—（言語としてのパッケージマネージャは無い・OS distro 経由: apt/dnf/brew/pacman）"
+  major_libs:
+    - name: "GNU coreutils"
+      desc: "GNU プロジェクトの標準コマンド群。`ls`/`cat`/`cp`/`mv`/`rm`/`sort`/`uniq`/`wc`/`head`/`tail` 等。Bash スクリプトの中核"
+    - name: "GNU grep"
+      desc: "高速なテキスト検索。`grep -E`（拡張正規表現）/`grep -r`（再帰）/ `-c`（カウント）等。ログ解析の定番"
+    - name: "GNU sed"
+      desc: "ストリームエディタ。`sed -i 's/foo/bar/g'`（インプレース置換）等、定型的テキスト変換に"
+    - name: "GNU awk (gawk)"
+      desc: "パターンスキャン＆処理言語。**列指向テキスト処理**・集計レポート生成・ワンライナー集計で最強クラス"
+    - name: "findutils（find / xargs）"
+      desc: "`find` で条件に合うファイルを列挙し、`xargs` で各ファイルにコマンドを適用。`find . -name '*.log' | xargs rm` 等"
+    - name: "curl / wget"
+      desc: "URL からのダウンロード。`curl -fsSL` が CI スクリプト定番（f=失敗で非0・s=サイレント・S=エラー表示・L=リダイレクト追従）"
+    - name: "jq"
+      desc: "JSON プロセッサ。`cat response.json | jq '.items[] | .name'` 等、API レスポンスの抽出・整形・変換で必須"
+    - name: "ShellCheck"
+      desc: "Bash/sh の静的解析ツール。word splitting・未定義変数・POSIX 違反を CI で検出。`shellcheck script.sh` で即実行"
+  runtimes:
+    - name: "GNU Bash"
+      desc: "公式実装。**Bash 5.3** が最新安定版（2024年公開）。大半の Linux ディストリビューションとレガシー macOS の標準シェル"
+    - name: "dash"
+      desc: "POSIX 互換・高速起動の軽量シェル。**Debian/Ubuntu の `/bin/sh` シンボリックリンク先**。systemd 起動スクリプト等で広く使われる"
+    - name: "busybox ash"
+      desc: "組込み Linux・Alpine Linux で採用されている軽量シェル。最小限の POSIX シェル互換"
+    - name: "zsh"
+      desc: "macOS Catalina（10.15）以降のデフォルトシェル。Bash の拡張に強力な**タブ補完・プラグイン（Oh My Zsh）**・Glob 拡張を加えたもの"
+
+code_examples:
+  - title: "Hello World（echo + シバン）"
+    code: |
+      #!/usr/bin/env bash
+      # シバン（shebang）で bash を明示
+      echo "Hello, Bash!"
+  - title: "変数展開（$VAR / ${VAR:-default}）"
+    code: |
+      #!/usr/bin/env bash
+      name="${1:-World}"   # 第1引数が無ければ "World"
+      user="$USER"         # 環境変数の展開
+      echo "Hello, $name! (user=$user)"
+  - title: "if / for ループ（パイプライン活用）"
+    code: |
+      #!/usr/bin/env bash
+      # 5xx のアクセスログだけ抽出して件数カウント
+      for log in /var/log/nginx/*.log; do
+          if grep -q " 5[0-9][0-9] " "$log"; then
+              echo "$log: $(grep -c ' 5[0-9][0-9] ' "$log") errors"
+          fi
+      done
+  - title: "trap + set -euo pipefail（堅牢スクリプト）"
+    code: |
+      #!/usr/bin/env bash
+      set -euo pipefail   # エラー即終了・未定義変数エラー・パイプライン失敗検出
+
+      cleanup() {
+          echo "cleanup: removing $TMPDIR" >&2
+          rm -rf -- "$TMPDIR"
+      }
+      trap cleanup EXIT    # 終了時（正常・エラー問わず）に必ず cleanup
+
+      TMPDIR="$(mktemp -d)"
+      echo "tempdir=$TMPDIR"
+      # ... 本処理 ...
+  - title: "関数定義 + main パターン"
+    code: |
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      log() { printf '[%s] %s\n' "$(date +%H:%M:%S)" "$*"; }
+
+      deploy() {
+          local env="$1"
+          log "deploying to $env"
+          # ... rsync / kubectl / aws s3 sync ...
+      }
+
+      main() {
+          local target="${1:-staging}"
+          deploy "$target"
+          log "done"
+      }
+
+      main "$@"
+
+learning_roadmap:
+  beginner_period: "目安: 〜2-3日"
+  beginner:
+    - topic: "基本文法（変数・制御構文）"
+      desc: "シェルの起動・シバン（`#!/usr/bin/env bash`）・変数（`$VAR`）・if/for/while・echo・read"
+    - topic: "コマンド実行と終了ステータス"
+      desc: "`$?`・`&&` / `||` / `;` の使い分け・コマンド置換 `$(cmd)`・バッククォート"
+    - topic: "クォートと単語分割"
+      desc: "**ダブルクォート `\"$VAR\"`** とシングルクォート `'literal'` の違い・**単語分割（word splitting）の罠**"
+    - topic: "パイプとリダイレクト"
+      desc: "`|` パイプ・`>` `>>` リダイレクト・`<` 入力・`/dev/null` の意味"
+  intermediate_period: "目安: 〜2-4週間"
+  intermediate:
+    - topic: "シェル展開"
+      desc: "ブレース展開 `{a,b,c}`・パス展開（glob）`*.log`・変数展開・算術展開 `$(())`"
+    - topic: "grep / sed / awk"
+      desc: "3大テキスト処理コマンド。grep の `-E`/`-v`、sed の `s/foo/bar/g`、awk の `{print $1}`"
+    - topic: "配列と for ループ"
+      desc: "`arr=(a b c)`・`${arr[@]}`・`for x in \"${arr[@]}\"`（**必ずダブルクォート**）・連想配列 `declare -A`"
+    - topic: "関数定義と引数処理"
+      desc: "`foo() { ...; }`・`$1` `$@` `shift`・`local`・`return`"
+    - topic: "ShellCheck での静的解析"
+      desc: "CI に組み込み・`shellcheck -S warning script.sh`・警告の意味と修正方法"
+  advanced_period: "目安: 〜1-3ヶ月"
+  advanced:
+    - topic: "堅牢化フラグ（set -euo pipefail）"
+      desc: "エラー即終了・未定義変数検出・パイプライン失敗検出。trap / IFS 制御と組み合わせて**本番品質**へ"
+    - topic: "サブシェル・プロセス置換"
+      desc: "`(cd dir && cmd)` で作業ディレクトリを一時変更・`<(cmd)` `< <(cmd)` で擬似ファイル化"
+    - topic: "ジョブ制御・シグナル"
+      desc: "`&` バックグラウンド・`wait`・`kill`・`trap` シグナルハンドラ・`jobs` / `fg` / `bg`"
+    - topic: "移植性（POSIX / dash / busybox）"
+      desc: "`#!/bin/sh` で書く場合の注意・Bash 拡張（`[[ ]]`・配列）を使わない書き方・Alpine での確認"
+    - topic: "テスト技法（bats / shellspec）"
+      desc: "シェルスクリプトの単体テストフレームワーク **bats** / **shellspec** で CI 品質を担保"
+
+terms:
+  - word: "シバン（shebang）"
+    def: "スクリプトの**1行目**に書く `#!/usr/bin/env bash` 等の宣言。実行時にどのインタプリタで動かすかを指定する。`env` 経由だと PATH から探索するので移植性が高い"
+  - word: "パイプ（pipe）"
+    def: "`|` でコマンドの出力を次のコマンドの入力に渡す。Bash のパイプラインは**Unix 哲学**（小さなコマンドを組み合わせて複雑な処理を実現）の根幹"
+  - word: "リダイレクト（redirection）"
+    def: "`>` `>>` `<` `2>` 等でファイルディスクリプタ（stdin/stdout/stderr）の流れを変える。`> file` は上書き、`>> file` は追記、`2>&1` で stderr を stdout にマージ"
+  - word: "fork / exec"
+    def: "シェルがコマンドを実行する際の基本動作。**fork** で親プロセスを複製し、**exec** で別プログラムに置き換える。`$(cmd)` もバックグラウンド `&` も内部的には fork"
+  - word: "サブシェル（subshell）"
+    def: "`(cd dir && cmd)` 等で括られた**子シェル**。親プロセスの作業ディレクトリ・変数を**変更しない**ので、安全に一時的な状態変更ができる"
+  - word: "単語分割（word splitting）"
+    def: "クォートされていない変数を**IFS**（既定では空白・タブ・改行）で分割して複数の引数として渡す挙動。`$VAR` を `\"$VAR\"` にしなかったせいで空白入りパスが壊れる事故の根本原因"
+  - word: "ジョブ制御（job control）"
+    def: "`&` でバックグラウンド起動・`jobs` で一覧・`fg` / `bg` でフォアグラウンド/バックグラウンド切替・`wait` で同期する仕組み。`Ctrl-Z` で停止も可能"
+  - word: "POSIX シェル"
+    def: "POSIX.1-2017 で標準化されたシェル仕様。Bash はこれに**ほぼ準拠**するが、`[[ ]]`・配列・プロセス置換等は Bash 独自拡張。**`/bin/sh` に置くスクリプトは POSIX 準拠で書く**のが鉄則"
