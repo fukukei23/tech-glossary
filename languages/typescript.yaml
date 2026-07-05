@@ -52,6 +52,44 @@ qa:
   - q: "Next.jsとExpressどちらを選びますか？"
     a: "フロント込みのWebサービスならNext.js（App Router）で統一するのが今の主流です。APIだけ提供するマイクロサービスにはExpressやFastifyが軽量で適しています"
 
+ecosystem:
+  package_manager: "npm / pnpm / yarn"
+  frameworks:
+    - name: "Next.js"
+      desc: "フルスタックWebフレームワーク・App Router"
+    - name: "React"
+      desc: "UIライブラリ・デファクト"
+  major_libs:
+    - "Prisma（ORM）"
+    - "Zod（スキーマバリデーション）"
+  runtimes: ["Node.js", "Bun", "Deno"]
+
+code_examples:
+  - title: "Hello World + 型"
+    code: |
+      const greeting: string = "Hello";
+      console.log(greeting);
+  - title: "async/await と型"
+    code: |
+      async function fetchUser(id: number): Promise<User> {
+        const res = await fetch(`/api/users/${id}`);
+        return res.json();
+      }
+
+learning_roadmap:
+  beginner_period: "目安: 〜2週間"
+  beginner:
+    - "TypeScriptの型システム基本（primitives, union, intersection）"
+    - "tsconfig.json の主要オプション（strict, target, module）"
+  intermediate_period: "目安: 〜1-2ヶ月"
+  intermediate:
+    - "ジェネリクス・ユーティリティ型（Partial, Pick, Omit）"
+    - "型推論の限界と型アサーション"
+  advanced_period: "目安: 〜3-6ヶ月"
+  advanced:
+    - "Conditional Types / Mapped Types"
+    - "Template Literal Types"
+
 terms:
   - word: "静的型付け"
     def: "コードを実行する前にデータの型を確認する仕組み。バグを事前に検出できる"

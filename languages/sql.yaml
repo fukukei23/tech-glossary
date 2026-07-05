@@ -48,6 +48,41 @@ qa:
   - q: "NoSQLじゃなくSQLを使う理由は？"
     a: "データ間の関係が複雑でJOINが必要なら、RDBが有利です。NoSQLはスキーマが柔軟でスケールしやすい反面、複雑なクエリが書きにくい。用途に応じて使い分けます"
 
+ecosystem:
+  package_manager: "—（言語仕様・各DBMSが実装）"
+  frameworks:
+    - name: "PostgreSQL"
+      desc: "OSS RDBMS・拡張性高・pgvector等"
+    - name: "MySQL"
+      desc: "普及RDBMS・Web系標準"
+  major_libs:
+    - "pgvector（ベクトル検索）"
+    - "pg_stat_statements（クエリ分析）"
+  runtimes: ["PostgreSQL", "MySQL", "SQLite"]
+
+code_examples:
+  - title: "基本SELECT"
+    code: |
+      SELECT name, created_at FROM users WHERE active = true;
+  - title: "JOIN"
+    code: |
+      SELECT u.name, o.total
+      FROM users u JOIN orders o ON u.id = o.user_id;
+
+learning_roadmap:
+  beginner_period: "目安: 〜2週間"
+  beginner:
+    - "SELECT/INSERT/UPDATE/DELETE 基本文法"
+    - "WHERE / ORDER BY / GROUP BY"
+  intermediate_period: "目安: 〜1-2ヶ月"
+  intermediate:
+    - "JOIN（INNER/LEFT/RIGHT）と集合演算"
+    - "インデックスと実行計画（EXPLAIN）"
+  advanced_period: "目安: 〜3-6ヶ月"
+  advanced:
+    - "ウィンドウ関数・CTE（WITH）"
+    - "トランザクション分離レベル・ロック"
+
 terms:
   - word: "リレーショナルDB"
     def: "データを表（テーブル）形式で管理し、テーブル間の関係を定義できるデータベース。PostgreSQL・MySQL・SQLiteなどが代表"

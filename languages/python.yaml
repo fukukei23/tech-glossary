@@ -51,6 +51,40 @@ qa:
   - q: "PoCはPythonでやりましたが、本番もPythonでいいですか？"
     a: "AIモデルの推論を含むなら本番もPythonが現実的です。ただしAPIの外側（ゲートウェイ・ルーティング）はGoを使い分けることも有効です"
 
+ecosystem:
+  package_manager: "pip / uv / poetry"
+  frameworks:
+    - name: "FastAPI"
+      desc: "モダンASGI Webフレームワーク・型ヒント活用"
+    - name: "Django"
+      desc: "フルスタックWebフレームワーク"
+  major_libs:
+    - "NumPy / Pandas（データ分析）"
+    - "PyTorch / TensorFlow（ML）"
+  runtimes: ["CPython", "PyPy"]
+
+code_examples:
+  - title: "Hello World"
+    code: |
+      print("Hello")
+  - title: "リスト内包表記"
+    code: |
+      squares = [x**2 for x in range(10)]
+
+learning_roadmap:
+  beginner_period: "目安: 〜2週間"
+  beginner:
+    - "基本文法・データ型（list/dict/tuple）"
+    - "関数・制御構文"
+  intermediate_period: "目安: 〜1-2ヶ月"
+  intermediate:
+    - "クラス・継承・dunder"
+    - "pip / venv と標準ライブラリ"
+  advanced_period: "目安: 〜3-6ヶ月"
+  advanced:
+    - "デコレータ・ジェネレータ"
+    - "async/await と asyncio"
+
 terms:
   - word: "PyTorch"
     def: "MetaのPython製ディープラーニングフレームワーク。研究から本番まで業界標準"

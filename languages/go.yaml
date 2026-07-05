@@ -51,6 +51,42 @@ qa:
   - q: "GoとRustどちらを選びますか？"
     a: "ほとんどのWebサービス・API用途ではGoで十分です。ゲームエンジン・組み込みデバイス・WebAssemblyが必要な場合にRustを選びます"
 
+ecosystem:
+  package_manager: "go mod（標準）"
+  frameworks:
+    - name: "Gin"
+      desc: "軽量HTTP Webフレームワーク"
+    - name: "Echo"
+      desc: "高性能HTTPフレームワーク"
+  major_libs:
+    - "goroutine（並行処理・標準）"
+    - "gRPC-Go"
+  runtimes: ["Go（単一バイナリ・ランタイム不要）"]
+
+code_examples:
+  - title: "Hello World"
+    code: |
+      package main
+      import "fmt"
+      func main() { fmt.Println("Hello") }
+  - title: "goroutine"
+    code: |
+      go func() { fmt.Println("async") }()
+
+learning_roadmap:
+  beginner_period: "目安: 〜2週間"
+  beginner:
+    - "基本文法・構造体・インターフェース"
+    - "go mod によるパッケージ管理"
+  intermediate_period: "目安: 〜1-2ヶ月"
+  intermediate:
+    - "goroutine と channel（並行処理）"
+    - "標準ライブラリ（net/http, database/sql）"
+  advanced_period: "目安: 〜3-6ヶ月"
+  advanced:
+    - "コンテキスト（context）による制御"
+    - "ジェネリクス（Go 1.18+）"
+
 terms:
   - word: "静的型付け"
     def: "コードを実行する前にデータの型を確認する仕組み。バグを事前に検出できる"

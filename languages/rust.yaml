@@ -51,6 +51,42 @@ qa:
   - q: "RustでAIアプリは作れますか？"
     a: "作れますがAIライブラリのエコシステムがPythonに比べて非常に限られます。推論エンジンの高速化部分をRustで書き、インターフェースはPythonというハイブリッドが現実的です"
 
+ecosystem:
+  package_manager: "cargo（標準）"
+  frameworks:
+    - name: "Actix-web"
+      desc: "高性能Webフレームワーク"
+    - name: "Axum"
+      desc: "モジュラーWebフレームワーク（Tokio系）"
+  major_libs:
+    - "Tokio（非同期ランタイム）"
+    - "Serde（シリアライズ）"
+  runtimes: ["Rust（単一バイナリ・ランタイム不要）"]
+
+code_examples:
+  - title: "Hello World"
+    code: |
+      fn main() { println!("Hello"); }
+  - title: "所有権と借用"
+    code: |
+      let s = String::from("hi");
+      let r = &s;
+      println!("{}", r);
+
+learning_roadmap:
+  beginner_period: "目安: 〜1ヶ月"
+  beginner:
+    - "基本文法・所有権システム"
+    - "cargo によるパッケージ管理"
+  intermediate_period: "目安: 〜2-3ヶ月"
+  intermediate:
+    - "ライフタイム・借用チェッカー"
+    - "トレイト・ジェネリクス"
+  advanced_period: "目安: 〜6ヶ月+"
+  advanced:
+    - "非同期（async/await + Tokio）"
+    - "unsafe と FFI"
+
 terms:
   - word: "所有権システム"
     def: "Rustの独自機能。メモリの確保と解放をコンパイラが自動検証し、GCなしでメモリ安全性を保証する仕組み"
