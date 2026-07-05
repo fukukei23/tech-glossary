@@ -86,3 +86,36 @@ def test_build_language_html_generates_file():
     assert "<title>TypeScript" in content
     assert "assets/style.css" in content
     assert "assets/tooltip.js" in content
+
+
+# === Phase2a: 新3セクション検証（存在時のみ・任意） ===
+
+@pytest.mark.parametrize("lang", EXPECTED_LANGS)
+def test_ecosystem_structure_when_present(lang):
+    data = load_yaml(lang)
+    if "ecosystem" not in data:
+        pytest.skip(f"{lang}.yaml に ecosystem 未登録（Phase2aでは任意）")
+    eco = data["ecosystem"]
+    assert "package_manager" in eco, f"{lang}.yaml ecosystem に package_manager がない"
+    for fw in eco.get("frameworks", []):
+        assert "name" in fw and "desc" in fw, f"{lang}.yaml ecosystem.frameworks に name/desc が必要"
+
+
+@pytest.mark.parametrize("lang", EXPECTED_LANGS)
+def test_code_examples_structure_when_present(lang):
+    data = load_yaml(lang)
+    if "code_examples" not in data:
+        pytest.skip(f"{lang}.yaml に code_examples 未登録（Phase2aでは任意）")
+    for ex in data["code_examples"]:
+        assert "title" in ex and "code" in ex, f"{lang}.yaml code_examples に title/code が必要"
+
+
+@pytest.mark.parametrize("lang", EXPECTED_LANGS)
+def test_learning_roadmap_structure_when_present(lang):
+    data = load_yaml(lang)
+    if "learning_roadmap" not in data:
+        pytest.skip(f"{lang}.yaml に learning_roadmap 未登録（Phase2aでは任意）")
+    lr = data["learning_roadmap"]
+    for level in ["beginner", "intermediate", "advanced"]:
+        assert level in lr, f"{lang}.yaml learning_roadmap に {level} がない"
+        assert isinstance(lr[level], list), f"{lang}.yaml learning_roadmap.{level} はlistであること"
