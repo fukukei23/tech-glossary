@@ -69,12 +69,19 @@ def main() -> int:
     # ビルド前にレーダーチャート断片を再生成（templates/_radar_cards.html を最新化）
     subprocess.run([sys.executable, str(ROOT / "generate-radar.py")], check=True)
     env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)), autoescape=True)
+
+    # YAML が存在する言語のみをビルド対象にする（Phase3進行中・未作成言語は skip）
+    available_langs = [name for name in LANGUAGES if (LANG_DIR / f"{name}.yaml").exists()]
+    skipped = [name for name in LANGUAGES if name not in available_langs]
+    if skipped:
+        print(f"⚠ skip (YAML未作成): {', '.join(skipped)}（Phase3後半タスクで作成）", file=sys.stderr)
+
     langs = []
-    for name in LANGUAGES:
+    for name in available_langs:
         build_language_html(name, env)
         langs.append(load_language(name))
     build_index(env, langs)
-    print(f"完了: {len(LANGUAGES)}言語 + index → {BUILD_DIR}/")
+    print(f"完了: {len(available_langs)}言語 + index → {BUILD_DIR}/")
     return 0
 
 
