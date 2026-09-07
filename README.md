@@ -251,3 +251,5 @@ tech-glossary/
 ---
 
 > Build with Python 3 + Jinja2 + PyYAML + mistune + pytest + highlight.js
+
+> 💡 **一言**: 用語は定義ではなく「会議でどう説明するか」で覚える。
